@@ -1,0 +1,317 @@
+2025-07-22 18:40:35,870 - INFO - 🧬 ULTRA GOD MODE AI STARTUP INITIATED
+2025-07-22 18:40:35,870 - INFO - 
+🔧 Python Version
+2025-07-22 18:40:35,870 - INFO - ✅ Python version 3.13.3 - Compatible
+2025-07-22 18:40:35,870 - INFO - 
+🔧 Environment Variables
+2025-07-22 18:40:35,876 - INFO - ✅ Telegram bot token configured
+2025-07-22 18:40:35,876 - INFO - ✅ Telegram chat ID configured
+2025-07-22 18:40:35,876 - INFO - 
+🔧 Required Packages
+2025-07-22 18:40:35,948 - INFO - ✅ flask - Available
+2025-07-22 18:40:35,948 - WARNING - ⚠️ opencv-python - Missing
+2025-07-22 18:40:35,989 - INFO - ✅ numpy - Available
+2025-07-22 18:40:35,989 - WARNING - ⚠️ pillow - Missing
+2025-07-22 18:40:35,989 - WARNING - ⚠️ python-telegram-bot - Missing
+2025-07-22 18:40:35,989 - WARNING - ⚠️ scikit-image - Missing
+2025-07-22 18:40:36,062 - INFO - ✅ matplotlib - Available
+2025-07-22 18:40:36,070 - INFO - ✅ scipy - Available
+2025-07-22 18:40:36,226 - INFO - ✅ pandas - Available
+2025-07-22 18:40:36,262 - INFO - ✅ requests - Available
+2025-07-22 18:40:36,262 - WARNING - ⚠️ python-dotenv - Missing
+2025-07-22 18:40:36,262 - WARNING - ⚠️ scikit-learn - Missing
+2025-07-22 18:40:36,686 - INFO - ✅ xgboost - Available
+2025-07-22 18:40:36,824 - INFO - Failed to extract font properties from /usr/share/fonts/truetype/noto/NotoColorEmoji.ttf: Can not load face (unknown file format; error code 0x2)
+2025-07-22 18:40:36,831 - INFO - generated new fontManager
+2025-07-22 18:40:36,973 - INFO - ✅ seaborn - Available
+2025-07-22 18:40:36,973 - WARNING - ⚠️ tensorflow - Missing (Optional, may cause reduced functionality)
+2025-07-22 18:40:36,973 - WARNING - ⚠️ keras - Missing (Optional, may cause reduced functionality)
+2025-07-22 18:40:36,973 - ERROR - ❌ Missing required packages: opencv-python, pillow, python-telegram-bot, scikit-image, python-dotenv, scikit-learn
+2025-07-22 18:40:36,973 - ERROR - ❌ Required Packages failed. Cannot continue.
+2025-07-22 18:40:36,973 - ERROR - ❌ Startup failed. Please fix the issues and try again.
+2025-07-22 18:41:06,633 - INFO - 🧬 ULTRA GOD MODE AI STARTUP INITIATED
+2025-07-22 18:41:06,633 - INFO - 
+🔧 Python Version
+2025-07-22 18:41:06,633 - INFO - ✅ Python version 3.13.3 - Compatible
+2025-07-22 18:41:06,633 - INFO - 
+🔧 Environment Variables
+2025-07-22 18:41:06,639 - INFO - ✅ Telegram bot token configured
+2025-07-22 18:41:06,639 - INFO - ✅ Telegram chat ID configured
+2025-07-22 18:41:06,639 - INFO - 
+🔧 Required Packages
+2025-07-22 18:41:06,704 - INFO - ✅ flask - Available
+2025-07-22 18:41:06,705 - WARNING - ⚠️ opencv-python - Missing
+2025-07-22 18:41:06,744 - INFO - ✅ numpy - Available
+2025-07-22 18:41:06,744 - WARNING - ⚠️ pillow - Missing
+2025-07-22 18:41:06,744 - WARNING - ⚠️ python-telegram-bot - Missing
+2025-07-22 18:41:06,744 - WARNING - ⚠️ scikit-image - Missing
+2025-07-22 18:41:06,806 - INFO - ✅ matplotlib - Available
+2025-07-22 18:41:06,810 - INFO - ✅ scipy - Available
+2025-07-22 18:41:06,933 - INFO - ✅ pandas - Available
+2025-07-22 18:41:06,963 - INFO - ✅ requests - Available
+2025-07-22 18:41:06,963 - WARNING - ⚠️ python-dotenv - Missing
+2025-07-22 18:41:06,963 - WARNING - ⚠️ scikit-learn - Missing
+2025-07-22 18:41:07,337 - INFO - ✅ xgboost - Available
+2025-07-22 18:41:07,530 - INFO - ✅ seaborn - Available
+2025-07-22 18:41:07,530 - WARNING - ⚠️ tensorflow - Missing (Optional, may cause reduced functionality)
+2025-07-22 18:41:07,531 - WARNING - ⚠️ keras - Missing (Optional, may cause reduced functionality)
+2025-07-22 18:41:07,531 - ERROR - ❌ Missing required packages: opencv-python, pillow, python-telegram-bot, scikit-image, python-dotenv, scikit-learn
+2025-07-22 18:41:07,531 - ERROR - ❌ Required Packages failed. Cannot continue.
+2025-07-22 18:41:07,531 - ERROR - ❌ Startup failed. Please fix the issues and try again.
+2025-07-22 18:41:36,267 - INFO - 🧬 ULTRA GOD MODE AI STARTUP INITIATED
+2025-07-22 18:41:36,267 - INFO - 
+🔧 Python Version
+2025-07-22 18:41:36,267 - INFO - ✅ Python version 3.13.3 - Compatible
+2025-07-22 18:41:36,267 - INFO - 
+🔧 Environment Variables
+2025-07-22 18:41:36,273 - INFO - ✅ Telegram bot token configured
+2025-07-22 18:41:36,273 - INFO - ✅ Telegram chat ID configured
+2025-07-22 18:41:36,273 - INFO - 
+🔧 Required Packages
+2025-07-22 18:41:36,340 - INFO - ✅ flask - Available
+2025-07-22 18:41:36,403 - INFO - ✅ opencv-python - Available
+2025-07-22 18:41:36,403 - INFO - ✅ numpy - Available
+2025-07-22 18:41:36,403 - INFO - ✅ pillow - Available
+2025-07-22 18:41:36,464 - INFO - ✅ python-telegram-bot - Available
+2025-07-22 18:41:36,465 - INFO - ✅ scikit-image - Available
+2025-07-22 18:41:36,526 - INFO - ✅ matplotlib - Available
+2025-07-22 18:41:36,530 - INFO - ✅ scipy - Available
+2025-07-22 18:41:36,654 - INFO - ✅ pandas - Available
+2025-07-22 18:41:36,681 - INFO - ✅ requests - Available
+2025-07-22 18:41:36,681 - INFO - ✅ python-dotenv - Available
+2025-07-22 18:41:37,018 - INFO - ✅ scikit-learn - Available
+2025-07-22 18:41:37,058 - INFO - ✅ xgboost - Available
+2025-07-22 18:41:37,224 - INFO - ✅ seaborn - Available
+2025-07-22 18:41:37,224 - WARNING - ⚠️ tensorflow - Missing (Optional, may cause reduced functionality)
+2025-07-22 18:41:37,224 - WARNING - ⚠️ keras - Missing (Optional, may cause reduced functionality)
+2025-07-22 18:41:37,224 - INFO - 
+🔧 Directory Structure
+2025-07-22 18:41:37,224 - INFO - ✅ Directory created/verified: logs
+2025-07-22 18:41:37,224 - INFO - ✅ Directory created/verified: charts
+2025-07-22 18:41:37,225 - INFO - ✅ Directory created/verified: models
+2025-07-22 18:41:37,225 - INFO - ✅ Directory created/verified: data
+2025-07-22 18:41:37,225 - INFO - ✅ Directory created/verified: backups
+2025-07-22 18:41:37,225 - INFO - 
+🔧 God Mode System Tests
+2025-07-22 18:41:37,225 - INFO - 🧬 Running God Mode AI system tests...
+2025-07-22 18:41:37,285 - ERROR - ❌ God Mode system test failed: No module named 'tensorflow'
+2025-07-22 18:41:37,285 - ERROR - ❌ God Mode System Tests failed. Cannot continue.
+2025-07-22 18:41:37,285 - ERROR - ❌ Startup failed. Please fix the issues and try again.
+2025-07-22 18:43:20,680 - INFO - 🧬 ULTRA GOD MODE AI STARTUP INITIATED
+2025-07-22 18:43:20,681 - INFO - 
+🔧 Python Version
+2025-07-22 18:43:20,681 - INFO - ✅ Python version 3.13.3 - Compatible
+2025-07-22 18:43:20,681 - INFO - 
+🔧 Environment Variables
+2025-07-22 18:43:20,686 - INFO - ✅ Telegram bot token configured
+2025-07-22 18:43:20,686 - INFO - ✅ Telegram chat ID configured
+2025-07-22 18:43:20,686 - INFO - 
+🔧 Required Packages
+2025-07-22 18:43:20,756 - INFO - ✅ flask - Available
+2025-07-22 18:43:20,820 - INFO - ✅ opencv-python - Available
+2025-07-22 18:43:20,821 - INFO - ✅ numpy - Available
+2025-07-22 18:43:20,821 - INFO - ✅ pillow - Available
+2025-07-22 18:43:20,883 - INFO - ✅ python-telegram-bot - Available
+2025-07-22 18:43:20,884 - INFO - ✅ scikit-image - Available
+2025-07-22 18:43:20,950 - INFO - ✅ matplotlib - Available
+2025-07-22 18:43:20,954 - INFO - ✅ scipy - Available
+2025-07-22 18:43:21,092 - INFO - ✅ pandas - Available
+2025-07-22 18:43:21,121 - INFO - ✅ requests - Available
+2025-07-22 18:43:21,121 - INFO - ✅ python-dotenv - Available
+2025-07-22 18:43:21,495 - INFO - ✅ scikit-learn - Available
+2025-07-22 18:43:21,534 - INFO - ✅ xgboost - Available
+2025-07-22 18:43:21,714 - INFO - ✅ seaborn - Available
+2025-07-22 18:43:21,714 - WARNING - ⚠️ tensorflow - Missing (Optional, may cause reduced functionality)
+2025-07-22 18:43:21,714 - WARNING - ⚠️ keras - Missing (Optional, may cause reduced functionality)
+2025-07-22 18:43:21,714 - INFO - 
+🔧 Directory Structure
+2025-07-22 18:43:21,714 - INFO - ✅ Directory created/verified: logs
+2025-07-22 18:43:21,715 - INFO - ✅ Directory created/verified: charts
+2025-07-22 18:43:21,715 - INFO - ✅ Directory created/verified: models
+2025-07-22 18:43:21,715 - INFO - ✅ Directory created/verified: data
+2025-07-22 18:43:21,715 - INFO - ✅ Directory created/verified: backups
+2025-07-22 18:43:21,715 - INFO - 
+🔧 God Mode System Tests
+2025-07-22 18:43:21,715 - INFO - 🧬 Running God Mode AI system tests...
+2025-07-22 18:43:21,717 - ERROR - ❌ God Mode system test failed: expected 'except' or 'finally' block (god_mode_ai.py, line 132)
+2025-07-22 18:43:21,717 - ERROR - ❌ God Mode System Tests failed. Cannot continue.
+2025-07-22 18:43:21,717 - ERROR - ❌ Startup failed. Please fix the issues and try again.
+2025-07-22 18:44:28,248 - INFO - 🧬 ULTRA GOD MODE AI STARTUP INITIATED
+2025-07-22 18:44:28,249 - INFO - 
+🔧 Python Version
+2025-07-22 18:44:28,249 - INFO - ✅ Python version 3.13.3 - Compatible
+2025-07-22 18:44:28,249 - INFO - 
+🔧 Environment Variables
+2025-07-22 18:44:28,254 - INFO - ✅ Telegram bot token configured
+2025-07-22 18:44:28,254 - INFO - ✅ Telegram chat ID configured
+2025-07-22 18:44:28,254 - INFO - 
+🔧 Required Packages
+2025-07-22 18:44:28,320 - INFO - ✅ flask - Available
+2025-07-22 18:44:28,370 - INFO - ✅ opencv-python - Available
+2025-07-22 18:44:28,370 - INFO - ✅ numpy - Available
+2025-07-22 18:44:28,370 - INFO - ✅ pillow - Available
+2025-07-22 18:44:28,428 - INFO - ✅ python-telegram-bot - Available
+2025-07-22 18:44:28,429 - INFO - ✅ scikit-image - Available
+2025-07-22 18:44:28,484 - INFO - ✅ matplotlib - Available
+2025-07-22 18:44:28,488 - INFO - ✅ scipy - Available
+2025-07-22 18:44:28,602 - INFO - ✅ pandas - Available
+2025-07-22 18:44:28,627 - INFO - ✅ requests - Available
+2025-07-22 18:44:28,627 - INFO - ✅ python-dotenv - Available
+2025-07-22 18:44:28,949 - INFO - ✅ scikit-learn - Available
+2025-07-22 18:44:28,981 - INFO - ✅ xgboost - Available
+2025-07-22 18:44:29,144 - INFO - ✅ seaborn - Available
+2025-07-22 18:44:29,144 - WARNING - ⚠️ tensorflow - Missing (Optional, may cause reduced functionality)
+2025-07-22 18:44:29,144 - WARNING - ⚠️ keras - Missing (Optional, may cause reduced functionality)
+2025-07-22 18:44:29,144 - INFO - 
+🔧 Directory Structure
+2025-07-22 18:44:29,144 - INFO - ✅ Directory created/verified: logs
+2025-07-22 18:44:29,145 - INFO - ✅ Directory created/verified: charts
+2025-07-22 18:44:29,145 - INFO - ✅ Directory created/verified: models
+2025-07-22 18:44:29,145 - INFO - ✅ Directory created/verified: data
+2025-07-22 18:44:29,145 - INFO - ✅ Directory created/verified: backups
+2025-07-22 18:44:29,145 - INFO - 
+🔧 God Mode System Tests
+2025-07-22 18:44:29,145 - INFO - 🧬 Running God Mode AI system tests...
+2025-07-22 18:44:29,227 - ERROR - ❌ God Mode system test failed: expected an indented block after function definition on line 783 (ml_confidence_engine.py, line 785)
+2025-07-22 18:44:29,228 - ERROR - ❌ God Mode System Tests failed. Cannot continue.
+2025-07-22 18:44:29,228 - ERROR - ❌ Startup failed. Please fix the issues and try again.
+2025-07-22 18:45:17,626 - INFO - 🧬 ULTRA GOD MODE AI STARTUP INITIATED
+2025-07-22 18:45:17,626 - INFO - 
+🔧 Python Version
+2025-07-22 18:45:17,626 - INFO - ✅ Python version 3.13.3 - Compatible
+2025-07-22 18:45:17,626 - INFO - 
+🔧 Environment Variables
+2025-07-22 18:45:17,631 - INFO - ✅ Telegram bot token configured
+2025-07-22 18:45:17,632 - INFO - ✅ Telegram chat ID configured
+2025-07-22 18:45:17,632 - INFO - 
+🔧 Required Packages
+2025-07-22 18:45:17,693 - INFO - ✅ flask - Available
+2025-07-22 18:45:17,743 - INFO - ✅ opencv-python - Available
+2025-07-22 18:45:17,743 - INFO - ✅ numpy - Available
+2025-07-22 18:45:17,744 - INFO - ✅ pillow - Available
+2025-07-22 18:45:17,798 - INFO - ✅ python-telegram-bot - Available
+2025-07-22 18:45:17,799 - INFO - ✅ scikit-image - Available
+2025-07-22 18:45:17,852 - INFO - ✅ matplotlib - Available
+2025-07-22 18:45:17,856 - INFO - ✅ scipy - Available
+2025-07-22 18:45:17,968 - INFO - ✅ pandas - Available
+2025-07-22 18:45:17,993 - INFO - ✅ requests - Available
+2025-07-22 18:45:17,993 - INFO - ✅ python-dotenv - Available
+2025-07-22 18:45:18,315 - INFO - ✅ scikit-learn - Available
+2025-07-22 18:45:18,347 - INFO - ✅ xgboost - Available
+2025-07-22 18:45:18,504 - INFO - ✅ seaborn - Available
+2025-07-22 18:45:18,504 - WARNING - ⚠️ tensorflow - Missing (Optional, may cause reduced functionality)
+2025-07-22 18:45:18,504 - WARNING - ⚠️ keras - Missing (Optional, may cause reduced functionality)
+2025-07-22 18:45:18,504 - INFO - 
+🔧 Directory Structure
+2025-07-22 18:45:18,504 - INFO - ✅ Directory created/verified: logs
+2025-07-22 18:45:18,505 - INFO - ✅ Directory created/verified: charts
+2025-07-22 18:45:18,505 - INFO - ✅ Directory created/verified: models
+2025-07-22 18:45:18,505 - INFO - ✅ Directory created/verified: data
+2025-07-22 18:45:18,505 - INFO - ✅ Directory created/verified: backups
+2025-07-22 18:45:18,505 - INFO - 
+🔧 God Mode System Tests
+2025-07-22 18:45:18,505 - INFO - 🧬 Running God Mode AI system tests...
+2025-07-22 18:45:18,623 - INFO - 🧬 Initializing God Mode AI systems...
+2025-07-22 18:45:18,623 - WARNING - ⚠️ TensorFlow not available - Psychology analyzer disabled
+2025-07-22 18:45:18,623 - INFO - 🧬 God Mode AI systems initialized successfully
+2025-07-22 18:45:18,623 - INFO - 🔬 Initializing ML Confidence Engine models...
+2025-07-22 18:45:18,623 - WARNING - ⚠️ TensorFlow not available - Deep learning features disabled
+2025-07-22 18:45:18,623 - INFO - 🔬 ML models initialized successfully
+2025-07-22 18:45:18,623 - INFO - 🤖 Initializing Ultra Telegram Bot...
+2025-07-22 18:45:18,666 - INFO - 🤖 Ultra Telegram Bot initialized successfully
+2025-07-22 18:45:18,667 - INFO - ✅ All core modules imported successfully
+2025-07-22 18:45:18,667 - INFO - 🧬 Initializing God Mode AI systems...
+2025-07-22 18:45:18,667 - WARNING - ⚠️ TensorFlow not available - Psychology analyzer disabled
+2025-07-22 18:45:18,667 - INFO - 🧬 God Mode AI systems initialized successfully
+2025-07-22 18:45:18,667 - INFO - 🔬 Initializing ML Confidence Engine models...
+2025-07-22 18:45:18,667 - WARNING - ⚠️ TensorFlow not available - Deep learning features disabled
+2025-07-22 18:45:18,667 - INFO - 🔬 ML models initialized successfully
+2025-07-22 18:45:18,667 - INFO - 🤖 Initializing Ultra Telegram Bot...
+2025-07-22 18:45:18,685 - INFO - 🤖 Ultra Telegram Bot initialized successfully
+2025-07-22 18:45:18,685 - INFO - ✅ Ultra God Mode Core initialized
+2025-07-22 18:45:18,685 - INFO - 
+🧬 ALL STARTUP CHECKS PASSED
+2025-07-22 18:45:18,685 - INFO - 🚀 LAUNCHING TRANSCENDENT MARKET DOMINATION SYSTEM
+2025-07-22 18:45:18,685 - INFO - 🧬 LAUNCHING ULTRA GOD MODE AI APPLICATION...
+2025-07-22 18:45:18,685 - ERROR - ❌ Application startup failed: cannot import name 'ultra_god_mode_core' from 'ultra_god_mode_app' (/workspace/ultra_god_mode_app.py)
+2025-07-22 18:46:06,623 - INFO - 🧬 ULTRA GOD MODE AI STARTUP INITIATED
+2025-07-22 18:46:06,623 - INFO - 
+🔧 Python Version
+2025-07-22 18:46:06,623 - INFO - ✅ Python version 3.13.3 - Compatible
+2025-07-22 18:46:06,623 - INFO - 
+🔧 Environment Variables
+2025-07-22 18:46:06,628 - INFO - ✅ Telegram bot token configured
+2025-07-22 18:46:06,628 - INFO - ✅ Telegram chat ID configured
+2025-07-22 18:46:06,628 - INFO - 
+🔧 Required Packages
+2025-07-22 18:46:06,692 - INFO - ✅ flask - Available
+2025-07-22 18:46:06,744 - INFO - ✅ opencv-python - Available
+2025-07-22 18:46:06,744 - INFO - ✅ numpy - Available
+2025-07-22 18:46:06,744 - INFO - ✅ pillow - Available
+2025-07-22 18:46:06,799 - INFO - ✅ python-telegram-bot - Available
+2025-07-22 18:46:06,800 - INFO - ✅ scikit-image - Available
+2025-07-22 18:46:06,856 - INFO - ✅ matplotlib - Available
+2025-07-22 18:46:06,860 - INFO - ✅ scipy - Available
+2025-07-22 18:46:06,976 - INFO - ✅ pandas - Available
+2025-07-22 18:46:07,002 - INFO - ✅ requests - Available
+2025-07-22 18:46:07,002 - INFO - ✅ python-dotenv - Available
+2025-07-22 18:46:07,328 - INFO - ✅ scikit-learn - Available
+2025-07-22 18:46:07,360 - INFO - ✅ xgboost - Available
+2025-07-22 18:46:07,519 - INFO - ✅ seaborn - Available
+2025-07-22 18:46:07,519 - WARNING - ⚠️ tensorflow - Missing (Optional, may cause reduced functionality)
+2025-07-22 18:46:07,519 - WARNING - ⚠️ keras - Missing (Optional, may cause reduced functionality)
+2025-07-22 18:46:07,519 - INFO - 
+🔧 Directory Structure
+2025-07-22 18:46:07,519 - INFO - ✅ Directory created/verified: logs
+2025-07-22 18:46:07,519 - INFO - ✅ Directory created/verified: charts
+2025-07-22 18:46:07,519 - INFO - ✅ Directory created/verified: models
+2025-07-22 18:46:07,519 - INFO - ✅ Directory created/verified: data
+2025-07-22 18:46:07,519 - INFO - ✅ Directory created/verified: backups
+2025-07-22 18:46:07,519 - INFO - 
+🔧 God Mode System Tests
+2025-07-22 18:46:07,519 - INFO - 🧬 Running God Mode AI system tests...
+2025-07-22 18:46:07,620 - INFO - 🧬 Initializing God Mode AI systems...
+2025-07-22 18:46:07,620 - WARNING - ⚠️ TensorFlow not available - Psychology analyzer disabled
+2025-07-22 18:46:07,620 - INFO - 🧬 God Mode AI systems initialized successfully
+2025-07-22 18:46:07,620 - INFO - 🔬 Initializing ML Confidence Engine models...
+2025-07-22 18:46:07,620 - WARNING - ⚠️ TensorFlow not available - Deep learning features disabled
+2025-07-22 18:46:07,620 - INFO - 🔬 ML models initialized successfully
+2025-07-22 18:46:07,620 - INFO - 🤖 Initializing Ultra Telegram Bot...
+2025-07-22 18:46:07,663 - INFO - 🤖 Ultra Telegram Bot initialized successfully
+2025-07-22 18:46:07,664 - INFO - 🧬 Initializing God Mode AI systems...
+2025-07-22 18:46:07,664 - WARNING - ⚠️ TensorFlow not available - Psychology analyzer disabled
+2025-07-22 18:46:07,664 - INFO - 🧬 God Mode AI systems initialized successfully
+2025-07-22 18:46:07,664 - INFO - 🔬 Initializing ML Confidence Engine models...
+2025-07-22 18:46:07,664 - WARNING - ⚠️ TensorFlow not available - Deep learning features disabled
+2025-07-22 18:46:07,664 - INFO - 🔬 ML models initialized successfully
+2025-07-22 18:46:07,664 - INFO - 🤖 Initializing Ultra Telegram Bot...
+2025-07-22 18:46:07,683 - INFO - 🤖 Ultra Telegram Bot initialized successfully
+2025-07-22 18:46:07,683 - INFO - ✅ All core modules imported successfully
+2025-07-22 18:46:07,683 - INFO - 🧬 Initializing God Mode AI systems...
+2025-07-22 18:46:07,683 - WARNING - ⚠️ TensorFlow not available - Psychology analyzer disabled
+2025-07-22 18:46:07,683 - INFO - 🧬 God Mode AI systems initialized successfully
+2025-07-22 18:46:07,683 - INFO - 🔬 Initializing ML Confidence Engine models...
+2025-07-22 18:46:07,683 - WARNING - ⚠️ TensorFlow not available - Deep learning features disabled
+2025-07-22 18:46:07,683 - INFO - 🔬 ML models initialized successfully
+2025-07-22 18:46:07,683 - INFO - 🤖 Initializing Ultra Telegram Bot...
+2025-07-22 18:46:07,703 - INFO - 🤖 Ultra Telegram Bot initialized successfully
+2025-07-22 18:46:07,703 - INFO - ✅ Ultra God Mode Core initialized
+2025-07-22 18:46:07,703 - INFO - 
+🧬 ALL STARTUP CHECKS PASSED
+2025-07-22 18:46:07,703 - INFO - 🚀 LAUNCHING TRANSCENDENT MARKET DOMINATION SYSTEM
+2025-07-22 18:46:07,703 - INFO - 🧬 LAUNCHING ULTRA GOD MODE AI APPLICATION...
+2025-07-22 18:46:07,703 - INFO - 🚀 Starting Ultra God Mode AI on 0.0.0.0:5000
+2025-07-22 18:46:07,703 - INFO - 🧬 TRANSCENDENT MARKET DOMINATION ACTIVATED
+2025-07-22 18:46:07,703 - INFO - 🎯 Ready for chart analysis at /analyze endpoint
+2025-07-22 18:46:07,704 - INFO - 📊 Performance dashboard at /performance endpoint
+2025-07-22 18:46:07,704 - INFO - 🤖 Telegram integration ready
+2025-07-22 18:46:07,706 - INFO - [31m[1mWARNING: This is a development server. Do not use it in a production deployment. Use a production WSGI server instead.[0m
+ * Running on all addresses (0.0.0.0)
+ * Running on http://127.0.0.1:5000
+ * Running on http://172.30.0.2:5000
+2025-07-22 18:46:07,706 - INFO - [33mPress CTRL+C to quit[0m
+2025-07-22 18:46:31,422 - INFO - 127.0.0.1 - - [22/Jul/2025 18:46:31] "GET /status HTTP/1.1" 200 -
+2025-07-22 18:46:36,917 - INFO - 127.0.0.1 - - [22/Jul/2025 18:46:36] "GET /performance HTTP/1.1" 200 -
+2025-07-22 18:47:48,331 - INFO - 127.0.0.1 - - [22/Jul/2025 18:47:48] "GET /status HTTP/1.1" 200 -
+2025-07-22 18:47:48,338 - INFO - 127.0.0.1 - - [22/Jul/2025 18:47:48] "GET /status HTTP/1.1" 200 -
+2025-07-22 18:47:48,345 - INFO - 127.0.0.1 - - [22/Jul/2025 18:47:48] "GET /status HTTP/1.1" 200 -
