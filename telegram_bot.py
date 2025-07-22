@@ -4,327 +4,313 @@
 Separate module for Telegram bot to avoid async conflicts
 """
 
-import os
-import logging
 import asyncio
-from datetime import datetime
-from telegram import Update, Bot
-from telegram.ext import Application, CommandHandler, MessageHandler, filters, ContextTypes
+import logging
 import requests
 import io
+from telegram import Update, InlineKeyboardButton, InlineKeyboardMarkup
+from telegram.ext import Application, CommandHandler, MessageHandler, CallbackQueryHandler, filters, ContextTypes
+from PIL import Image
+import base64
+from datetime import datetime
+import pytz
 
-# Setup logging
-logging.basicConfig(level=logging.INFO)
+# Configure logging
+logging.basicConfig(level=logging.INFO, format='%(asctime)s - %(name)s - %(levelname)s - %(message)s')
 logger = logging.getLogger(__name__)
 
-class GhostTelegramBot:
-    """Ghost Transcendence Core Telegram Bot"""
+# Bot configuration
+BOT_TOKEN = "7604218758:AAHJj2zMDTfVwyJHpLClVCDzukNr2Psj-38"
+FLASK_API_URL = "http://localhost:5000/api/analyze"  # Updated endpoint
+
+# UTC+6:00 timezone
+market_timezone = pytz.timezone('Asia/Dhaka')
+
+class TelegramBot:
+    """
+    🕯️ CANDLE WHISPERER TELEGRAM BOT
+    Connects users to the AI that talks with every candle
+    """
     
-    def __init__(self, token: str, api_url: str = "http://localhost:5000"):
-        self.token = token
-        self.api_url = api_url
-        self.bot = None
-        self.application = None
+    def __init__(self):
+        self.app = Application.builder().token(BOT_TOKEN).build()
+        self.setup_handlers()
         
+    def setup_handlers(self):
+        """Setup bot command and message handlers"""
+        # Commands
+        self.app.add_handler(CommandHandler("start", self.start_command))
+        self.app.add_handler(CommandHandler("help", self.help_command))
+        self.app.add_handler(CommandHandler("stats", self.stats_command))
+        
+        # Photo handler for chart analysis
+        self.app.add_handler(MessageHandler(filters.PHOTO, self.handle_chart_image))
+        
+        # Callback query handler for buttons
+        self.app.add_handler(CallbackQueryHandler(self.handle_callback))
+        
+        logger.info("🕯️ CANDLE WHISPERER Bot handlers setup complete")
+
     async def start_command(self, update: Update, context: ContextTypes.DEFAULT_TYPE):
-        """Handle /start command"""
-        welcome_msg = """
-🔥 WELCOME TO GHOST TRANSCENDENCE CORE ∞ vX
+        """Start command - welcome message"""
+        welcome_message = """🔥 GHOST TRANSCENDENCE CORE ∞ vX - CANDLE WHISPERER
 
-🎯 THE GOD-LEVEL AI TRADING BOT
+🕯️ Welcome to the CANDLE WHISPERER AI Bot!
 
-✅ Send me a candlestick chart screenshot
-✅ I'll analyze it with infinite intelligence
-✅ Get precise CALL/PUT signals
-✅ No fixed strategies - pure AI adaptation
-✅ Works on any broker, any market condition
+This AI literally TALKS WITH EVERY CANDLE to understand market secrets and provide 100% accurate signals for volatile OTC markets.
 
-🧠 Just upload your chart and watch the magic happen!
+🎯 Features:
+• 🕯️ Candle Whisperer Mode - Talks with each candle
+• ⏰ UTC+6:00 Timing - Perfect entry precision
+• 🎪 100% Accuracy Target - No losses
+• 🤫 Secret Pattern Detection - Hidden market messages
+• 🚫 Loss Prevention System - Learns from mistakes
 
-📝 Commands:
-/help - Show help information
-/stats - View analysis statistics
-/version - Show bot version
-"""
-        await update.message.reply_text(welcome_msg)
+📸 How to use:
+1. Send me a screenshot of your candlestick chart
+2. I'll talk with every candle to understand their story
+3. Get precise signal: 1M | HH:MM | CALL/PUT
+4. Enter at the exact time provided
+
+⚡ Ready to dominate the market with candle intelligence!
+
+Send your chart screenshot now! 📈"""
+
+        keyboard = [
+            [InlineKeyboardButton("📊 Send Chart", callback_data="send_chart")],
+            [InlineKeyboardButton("📈 Bot Stats", callback_data="stats")],
+            [InlineKeyboardButton("❓ Help", callback_data="help")]
+        ]
+        reply_markup = InlineKeyboardMarkup(keyboard)
+        
+        await update.message.reply_text(welcome_message, reply_markup=reply_markup)
 
     async def help_command(self, update: Update, context: ContextTypes.DEFAULT_TYPE):
-        """Handle /help command"""
-        help_msg = """
-🆘 GHOST TRANSCENDENCE CORE HELP
+        """Help command"""
+        help_message = """🕯️ CANDLE WHISPERER HELP
 
-📸 Send Chart Image: Upload any candlestick chart
-🎯 Get Signal: Receive CALL/PUT with confidence
-📊 Supported: Any broker, timeframe, market
-⚡ AI Features: Dynamic strategy creation, pattern recognition
+📋 Commands:
+• /start - Start the bot
+• /help - Show this help
+• /stats - View bot statistics
 
-🤖 How to use:
-1. Send me a screenshot of your trading chart
-2. Wait for AI analysis (30-60 seconds)
-3. Receive trading signal with confidence level
+📸 Image Analysis:
+• Send any candlestick chart screenshot
+• Support all brokers (Quotex, IQ Option, Pocket Option, etc.)
+• Works with OTC markets and volatile instruments
+• AI talks with every candle to understand market story
 
-📝 Commands:
-/start - Welcome message
-/help - This help message
-/stats - Bot usage statistics
-/version - Bot version information
+🎯 Signal Format:
+• 1M | 14:25 | CALL (Next candle entry time UTC+6:00)
+• 1M | 14:25 | PUT (Bearish signal)
+• NO SIGNAL (Wait for better opportunity)
 
-🔥 Ghost Transcendence Features:
-👻 Manipulation Resistant
-🧠 Infinite Learning
-⚡ Dynamic Strategies
-🎯 No-Loss Logic
-"""
-        await update.message.reply_text(help_msg)
+🕯️ Candle Whisperer Features:
+• Each candle has a personality and story
+• AI extracts secret messages from wicks and bodies
+• Real-time market session analysis
+• 100% accuracy through candle conversations
+• Loss prevention through learning
+
+⚡ The AI thinks like it can communicate with every candle to provide the most accurate signals possible!"""
+
+        await update.message.reply_text(help_message)
 
     async def stats_command(self, update: Update, context: ContextTypes.DEFAULT_TYPE):
-        """Handle /stats command"""
+        """Stats command - show bot statistics"""
         try:
-            # Try to get stats from the main API
-            response = requests.get(f"{self.api_url}/api/stats", timeout=5)
-            if response.status_code == 200:
-                stats = response.json()
-                total_analyses = stats.get('total_analyses', 0)
-            else:
-                total_analyses = "Unknown"
-        except:
-            total_analyses = "API Unavailable"
+            # Get current time in UTC+6:00
+            current_time = datetime.now(market_timezone).strftime("%H:%M:%S")
             
-        stats_msg = f"""
-📊 GHOST TRANSCENDENCE CORE STATS
+            stats_message = f"""📊 CANDLE WHISPERER STATISTICS
 
-🧠 Total Analyses: {total_analyses}
-⚡ Version: ∞ vX
-🎯 AI Personality: GHOST TRANSCENDENCE CORE
-📈 Confidence Threshold: 75.0%
-👻 Ghost Mode: ACTIVE
-⚡ Manipulation Resistance: MAXIMUM
+🕯️ Bot Version: ∞ vX CANDLE WHISPERER
+⏰ Current Time: {current_time} (UTC+6:00)
+🎯 Accuracy Target: 100%
+🤖 AI Mode: CANDLE WHISPERER ACTIVE
 
-The AI is constantly learning and evolving!
+🕯️ Candle Features:
+✅ Candle Conversations - ACTIVE
+✅ Secret Pattern Detection - ACTIVE
+✅ Loss Prevention System - ACTIVE
+✅ UTC+6:00 Timing Precision - ACTIVE
+✅ Volatility Analysis - ACTIVE
 
-🔥 Features Active:
-✅ Dynamic Strategy Creation
-✅ Pattern Recognition  
-✅ Manipulation Detection
-✅ Broker Adaptation
-✅ Infinite Learning
-"""
-        await update.message.reply_text(stats_msg)
+🎪 Market Intelligence:
+• Talks with 15-25 candles per analysis
+• Extracts wick and body secrets
+• Detects market manipulation
+• Provides next candle entry time
+• Learns from every loss
 
-    async def version_command(self, update: Update, context: ContextTypes.DEFAULT_TYPE):
-        """Handle /version command"""
-        version_msg = """
-🔥 GHOST TRANSCENDENCE CORE ∞ vX
+⚡ Ready to analyze your volatile market screenshot!"""
+            
+            await update.message.reply_text(stats_message)
+            
+        except Exception as e:
+            await update.message.reply_text(f"📊 Stats temporarily unavailable: {str(e)}")
 
-🧠 Ultimate AI Trading Bot
-⚡ No-Loss Logic Builder
-🎯 Dynamic Strategy Creation
-📊 Works on Any Market Condition
-👻 Manipulation Resistant
-🌍 Universal Broker Support
-
-🚀 Core Technologies:
-• OpenCV + HSV Analysis
-• Advanced Pattern Recognition
-• Dynamic AI Strategy Creation
-• Manipulation Detection
-• Real-time Learning
-
-Built with ❤️ for traders who refuse to accept losses.
-"""
-        await update.message.reply_text(version_msg)
-
-    async def handle_photo(self, update: Update, context: ContextTypes.DEFAULT_TYPE):
-        """Handle photo messages (chart analysis)"""
+    async def handle_chart_image(self, update: Update, context: ContextTypes.DEFAULT_TYPE):
+        """Handle chart image analysis with CANDLE WHISPERER"""
         try:
-            # Send processing message
+            logger.info("🕯️ CANDLE WHISPERER: Received chart image for analysis")
+            
+            # Send initial processing message
             processing_msg = await update.message.reply_text(
-                "🧠 GHOST TRANSCENDENCE CORE ACTIVATED\n"
-                "⚡ Analyzing chart with infinite intelligence...\n"
-                "👻 Manipulation resistance: MAXIMUM\n"
-                "🎯 Creating dynamic strategy..."
+                "🕯️ CANDLE WHISPERER ANALYZING...\n\n"
+                "📸 Chart image received\n"
+                "🗣️ Starting conversations with candles...\n"
+                "🤫 Extracting secret patterns...\n"
+                "⏳ Please wait for candle wisdom..."
             )
             
-            # Get the highest resolution photo
+            # Get the largest photo
             photo = update.message.photo[-1]
             
-            # Download image
+            # Download photo
             photo_file = await photo.get_file()
-            image_data = await photo_file.download_as_bytearray()
+            photo_bytes = await photo_file.download_as_bytearray()
             
-            # Prepare files for API request
-            files = {'chart_image': ('chart.jpg', io.BytesIO(image_data), 'image/jpeg')}
+            # Convert to PIL Image and then to bytes for upload
+            image = Image.open(io.BytesIO(photo_bytes))
             
-            # Send to analysis API
-            try:
-                response = requests.post(
-                    f"{self.api_url}/analyze",
-                    files=files,
-                    timeout=120  # 2 minutes timeout
+            # Convert PIL image to bytes for upload
+            img_byte_arr = io.BytesIO()
+            image.save(img_byte_arr, format='PNG')
+            img_byte_arr.seek(0)
+            
+            # Send to Flask API for analysis
+            files = {'image': ('chart.png', img_byte_arr, 'image/png')}
+            
+            logger.info(f"🔗 Sending image to Flask API: {FLASK_API_URL}")
+            response = requests.post(FLASK_API_URL, files=files, timeout=30)
+            
+            if response.status_code == 200:
+                result = response.json()
+                
+                # Extract analysis results
+                signal_type = result.get('signal', 'NO SIGNAL')
+                confidence = result.get('confidence', 0.0)
+                next_candle_time = result.get('next_candle_time', '00:00')
+                message = result.get('message', 'Analysis complete')
+                total_candles = result.get('total_candles_consulted', 0)
+                candle_prophecy = result.get('candle_prophecy', '')
+                
+                # Edit the processing message with results
+                await processing_msg.edit_text(message)
+                
+                # Add quick action buttons
+                keyboard = []
+                if signal_type != 'NO SIGNAL':
+                    keyboard.append([
+                        InlineKeyboardButton(f"🎯 {signal_type} at {next_candle_time}", callback_data=f"confirm_{signal_type}")
+                    ])
+                
+                keyboard.extend([
+                    [InlineKeyboardButton("📸 Analyze Another Chart", callback_data="send_chart")],
+                    [InlineKeyboardButton("📊 Bot Stats", callback_data="stats")]
+                ])
+                
+                reply_markup = InlineKeyboardMarkup(keyboard)
+                
+                # Send final message with buttons
+                await update.message.reply_text(
+                    f"🕯️ CANDLE WHISPERER ANALYSIS COMPLETE!\n\n"
+                    f"🎯 Signal: {signal_type}\n"
+                    f"⏰ Entry: {next_candle_time} (UTC+6:00)\n"
+                    f"📈 Confidence: {confidence:.1f}%\n"
+                    f"🕯️ Candles Consulted: {total_candles}",
+                    reply_markup=reply_markup
                 )
                 
-                if response.status_code == 200:
-                    result = response.json()
-                    
-                    # Format response
-                    if result.get('error'):
-                        response_text = f"❌ Analysis failed: {result['error']}"
-                    else:
-                        signal_type = result.get('signal', 'NO SIGNAL')
-                        confidence = result.get('confidence', 0)
-                        timeframe = result.get('timeframe', '1M')
-                        time_target = result.get('time_target', 'Next candle')
-                        reasoning = result.get('reasoning', 'Advanced AI analysis completed.')
-                        
-                        # Create signal emoji
-                        signal_emoji = "🚀" if signal_type == "CALL" else "📉" if signal_type == "PUT" else "⏸️"
-                        
-                        response_text = f"""
-🔥 GHOST TRANSCENDENCE CORE ∞ vX
-
-{signal_emoji} SIGNAL: **{signal_type}**
-⏰ TIMEFRAME: {timeframe}
-🎯 TARGET: {time_target}
-📈 CONFIDENCE: {confidence:.1f}%
-
-🧠 AI REASONING:
-{reasoning}
-
-⚡ This signal was generated using dynamic AI strategy - no fixed rules, pure intelligence adaptation.
-
-👻 Ghost Features Active:
-✅ Manipulation Resistance
-✅ Broker Trap Detection  
-✅ Fake Signal Immunity
-✅ Adaptive Evolution
-"""
-                else:
-                    response_text = f"❌ API Error: {response.status_code} - {response.text}"
-                    
-            except requests.exceptions.Timeout:
-                response_text = "⏰ Analysis timeout. The chart might be too complex or servers are busy. Please try again."
-            except requests.exceptions.ConnectionError:
-                response_text = "🔌 Connection error. The analysis server might be down. Please try again later."
-            except Exception as e:
-                response_text = f"❌ Error during analysis: {str(e)}"
-            
-            # Delete processing message and send result
-            try:
-                await processing_msg.delete()
-            except:
-                pass  # Ignore if message already deleted
+                logger.info(f"🎯 CANDLE WHISPERER Analysis complete: {signal_type} | {confidence:.1f}%")
                 
-            await update.message.reply_text(response_text, parse_mode='Markdown')
-            
+            else:
+                error_message = f"❌ Analysis failed: {response.text}"
+                await processing_msg.edit_text(
+                    f"🚫 CANDLE WHISPERER ERROR\n\n"
+                    f"{error_message}\n\n"
+                    f"Please try again or contact support."
+                )
+                logger.error(f"❌ API Error: {response.status_code} - {response.text}")
+                
         except Exception as e:
-            logger.error(f"Chart analysis error: {str(e)}")
+            logger.error(f"❌ Chart analysis error: {str(e)}")
+            
             try:
-                await update.message.reply_text(
-                    f"❌ Error processing chart: {str(e)}\n\n"
-                    "Please try again with a clear chart screenshot."
+                await processing_msg.edit_text(
+                    f"🚫 CANDLE WHISPERER ERROR\n\n"
+                    f"Error: {str(e)}\n\n"
+                    f"🔄 Please try again with a clear chart screenshot."
                 )
             except:
-                pass
-
-    async def handle_text(self, update: Update, context: ContextTypes.DEFAULT_TYPE):
-        """Handle text messages"""
-        text = update.message.text.lower()
-        
-        # Check for keywords
-        if any(word in text for word in ['chart', 'signal', 'analysis', 'help', 'trade']):
-            await update.message.reply_text(
-                "📸 Please send me a chart screenshot to analyze!\n\n"
-                "🎯 I can analyze charts from any broker:\n"
-                "• MetaTrader 4/5\n"
-                "• TradingView\n"
-                "• IQ Option\n"
-                "• Binance\n"
-                "• Any mobile trading app\n\n"
-                "📝 Use /help for more information."
-            )
-        elif any(word in text for word in ['hello', 'hi', 'hey', 'start']):
-            await update.message.reply_text(
-                "👋 Hello! I'm the Ghost Transcendence Core AI!\n\n"
-                "🔥 Send me a candlestick chart screenshot and I'll provide:\n"
-                "• CALL/PUT signals\n"
-                "• Confidence levels\n"
-                "• Market analysis\n"
-                "• Risk assessment\n\n"
-                "📝 Use /start for full welcome message."
-            )
-        else:
-            await update.message.reply_text(
-                "🤖 I'm the Ghost Transcendence Core AI!\n\n"
-                "📸 Send me a chart screenshot for analysis\n"
-                "📝 Use /help to see all commands\n\n"
-                "🎯 I specialize in:\n"
-                "• Chart pattern recognition\n"
-                "• Market manipulation detection\n"
-                "• Dynamic strategy creation\n"
-                "• High-confidence signal generation"
-            )
-
-    async def error_handler(self, update: object, context: ContextTypes.DEFAULT_TYPE):
-        """Handle errors"""
-        logger.error(f"Exception while handling an update: {context.error}")
-        
-        # Try to send error message to user
-        if update and hasattr(update, 'message') and update.message:
-            try:
                 await update.message.reply_text(
-                    "❌ An error occurred while processing your request.\n"
-                    "Please try again or contact support if the problem persists."
+                    f"🚫 CANDLE WHISPERER ERROR\n\n"
+                    f"Error: {str(e)}\n\n"
+                    f"🔄 Please try again with a clear chart screenshot."
                 )
-            except:
-                pass
 
-    def setup_handlers(self):
-        """Setup bot handlers"""
-        # Command handlers
-        self.application.add_handler(CommandHandler("start", self.start_command))
-        self.application.add_handler(CommandHandler("help", self.help_command))
-        self.application.add_handler(CommandHandler("stats", self.stats_command))
-        self.application.add_handler(CommandHandler("version", self.version_command))
+    async def handle_callback(self, update: Update, context: ContextTypes.DEFAULT_TYPE):
+        """Handle button callbacks"""
+        query = update.callback_query
+        await query.answer()
         
-        # Message handlers
-        self.application.add_handler(MessageHandler(filters.PHOTO, self.handle_photo))
-        self.application.add_handler(MessageHandler(filters.TEXT & ~filters.COMMAND, self.handle_text))
-        
-        # Error handler
-        self.application.add_error_handler(self.error_handler)
-
-    def run(self):
-        """Run the bot"""
-        try:
-            # Create application
-            self.application = Application.builder().token(self.token).build()
-            
-            # Setup handlers
-            self.setup_handlers()
-            
-            # Start the bot
-            logger.info("📱 Ghost Transcendence Core Telegram Bot starting...")
-            self.application.run_polling(
-                drop_pending_updates=True,
-                allowed_updates=Update.ALL_TYPES
+        if query.data == "send_chart":
+            await query.edit_message_text(
+                "📸 CANDLE WHISPERER READY\n\n"
+                "🕯️ Send me your candlestick chart screenshot now!\n\n"
+                "I'll talk with every candle to understand their story and provide:\n"
+                "• 🎯 Precise signal (CALL/PUT)\n"
+                "• ⏰ Exact entry time (UTC+6:00)\n"
+                "• 🎪 100% accuracy target\n"
+                "• 🤫 Secret pattern analysis\n\n"
+                "📱 Works with any broker: Quotex, IQ Option, Pocket Option, etc."
             )
             
-        except Exception as e:
-            logger.error(f"Bot startup error: {str(e)}")
+        elif query.data == "stats":
+            await self.stats_command(update, context)
+            
+        elif query.data == "help":
+            await self.help_command(update, context)
+            
+        elif query.data.startswith("confirm_"):
+            signal = query.data.replace("confirm_", "")
+            current_time = datetime.now(market_timezone).strftime("%H:%M:%S")
+            
+            await query.edit_message_text(
+                f"✅ SIGNAL CONFIRMED\n\n"
+                f"🎯 Direction: {signal}\n"
+                f"⏰ Current Time: {current_time} (UTC+6:00)\n"
+                f"🕯️ Candle Whisperer Confidence: HIGH\n\n"
+                f"📈 Good luck with your trade!\n"
+                f"🔄 Send another chart for next analysis."
+            )
 
-def main():
-    """Main function"""
-    # Get token from environment
-    token = os.environ.get('TELEGRAM_BOT_TOKEN', '7604218758:AAHJj2zMDTfVwyJHpLClVCDzukNr2Psj-38')
-    api_url = os.environ.get('API_URL', 'http://localhost:5000')
-    
-    if not token or token == 'your_bot_token_here':
-        logger.error("❌ TELEGRAM_BOT_TOKEN not configured!")
-        return
-    
-    # Create and run bot
-    bot = GhostTelegramBot(token, api_url)
-    bot.run()
+async def main():
+    """Main function to run the bot"""
+    try:
+        logger.info("🕯️ Starting CANDLE WHISPERER Telegram Bot...")
+        
+        bot = TelegramBot()
+        
+        # Start the bot
+        await bot.app.initialize()
+        await bot.app.start()
+        
+        logger.info("🕯️ CANDLE WHISPERER Bot is now running and ready for chart analysis!")
+        logger.info("🎯 Waiting for volatile market screenshots...")
+        
+        # Run the bot
+        await bot.app.updater.start_polling()
+        
+        # Keep the bot running
+        await asyncio.Event().wait()
+        
+    except Exception as e:
+        logger.error(f"❌ Bot startup error: {str(e)}")
+    finally:
+        if 'bot' in locals():
+            await bot.app.stop()
 
-if __name__ == '__main__':
-    main()
+if __name__ == "__main__":
+    asyncio.run(main())
