@@ -23,6 +23,7 @@ from ai_engine.perception_engine import PerceptionEngine
 from ai_engine.context_engine import ContextEngine
 from ai_engine.intelligence_engine import IntelligenceEngine
 from ai_engine.signal_generator import SignalGenerator
+from ai_engine.real_candle_detector import RealCandleDetector  # REAL ANALYSIS
 from utils.chart_analyzer import ChartAnalyzer
 from utils.logger import setup_logger
 
@@ -42,6 +43,7 @@ context_engine = ContextEngine()
 intelligence_engine = IntelligenceEngine()
 signal_generator = SignalGenerator()
 chart_analyzer = ChartAnalyzer()
+real_candle_detector = RealCandleDetector()  # REAL CHART ANALYSIS
 
 class GhostTranscendenceCore:
     """The main AI core that orchestrates all engines"""
@@ -161,24 +163,30 @@ def analyze_chart():
         asyncio.set_event_loop(loop)
         
         try:
-            # Step 1: Perception Engine - convert image to bytes first
-            # Convert cv2 image to bytes for the perception engine
+            # Step 1: REAL CANDLE DETECTION - Analyze user's actual chart
             _, buffer = cv2.imencode('.png', image)
             image_bytes = buffer.tobytes()
             
-            perception_result = loop.run_until_complete(perception_engine.process_image(image_bytes))
-            logger.info(f"👁️ Perception: {len(perception_result.get('candles', []) if perception_result else [])} candles detected")
+            # Use REAL candle detector to analyze user's actual screenshot
+            real_analysis = loop.run_until_complete(real_candle_detector.analyze_real_chart(image_bytes))
+            real_candle_count = real_analysis.get('real_candles_detected', 0)
             
-            # Step 2: Intelligence Engine (CANDLE WHISPERER MODE)
+            logger.info(f"🕯️ REAL ANALYSIS: {real_candle_count} ACTUAL candles detected in your chart")
+            
+            # Step 2: Intelligence Engine with REAL candle data
+            chart_data['real_candles'] = real_analysis.get('candles', [])
+            chart_data['real_conversations'] = real_analysis.get('candle_conversations', [])
+            chart_data['real_patterns'] = real_analysis.get('real_patterns', {})
+            
             strategy = loop.run_until_complete(intelligence_engine.create_strategy(chart_data, context))
             logger.info(f"🧠 Strategy: {strategy.get('type', 'unknown')}")
             
-            # Step 3: Signal Generator (with CANDLE WHISPERER)
+            # Step 3: Signal Generator with REAL data
             signal = loop.run_until_complete(signal_generator.generate_signal(strategy, chart_data, context))
             logger.info(f"🎯 Signal: {signal.get('signal', 'unknown')}")
             
-            # Build CANDLE WHISPERER response
-            response = loop.run_until_complete(build_candle_whisperer_response(signal, strategy, perception_result or {}))
+            # Build response with REAL candle count
+            response = loop.run_until_complete(build_real_candle_response(signal, strategy, real_analysis))
             
         finally:
             loop.close()
@@ -194,7 +202,7 @@ def analyze_chart():
             'message': '🚫 CANDLE WHISPERER temporarily offline'
         }), 500
 
-async def build_candle_whisperer_response(signal: Dict, strategy: Dict, perception: Dict) -> Dict:
+async def build_real_candle_response(signal: Dict, strategy: Dict, real_analysis: Dict) -> Dict:
     """
     🕯️ Build beautiful CANDLE WHISPERER response with all details
     """
@@ -206,10 +214,17 @@ async def build_candle_whisperer_response(signal: Dict, strategy: Dict, percepti
         candle_whisperer_mode = signal.get('candle_whisperer_mode', False)
         reasoning = signal.get('reasoning', 'Analysis complete')
         
-        # Extract candle conversation details
-        total_candles = signal.get('candle_conversations', 0)
-        candle_prophecy = signal.get('candle_prophecy', '')
+        # Extract REAL candle conversation details
+        real_candle_count = real_analysis.get('real_candles_detected', 0)
+        real_conversations = real_analysis.get('candle_conversations', [])
+        real_patterns = real_analysis.get('real_patterns', {})
         accuracy = signal.get('accuracy', 0.60)
+        
+        # Build prophecy from real conversations
+        candle_prophecy = f"Analyzed {real_candle_count} real candles from your chart"
+        if real_conversations:
+            latest_conversation = real_conversations[-1] if real_conversations else {}
+            candle_prophecy = latest_conversation.get('message', candle_prophecy)
         
         # Format confidence as percentage
         confidence_percent = confidence * 100 if confidence < 1.0 else confidence
@@ -224,7 +239,8 @@ async def build_candle_whisperer_response(signal: Dict, strategy: Dict, percepti
             'timezone': 'UTC+6:00',
             'reasoning': reasoning,
             'candle_whisperer_active': candle_whisperer_mode,
-            'total_candles_consulted': total_candles,
+            'total_candles_consulted': real_candle_count,  # REAL count from your chart
+            'real_candles_detected': real_candle_count,
             'candle_prophecy': candle_prophecy,
             'strategy_type': strategy.get('type', 'unknown'),
             'features_active': signal.get('features', {}),
@@ -262,7 +278,7 @@ async def build_candle_whisperer_response(signal: Dict, strategy: Dict, percepti
 🧠 CANDLE WHISPERER ANALYSIS:
 {clean_reasoning}
 
-🕯️ CANDLE CONVERSATIONS: {total_candles} candles consulted
+🕯️ REAL CANDLES ANALYZED: {real_candle_count} actual candles from your chart
 📜 PROPHECY: {clean_prophecy}
 
 ⚡ This signal was generated by TALKING WITH EVERY CANDLE
@@ -284,7 +300,7 @@ async def build_candle_whisperer_response(signal: Dict, strategy: Dict, percepti
 🧠 CANDLE WHISPERER ANALYSIS:
 🚫 NO SIGNAL: {clean_reasoning}
 
-🕯️ CANDLE CONVERSATIONS: {total_candles} candles consulted
+🕯️ REAL CANDLES ANALYZED: {real_candle_count} actual candles from your chart
 📜 MESSAGE: Candles advise waiting for better opportunity
 
 ⚡ This analysis was generated by TALKING WITH EVERY CANDLE
