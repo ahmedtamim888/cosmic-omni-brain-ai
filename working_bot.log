@@ -1,2 +1,3 @@
 nohup: ignoring input
 INFO:__main__:🌌 OMNI-BRAIN BINARY AI STARTING...
+ERROR:__main__:Error getting updates: HTTPSConnectionPool(host='api.telegram.org', port=443): Read timed out. (read timeout=35)
