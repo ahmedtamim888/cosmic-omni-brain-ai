@@ -137,86 +137,164 @@ class CandleDetector:
         return candles[-8:] if len(candles) > 8 else candles  # Return last 8 candles
     
     def _analyze_price_action_slice(self, color_slice: np.ndarray, gray_slice: np.ndarray, x_pos: int, position: int) -> Optional[Candle]:
-        """Analyze a vertical slice to extract OHLC data"""
+        """Analyze a vertical slice to extract REAL OHLC data from broker charts"""
         if color_slice.size == 0:
             return None
             
         height, width = color_slice.shape[:2]
         
-        # Convert to HSV for better color detection
+        # Multiple detection methods for different broker chart types
+        candle = None
+        
+        # Method 1: HSV Color Detection (for colored candles)
+        candle = self._detect_colored_candle(color_slice, height, position)
+        if candle:
+            return candle
+            
+        # Method 2: Grayscale Analysis (for black/white candles)
+        candle = self._detect_grayscale_candle(color_slice, height, position)
+        if candle:
+            return candle
+            
+        # Method 3: Edge Detection (for outlined candles)
+        candle = self._detect_edge_candle(color_slice, height, position)
+        if candle:
+            return candle
+            
+        return None  # No valid candle detected
+    
+    def _detect_colored_candle(self, color_slice: np.ndarray, height: int, position: int) -> Optional[Candle]:
+        """Detect colored candles (green/red) from broker charts"""
         hsv_slice = cv2.cvtColor(color_slice, cv2.COLOR_BGR2HSV)
         
-        # Define color ranges for bullish (green) and bearish (red) candles
-        # Green range (bullish)
-        green_lower = np.array([35, 40, 40])
-        green_upper = np.array([85, 255, 255])
-        green_mask = cv2.inRange(hsv_slice, green_lower, green_upper)
+        # Expanded color ranges for different broker themes
+        green_ranges = [
+            ([35, 30, 30], [85, 255, 255]),   # Standard green
+            ([40, 40, 40], [80, 255, 255]),   # Bright green
+            ([30, 20, 20], [90, 255, 255]),   # Wide green range
+        ]
         
-        # Red range (bearish)
-        red_lower1 = np.array([0, 40, 40])
-        red_upper1 = np.array([20, 255, 255])
-        red_lower2 = np.array([160, 40, 40])
-        red_upper2 = np.array([180, 255, 255])
-        red_mask1 = cv2.inRange(hsv_slice, red_lower1, red_upper1)
-        red_mask2 = cv2.inRange(hsv_slice, red_lower2, red_upper2)
-        red_mask = cv2.bitwise_or(red_mask1, red_mask2)
+        red_ranges = [
+            ([0, 30, 30], [20, 255, 255]),    # Red range 1
+            ([160, 30, 30], [180, 255, 255]), # Red range 2  
+            ([170, 40, 40], [180, 255, 255]), # Bright red
+        ]
         
-        # Count colored pixels
+        # Combine all green masks
+        green_mask = np.zeros(hsv_slice.shape[:2], dtype=np.uint8)
+        for lower, upper in green_ranges:
+            mask = cv2.inRange(hsv_slice, np.array(lower), np.array(upper))
+            green_mask = cv2.bitwise_or(green_mask, mask)
+        
+        # Combine all red masks
+        red_mask = np.zeros(hsv_slice.shape[:2], dtype=np.uint8)
+        for lower, upper in red_ranges:
+            mask = cv2.inRange(hsv_slice, np.array(lower), np.array(upper))
+            red_mask = cv2.bitwise_or(red_mask, mask)
+        
         green_pixels = cv2.countNonZero(green_mask)
         red_pixels = cv2.countNonZero(red_mask)
         
-        # Determine candle type
-        if green_pixels == 0 and red_pixels == 0:
-            return None  # No clear color detected
-            
-        is_bullish = green_pixels > red_pixels
-        
-        # Find the candle body and wicks using the dominant color
-        dominant_mask = green_mask if is_bullish else red_mask
-        
-        # Find vertical extent of colored areas
-        vertical_profile = np.sum(dominant_mask, axis=1)
-        non_zero_indices = np.where(vertical_profile > 0)[0]
-        
-        if len(non_zero_indices) == 0:
+        # Need sufficient color pixels to be valid
+        if green_pixels < 20 and red_pixels < 20:
             return None
             
-        # Extract price levels (inverted because image coordinates are inverted)
-        highest_point = non_zero_indices[0]  # Top of candle (highest price)
-        lowest_point = non_zero_indices[-1]  # Bottom of candle (lowest price)
+        is_bullish = green_pixels > red_pixels
+        dominant_mask = green_mask if is_bullish else red_mask
         
-        # Find body boundaries by looking for the thickest part
-        body_thickness = []
-        for y in non_zero_indices:
-            thickness = vertical_profile[y]
-            body_thickness.append((y, thickness))
+        return self._extract_ohlc_from_mask(dominant_mask, height, is_bullish, position)
+    
+    def _detect_grayscale_candle(self, color_slice: np.ndarray, height: int, position: int) -> Optional[Candle]:
+        """Detect black/white candles from broker charts"""
+        gray_slice = cv2.cvtColor(color_slice, cv2.COLOR_BGR2GRAY)
+        
+        # White candles (bullish)
+        white_mask = cv2.threshold(gray_slice, 180, 255, cv2.THRESH_BINARY)[1]
+        # Black/dark candles (bearish)
+        black_mask = cv2.threshold(gray_slice, 80, 255, cv2.THRESH_BINARY_INV)[1]
+        
+        white_pixels = cv2.countNonZero(white_mask)
+        black_pixels = cv2.countNonZero(black_mask)
+        
+        if white_pixels < 20 and black_pixels < 20:
+            return None
             
-        # Sort by thickness to find body boundaries
-        body_thickness.sort(key=lambda x: x[1], reverse=True)
-        body_top = min([y for y, _ in body_thickness[:len(body_thickness)//3]])
-        body_bottom = max([y for y, _ in body_thickness[:len(body_thickness)//3]])
+        is_bullish = white_pixels > black_pixels
+        dominant_mask = white_mask if is_bullish else black_mask
         
-        # Calculate price values (normalize to 0-100 scale for relative analysis)
+        return self._extract_ohlc_from_mask(dominant_mask, height, is_bullish, position)
+    
+    def _detect_edge_candle(self, color_slice: np.ndarray, height: int, position: int) -> Optional[Candle]:
+        """Detect outlined candles using edge detection"""
+        gray_slice = cv2.cvtColor(color_slice, cv2.COLOR_BGR2GRAY)
+        
+        # Edge detection
+        edges = cv2.Canny(gray_slice, 30, 100)
+        
+        # Dilate edges to make them thicker for analysis
+        kernel = np.ones((2,2), np.uint8)
+        edges = cv2.dilate(edges, kernel, iterations=1)
+        
+        edge_pixels = cv2.countNonZero(edges)
+        if edge_pixels < 10:
+            return None
+            
+        # Analyze the filled vs empty areas to determine candle type
+        avg_gray = np.mean(gray_slice)
+        is_bullish = avg_gray > 128  # Brighter = bullish
+        
+        return self._extract_ohlc_from_mask(edges, height, is_bullish, position)
+    
+    def _extract_ohlc_from_mask(self, mask: np.ndarray, height: int, is_bullish: bool, position: int) -> Optional[Candle]:
+        """Extract OHLC values from a binary mask"""
+        # Find vertical profile of the mask
+        vertical_profile = np.sum(mask, axis=1)
+        non_zero_indices = np.where(vertical_profile > 0)[0]
+        
+        if len(non_zero_indices) < 3:  # Need at least some vertical extent
+            return None
+            
+        # Extract key price levels
+        highest_point = non_zero_indices[0]     # High
+        lowest_point = non_zero_indices[-1]    # Low
+        
+        # Find body region (thickest part)
+        max_thickness = np.max(vertical_profile)
+        thick_threshold = max_thickness * 0.7
+        body_indices = np.where(vertical_profile >= thick_threshold)[0]
+        
+        if len(body_indices) == 0:
+            body_top_idx = highest_point
+            body_bottom_idx = lowest_point
+        else:
+            body_top_idx = body_indices[0]
+            body_bottom_idx = body_indices[-1]
+        
+        # Convert to price values (invert Y-axis)
         high_price = 100 - (highest_point / height) * 100
         low_price = 100 - (lowest_point / height) * 100
         
         if is_bullish:
-            open_price = 100 - (body_bottom / height) * 100
-            close_price = 100 - (body_top / height) * 100
+            open_price = 100 - (body_bottom_idx / height) * 100
+            close_price = 100 - (body_top_idx / height) * 100
         else:
-            open_price = 100 - (body_top / height) * 100
-            close_price = 100 - (body_bottom / height) * 100
+            open_price = 100 - (body_top_idx / height) * 100
+            close_price = 100 - (body_bottom_idx / height) * 100
+        
+        # Validate price relationships
+        if high_price < low_price or abs(high_price - low_price) < 0.5:
+            return None
             
-        # Calculate measurements
-        body_top_price = max(open_price, close_price)
-        body_bottom_price = min(open_price, close_price)
+        # Calculate candle properties
+        body_top = max(open_price, close_price)
+        body_bottom = min(open_price, close_price)
         body_size = abs(close_price - open_price)
-        upper_wick = high_price - body_top_price
-        lower_wick = body_bottom_price - low_price
+        upper_wick = high_price - body_top
+        lower_wick = body_bottom - low_price
         total_size = high_price - low_price
         
-        # Quality check - ensure reasonable candle proportions
-        if total_size < 0.5 or body_size < 0:
+        # Quality checks
+        if total_size < 1.0 or body_size < 0:
             return None
             
         return Candle(
@@ -224,8 +302,8 @@ class CandleDetector:
             close_price=close_price,
             high_price=high_price,
             low_price=low_price,
-            body_top=body_top_price,
-            body_bottom=body_bottom_price,
+            body_top=body_top,
+            body_bottom=body_bottom,
             upper_wick=upper_wick,
             lower_wick=lower_wick,
             body_size=body_size,
