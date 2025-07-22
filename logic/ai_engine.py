@@ -43,52 +43,216 @@ class CandleDetector:
         self.min_candle_height = 10
         self.min_candle_width = 3
         
-    def preprocess_image(self, image_path: str) -> np.ndarray:
+    def preprocess_image(self, image_path: str) -> tuple:
         """Preprocess the chart image for candlestick detection"""
         # Load image
         img = cv2.imread(image_path)
         if img is None:
             raise ValueError("Could not load image")
             
-        # Convert to grayscale
+        # Convert to grayscale for analysis
         gray = cv2.cvtColor(img, cv2.COLOR_BGR2GRAY)
         
+        # Enhance contrast
+        clahe = cv2.createCLAHE(clipLimit=2.0, tileGridSize=(8,8))
+        enhanced = clahe.apply(gray)
+        
         # Apply Gaussian blur to reduce noise
-        blurred = cv2.GaussianBlur(gray, (3, 3), 0)
+        blurred = cv2.GaussianBlur(enhanced, (3, 3), 0)
         
-        # Apply adaptive thresholding
-        thresh = cv2.adaptiveThreshold(blurred, 255, cv2.ADAPTIVE_THRESH_GAUSSIAN_C, 
-                                     cv2.THRESH_BINARY, 11, 2)
+        # Use Canny edge detection for better line detection
+        edges = cv2.Canny(blurred, 50, 150, apertureSize=3)
         
-        return img, gray, thresh
+        # Apply morphological operations to connect nearby edges
+        kernel = np.ones((3,3), np.uint8)
+        closed = cv2.morphologyEx(edges, cv2.MORPH_CLOSE, kernel)
+        
+        return img, gray, closed
     
     def detect_candlesticks(self, image_path: str) -> List[Candle]:
-        """Detect candlesticks from chart image"""
-        img, gray, thresh = self.preprocess_image(image_path)
+        """Detect candlesticks from chart image using advanced computer vision"""
+        img, gray, edges = self.preprocess_image(image_path)
         height, width = img.shape[:2]
         
-        # Find contours
-        contours, _ = cv2.findContours(thresh, cv2.RETR_EXTERNAL, cv2.CHAIN_APPROX_SIMPLE)
+        # Detect horizontal and vertical lines (price levels and time separators)
+        horizontal_kernel = cv2.getStructuringElement(cv2.MORPH_RECT, (25, 1))
+        vertical_kernel = cv2.getStructuringElement(cv2.MORPH_RECT, (1, 25))
         
-        # Filter and analyze potential candlestick regions
+        horizontal_lines = cv2.morphologyEx(edges, cv2.MORPH_OPEN, horizontal_kernel)
+        vertical_lines = cv2.morphologyEx(edges, cv2.MORPH_OPEN, vertical_kernel)
+        
+        # Combine to get grid structure
+        grid = cv2.addWeighted(horizontal_lines, 0.5, vertical_lines, 0.5, 0.0)
+        
+        # Find potential candlestick regions by analyzing vertical patterns
+        candles = self._extract_candlestick_data(img, gray, grid, width, height)
+        
+        # Sort by x-coordinate (time order) and return recent candles
+        candles = sorted(candles, key=lambda c: c.position)
+        recent_candles = candles[-Config.MAX_CANDLES_ANALYZED:] if len(candles) > Config.MAX_CANDLES_ANALYZED else candles
+        
+        # Normalize price data to relative values
+        if recent_candles:
+            self._normalize_price_data(recent_candles)
+            
+        return recent_candles
+    
+    def _extract_candlestick_data(self, img: np.ndarray, gray: np.ndarray, grid: np.ndarray, width: int, height: int) -> List[Candle]:
+        """Extract candlestick data using color analysis and pattern recognition"""
         candles = []
         
-        # Sort contours by x-coordinate (left to right)
-        contours = sorted(contours, key=lambda c: cv2.boundingRect(c)[0])
+        # Divide image into time segments (assuming standard chart layout)
+        segment_width = width // 20  # Analyze last 20 potential candle positions
         
-        for i, contour in enumerate(contours):
-            x, y, w, h = cv2.boundingRect(contour)
+        for i in range(10, 20):  # Focus on recent candles (right side of chart)
+            x_start = i * segment_width
+            x_end = min((i + 1) * segment_width, width)
             
-            # Filter by size constraints
-            if w >= self.min_candle_width and h >= self.min_candle_height:
-                # Extract candle region
-                candle_region = img[y:y+h, x:x+w]
-                candle = self._analyze_candle_region(candle_region, x, y, w, h, i)
-                if candle:
-                    candles.append(candle)
+            if x_end - x_start < 5:  # Skip too narrow segments
+                continue
+                
+            # Extract vertical slice for this time period
+            candle_slice = img[:, x_start:x_end]
+            gray_slice = gray[:, x_start:x_end]
+            
+            # Analyze this slice for candlestick patterns
+            candle = self._analyze_price_action_slice(candle_slice, gray_slice, x_start, i)
+            if candle:
+                candles.append(candle)
+                
+        return candles
+    
+    def _analyze_price_action_slice(self, color_slice: np.ndarray, gray_slice: np.ndarray, x_pos: int, position: int) -> Optional[Candle]:
+        """Analyze a vertical slice to extract OHLC data"""
+        if color_slice.size == 0:
+            return None
+            
+        height, width = color_slice.shape[:2]
         
-        # Return last 8 candles (most recent)
-        return candles[-Config.MAX_CANDLES_ANALYZED:] if len(candles) > Config.MAX_CANDLES_ANALYZED else candles
+        # Convert to HSV for better color detection
+        hsv_slice = cv2.cvtColor(color_slice, cv2.COLOR_BGR2HSV)
+        
+        # Define color ranges for bullish (green) and bearish (red) candles
+        # Green range (bullish)
+        green_lower = np.array([35, 40, 40])
+        green_upper = np.array([85, 255, 255])
+        green_mask = cv2.inRange(hsv_slice, green_lower, green_upper)
+        
+        # Red range (bearish)
+        red_lower1 = np.array([0, 40, 40])
+        red_upper1 = np.array([20, 255, 255])
+        red_lower2 = np.array([160, 40, 40])
+        red_upper2 = np.array([180, 255, 255])
+        red_mask1 = cv2.inRange(hsv_slice, red_lower1, red_upper1)
+        red_mask2 = cv2.inRange(hsv_slice, red_lower2, red_upper2)
+        red_mask = cv2.bitwise_or(red_mask1, red_mask2)
+        
+        # Count colored pixels
+        green_pixels = cv2.countNonZero(green_mask)
+        red_pixels = cv2.countNonZero(red_mask)
+        
+        # Determine candle type
+        if green_pixels == 0 and red_pixels == 0:
+            return None  # No clear color detected
+            
+        is_bullish = green_pixels > red_pixels
+        
+        # Find the candle body and wicks using the dominant color
+        dominant_mask = green_mask if is_bullish else red_mask
+        
+        # Find vertical extent of colored areas
+        vertical_profile = np.sum(dominant_mask, axis=1)
+        non_zero_indices = np.where(vertical_profile > 0)[0]
+        
+        if len(non_zero_indices) == 0:
+            return None
+            
+        # Extract price levels (inverted because image coordinates are inverted)
+        highest_point = non_zero_indices[0]  # Top of candle (highest price)
+        lowest_point = non_zero_indices[-1]  # Bottom of candle (lowest price)
+        
+        # Find body boundaries by looking for the thickest part
+        body_thickness = []
+        for y in non_zero_indices:
+            thickness = vertical_profile[y]
+            body_thickness.append((y, thickness))
+            
+        # Sort by thickness to find body boundaries
+        body_thickness.sort(key=lambda x: x[1], reverse=True)
+        body_top = min([y for y, _ in body_thickness[:len(body_thickness)//3]])
+        body_bottom = max([y for y, _ in body_thickness[:len(body_thickness)//3]])
+        
+        # Calculate price values (normalize to 0-100 scale for relative analysis)
+        high_price = 100 - (highest_point / height) * 100
+        low_price = 100 - (lowest_point / height) * 100
+        
+        if is_bullish:
+            open_price = 100 - (body_bottom / height) * 100
+            close_price = 100 - (body_top / height) * 100
+        else:
+            open_price = 100 - (body_top / height) * 100
+            close_price = 100 - (body_bottom / height) * 100
+            
+        # Calculate measurements
+        body_top_price = max(open_price, close_price)
+        body_bottom_price = min(open_price, close_price)
+        body_size = abs(close_price - open_price)
+        upper_wick = high_price - body_top_price
+        lower_wick = body_bottom_price - low_price
+        total_size = high_price - low_price
+        
+        # Quality check - ensure reasonable candle proportions
+        if total_size < 0.5 or body_size < 0:
+            return None
+            
+        return Candle(
+            open_price=open_price,
+            close_price=close_price,
+            high_price=high_price,
+            low_price=low_price,
+            body_top=body_top_price,
+            body_bottom=body_bottom_price,
+            upper_wick=upper_wick,
+            lower_wick=lower_wick,
+            body_size=body_size,
+            total_size=total_size,
+            is_bullish=is_bullish,
+            color="GREEN" if is_bullish else "RED",
+            position=position,
+            timestamp=datetime.now()
+        )
+    
+    def _normalize_price_data(self, candles: List[Candle]) -> None:
+        """Normalize price data to create consistent relative values"""
+        if not candles:
+            return
+            
+        # Find overall high and low for normalization
+        all_highs = [c.high_price for c in candles]
+        all_lows = [c.low_price for c in candles]
+        
+        global_high = max(all_highs)
+        global_low = min(all_lows)
+        price_range = global_high - global_low
+        
+        if price_range == 0:
+            return
+            
+        # Normalize all prices to 0-100 scale
+        for candle in candles:
+            # Normalize each price point
+            candle.high_price = ((candle.high_price - global_low) / price_range) * 100
+            candle.low_price = ((candle.low_price - global_low) / price_range) * 100
+            candle.open_price = ((candle.open_price - global_low) / price_range) * 100
+            candle.close_price = ((candle.close_price - global_low) / price_range) * 100
+            
+            # Recalculate derived values
+            candle.body_top = max(candle.open_price, candle.close_price)
+            candle.body_bottom = min(candle.open_price, candle.close_price)
+            candle.body_size = abs(candle.close_price - candle.open_price)
+            candle.upper_wick = candle.high_price - candle.body_top
+            candle.lower_wick = candle.body_bottom - candle.low_price
+            candle.total_size = candle.high_price - candle.low_price
     
     def _analyze_candle_region(self, region: np.ndarray, x: int, y: int, w: int, h: int, position: int) -> Optional[Candle]:
         """Analyze individual candle region to extract OHLC data"""
