@@ -196,8 +196,25 @@ Send your chart screenshot now! 📈"""
                 total_candles = result.get('total_candles_consulted', 0)
                 candle_prophecy = result.get('candle_prophecy', '')
                 
+                # Clean message for Telegram
+                def telegram_safe_text(text):
+                    """Make text safe for Telegram"""
+                    if not text:
+                        return "Analysis complete"
+                    # Remove or replace problematic characters
+                    safe_text = str(text).replace('*', '').replace('_', ' ')
+                    safe_text = safe_text.replace('`', '').replace('[', '(').replace(']', ')')
+                    safe_text = safe_text.replace('<', '').replace('>', '').replace('|', '-')
+                    safe_text = safe_text.replace('\\', '').replace('{', '').replace('}', '')
+                    # Limit message length for Telegram
+                    if len(safe_text) > 4000:
+                        safe_text = safe_text[:4000] + "\n\n... (truncated for display)"
+                    return safe_text
+                
+                clean_message = telegram_safe_text(message)
+                
                 # Edit the processing message with results
-                await processing_msg.edit_text(message)
+                await processing_msg.edit_text(clean_message)
                 
                 # Add quick action buttons
                 keyboard = []
