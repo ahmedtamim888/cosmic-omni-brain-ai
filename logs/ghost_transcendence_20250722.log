@@ -102,3 +102,7 @@
 2025-07-22 02:21:45 |     INFO | GHOST_TRANSCENDENCE_CORE | analyze_chart:170 | 👁️ Perception: 18 candles detected
 2025-07-22 02:21:45 |     INFO | GHOST_TRANSCENDENCE_CORE | analyze_chart:174 | 🧠 Strategy: candle_whisperer_no signal
 2025-07-22 02:21:45 |     INFO | GHOST_TRANSCENDENCE_CORE | analyze_chart:178 | 🎯 Signal: PUT
+2025-07-22 02:24:28 |     INFO | GHOST_TRANSCENDENCE_CORE | analyze_chart:60 | 🧠 GHOST TRANSCENDENCE CORE ACTIVATED - Beginning chart analysis
+2025-07-22 02:24:28 |    ERROR | GHOST_TRANSCENDENCE_CORE | analyze_chart:87 | ❌ Analysis failed: SignalGenerator.generate_signal() missing 1 required positional argument: 'context'
+2025-07-22 02:24:42 |     INFO | GHOST_TRANSCENDENCE_CORE | analyze_chart:60 | 🧠 GHOST TRANSCENDENCE CORE ACTIVATED - Beginning chart analysis
+2025-07-22 02:24:42 |    ERROR | GHOST_TRANSCENDENCE_CORE | analyze_chart:87 | ❌ Analysis failed: SignalGenerator.generate_signal() missing 1 required positional argument: 'context'
