@@ -124,10 +124,8 @@ class CandleDetector:
                 # Extract and analyze candle slice
                 candle_slice = img[:, x_start:x_end]
                 
-                # Try multiple analysis methods
-                candle = (self._analyze_price_action_slice(candle_slice, None, x_start, i) or
-                         self._analyze_simple_candle_slice(candle_slice, x_start, i) or
-                         self._analyze_fallback_slice(candle_slice, x_start, i))
+                # Only use real analysis - no fallbacks
+                candle = self._analyze_price_action_slice(candle_slice, None, x_start, i)
                 
                 if candle:
                     temp_candles.append(candle)
@@ -270,7 +268,7 @@ class CandleDetector:
             candle.lower_wick = candle.body_bottom - candle.low_price
             candle.total_size = candle.high_price - candle.low_price
     
-    def _analyze_simple_candle_slice(self, color_slice: np.ndarray, x_pos: int, position: int) -> Optional[Candle]:
+    def _analyze_simple_candle_slice_REMOVED(self, color_slice: np.ndarray, x_pos: int, position: int) -> Optional[Candle]:
         """Simple candle analysis using basic color detection"""
         if color_slice.size == 0:
             return None
@@ -339,7 +337,7 @@ class CandleDetector:
             
         return self._create_candle_from_prices(open_price, high_price, low_price, close_price, is_bullish, position)
     
-    def _analyze_fallback_slice(self, color_slice: np.ndarray, x_pos: int, position: int) -> Optional[Candle]:
+    def _analyze_fallback_slice_REMOVED(self, color_slice: np.ndarray, x_pos: int, position: int) -> Optional[Candle]:
         """Fallback analysis - always generates a candle based on position"""
         if color_slice.size == 0:
             return None
