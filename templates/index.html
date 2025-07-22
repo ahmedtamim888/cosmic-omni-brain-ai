@@ -1,0 +1,396 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>🧠 COSMIC AI Binary Signal Bot 🚀</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+    <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🧠</text></svg>">
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+</head>
+<body>
+    <div class="container">
+        <!-- Header -->
+        <header class="header">
+            <div class="header-content">
+                <h1 class="title">
+                    <span class="emoji">🧠</span>
+                    COSMIC AI
+                    <span class="emoji">🚀</span>
+                </h1>
+                <p class="subtitle">Binary Signal Bot - Next 1M Candle Predictions</p>
+                <div class="stats">
+                    <div class="stat">
+                        <span class="stat-label">Confidence Threshold</span>
+                        <span class="stat-value">{{ confidence_threshold }}%</span>
+                    </div>
+                    <div class="stat">
+                        <span class="stat-label">Max File Size</span>
+                        <span class="stat-value">{{ max_file_size_mb }}MB</span>
+                    </div>
+                    <div class="stat">
+                        <span class="stat-label">Timeframe</span>
+                        <span class="stat-value">1 Minute</span>
+                    </div>
+                </div>
+            </div>
+        </header>
+
+        <!-- Main Content -->
+        <main class="main-content">
+            <!-- Upload Section -->
+            <section class="upload-section">
+                <div class="upload-container">
+                    <div id="drop-zone" class="drop-zone">
+                        <div class="drop-zone-content">
+                            <div class="upload-icon">📊</div>
+                            <h3>Upload Candlestick Chart</h3>
+                            <p>Drag & drop your chart screenshot here</p>
+                            <p class="file-info">Supports: {{ supported_formats | join(', ') | upper }}</p>
+                            <button type="button" class="browse-btn" onclick="document.getElementById('file-input').click()">
+                                Browse Files
+                            </button>
+                            <input type="file" id="file-input" accept=".jpg,.jpeg,.png,.bmp" style="display: none;">
+                        </div>
+                    </div>
+                    
+                    <div class="upload-progress" id="upload-progress" style="display: none;">
+                        <div class="progress-bar">
+                            <div class="progress-fill" id="progress-fill"></div>
+                        </div>
+                        <p class="progress-text" id="progress-text">Analyzing chart...</p>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Results Section -->
+            <section class="results-section" id="results-section" style="display: none;">
+                <div class="results-container">
+                    <div class="result-header">
+                        <h2>🔮 Analysis Results</h2>
+                        <button class="new-analysis-btn" onclick="resetAnalysis()">New Analysis</button>
+                    </div>
+                    
+                    <div class="signal-card" id="signal-card">
+                        <!-- Signal content will be populated by JavaScript -->
+                    </div>
+
+                    <div class="analysis-details" id="analysis-details">
+                        <!-- Analysis details will be populated by JavaScript -->
+                    </div>
+                </div>
+            </section>
+
+            <!-- Status Section -->
+            <section class="status-section">
+                <div class="status-container">
+                    <h3>🔧 System Status</h3>
+                    <div class="status-grid">
+                        <div class="status-item">
+                            <span class="status-label">AI Engine</span>
+                            <span class="status-value active">🟢 Active</span>
+                        </div>
+                        <div class="status-item">
+                            <span class="status-label">Telegram Bot</span>
+                            <span class="status-value" id="telegram-status">🟡 Checking...</span>
+                        </div>
+                        <div class="status-item">
+                            <span class="status-label">API Version</span>
+                            <span class="status-value">v1.0</span>
+                        </div>
+                    </div>
+                    <button class="test-telegram-btn" onclick="testTelegram()">Test Telegram Bot</button>
+                </div>
+            </section>
+        </main>
+
+        <!-- Footer -->
+        <footer class="footer">
+            <p>🌌 Powered by Cosmic AI Engine | For educational purposes only</p>
+            <p class="disclaimer">⚠️ Trading involves risk. Use proper risk management.</p>
+        </footer>
+    </div>
+
+    <!-- Notification Toast -->
+    <div id="toast" class="toast"></div>
+
+    <script>
+        // Global variables
+        let isAnalyzing = false;
+
+        // Initialize the application
+        $(document).ready(function() {
+            setupDropZone();
+            checkSystemStatus();
+        });
+
+        // Setup drag and drop functionality
+        function setupDropZone() {
+            const dropZone = document.getElementById('drop-zone');
+            const fileInput = document.getElementById('file-input');
+
+            // Prevent default drag behaviors
+            ['dragenter', 'dragover', 'dragleave', 'drop'].forEach(eventName => {
+                dropZone.addEventListener(eventName, preventDefaults, false);
+                document.body.addEventListener(eventName, preventDefaults, false);
+            });
+
+            // Highlight drop zone when item is dragged over it
+            ['dragenter', 'dragover'].forEach(eventName => {
+                dropZone.addEventListener(eventName, highlight, false);
+            });
+
+            ['dragleave', 'drop'].forEach(eventName => {
+                dropZone.addEventListener(eventName, unhighlight, false);
+            });
+
+            // Handle dropped files
+            dropZone.addEventListener('drop', handleDrop, false);
+
+            // Handle file input change
+            fileInput.addEventListener('change', function(e) {
+                handleFiles(e.target.files);
+            });
+        }
+
+        function preventDefaults(e) {
+            e.preventDefault();
+            e.stopPropagation();
+        }
+
+        function highlight(e) {
+            document.getElementById('drop-zone').classList.add('drag-over');
+        }
+
+        function unhighlight(e) {
+            document.getElementById('drop-zone').classList.remove('drag-over');
+        }
+
+        function handleDrop(e) {
+            const dt = e.dataTransfer;
+            const files = dt.files;
+            handleFiles(files);
+        }
+
+        function handleFiles(files) {
+            if (files.length > 0) {
+                uploadFile(files[0]);
+            }
+        }
+
+        // Upload and analyze file
+        function uploadFile(file) {
+            if (isAnalyzing) {
+                showToast('Analysis already in progress', 'warning');
+                return;
+            }
+
+            // Validate file type
+            const allowedTypes = ['image/jpeg', 'image/jpg', 'image/png', 'image/bmp'];
+            if (!allowedTypes.includes(file.type)) {
+                showToast('Invalid file type. Please upload JPG, PNG, or BMP files.', 'error');
+                return;
+            }
+
+            // Validate file size (16MB limit)
+            if (file.size > 16 * 1024 * 1024) {
+                showToast('File too large. Maximum size is {{ max_file_size_mb }}MB.', 'error');
+                return;
+            }
+
+            isAnalyzing = true;
+            showProgress();
+
+            const formData = new FormData();
+            formData.append('chart_file', file);
+
+            $.ajax({
+                url: '/upload',
+                type: 'POST',
+                data: formData,
+                processData: false,
+                contentType: false,
+                success: function(response) {
+                    hideProgress();
+                    if (response.success) {
+                        displayResults(response);
+                        showToast('Chart analyzed successfully!', 'success');
+                    } else {
+                        showToast(response.error || 'Analysis failed', 'error');
+                    }
+                },
+                error: function(xhr, status, error) {
+                    hideProgress();
+                    const response = xhr.responseJSON || {};
+                    showToast(response.error || 'Upload failed', 'error');
+                },
+                complete: function() {
+                    isAnalyzing = false;
+                }
+            });
+        }
+
+        // Show/hide progress
+        function showProgress() {
+            document.getElementById('upload-progress').style.display = 'block';
+            document.getElementById('drop-zone').style.display = 'none';
+            
+            // Animate progress bar
+            let progress = 0;
+            const interval = setInterval(() => {
+                progress += Math.random() * 15;
+                if (progress > 90) progress = 90;
+                document.getElementById('progress-fill').style.width = progress + '%';
+                
+                if (progress > 30) {
+                    document.getElementById('progress-text').textContent = 'Detecting candlesticks...';
+                }
+                if (progress > 60) {
+                    document.getElementById('progress-text').textContent = 'Analyzing market psychology...';
+                }
+                if (progress > 80) {
+                    document.getElementById('progress-text').textContent = 'Generating strategy...';
+                }
+            }, 200);
+
+            // Store interval for cleanup
+            window.progressInterval = interval;
+        }
+
+        function hideProgress() {
+            if (window.progressInterval) {
+                clearInterval(window.progressInterval);
+            }
+            document.getElementById('progress-fill').style.width = '100%';
+            setTimeout(() => {
+                document.getElementById('upload-progress').style.display = 'none';
+                document.getElementById('drop-zone').style.display = 'flex';
+                document.getElementById('progress-fill').style.width = '0%';
+                document.getElementById('progress-text').textContent = 'Analyzing chart...';
+            }, 500);
+        }
+
+        // Display analysis results
+        function displayResults(data) {
+            const signal = data.signal;
+            
+            // Show results section
+            document.getElementById('results-section').style.display = 'block';
+            document.getElementById('results-section').scrollIntoView({ behavior: 'smooth' });
+
+            // Create signal card
+            const signalCard = document.getElementById('signal-card');
+            const signalEmoji = signal.signal === 'CALL' ? '📈' : signal.signal === 'PUT' ? '📉' : '⏸️';
+            const signalColor = signal.signal === 'CALL' ? 'call' : signal.signal === 'PUT' ? 'put' : 'no-trade';
+            const confidenceLevel = signal.confidence >= 90 ? 'high' : signal.confidence >= 80 ? 'medium' : 'low';
+
+            signalCard.innerHTML = `
+                <div class="signal-main ${signalColor}">
+                    <div class="signal-header">
+                        <span class="signal-emoji">${signalEmoji}</span>
+                        <div class="signal-info">
+                            <h3 class="signal-type">${signal.signal}</h3>
+                            <p class="signal-time">${signal.entry_time} UTC+6</p>
+                        </div>
+                        <div class="confidence-badge ${confidenceLevel}">
+                            ${signal.confidence}%
+                        </div>
+                    </div>
+                    <div class="signal-body">
+                        <p class="signal-reasoning">${signal.reasoning}</p>
+                    </div>
+                </div>
+            `;
+
+            // Create analysis details
+            const analysisDetails = document.getElementById('analysis-details');
+            analysisDetails.innerHTML = `
+                <div class="detail-grid">
+                    <div class="detail-item">
+                        <span class="detail-label">🎯 Strategy</span>
+                        <span class="detail-value">${signal.strategy.replace(/_/g, ' ')}</span>
+                    </div>
+                    <div class="detail-item">
+                        <span class="detail-label">🧭 Psychology</span>
+                        <span class="detail-value">${signal.market_psychology.replace(/_/g, ' ')}</span>
+                    </div>
+                    <div class="detail-item">
+                        <span class="detail-label">⏰ Timeframe</span>
+                        <span class="detail-value">${signal.timeframe}</span>
+                    </div>
+                    <div class="detail-item">
+                        <span class="detail-label">📱 Telegram</span>
+                        <span class="detail-value ${data.telegram_sent ? 'success' : 'warning'}">
+                            ${data.telegram_sent ? '✅ Sent' : '⚠️ Not sent'}
+                        </span>
+                    </div>
+                </div>
+            `;
+        }
+
+        // Reset analysis
+        function resetAnalysis() {
+            document.getElementById('results-section').style.display = 'none';
+            document.getElementById('file-input').value = '';
+            document.querySelector('.container').scrollIntoView({ behavior: 'smooth' });
+        }
+
+        // Check system status
+        function checkSystemStatus() {
+            $.get('/api/status')
+                .done(function(data) {
+                    const telegramStatus = document.getElementById('telegram-status');
+                    if (data.telegram && data.telegram.configured) {
+                        telegramStatus.innerHTML = '🟢 Connected';
+                        telegramStatus.className = 'status-value active';
+                    } else {
+                        telegramStatus.innerHTML = '🔴 Not configured';
+                        telegramStatus.className = 'status-value inactive';
+                    }
+                })
+                .fail(function() {
+                    document.getElementById('telegram-status').innerHTML = '🔴 Error';
+                });
+        }
+
+        // Test Telegram bot
+        function testTelegram() {
+            $.post('/test-telegram')
+                .done(function(data) {
+                    if (data.success && data.test_sent) {
+                        showToast('✅ Test message sent to Telegram!', 'success');
+                        document.getElementById('telegram-status').innerHTML = '🟢 Connected';
+                        document.getElementById('telegram-status').className = 'status-value active';
+                    } else {
+                        showToast('❌ Failed to send test message', 'error');
+                    }
+                })
+                .fail(function() {
+                    showToast('❌ Telegram test failed', 'error');
+                });
+        }
+
+        // Toast notifications
+        function showToast(message, type = 'info') {
+            const toast = document.getElementById('toast');
+            toast.textContent = message;
+            toast.className = `toast toast-${type} toast-show`;
+            
+            setTimeout(() => {
+                toast.className = 'toast';
+            }, 3000);
+        }
+
+        // Keyboard shortcuts
+        document.addEventListener('keydown', function(e) {
+            if (e.ctrlKey && e.key === 'u') {
+                e.preventDefault();
+                document.getElementById('file-input').click();
+            }
+            if (e.key === 'Escape' && isAnalyzing) {
+                // Could add cancel functionality here
+            }
+        });
+    </script>
+</body>
+</html>

@@ -1,0 +1,12 @@
+nohup: ignoring input
+Traceback (most recent call last):
+  File "/workspace/app.py", line 11, in <module>
+    from telegram_bot import send_signal_to_telegram
+  File "/workspace/telegram_bot.py", line 12, in <module>
+    class TelegramBot:
+    ...<205 lines>...
+            return status
+  File "/workspace/telegram_bot.py", line 55, in TelegramBot
+    def _format_signal_message(self, signal: MarketSignal) -> str:
+                                             ^^^^^^^^^^^^
+NameError: name 'MarketSignal' is not defined
