@@ -7,7 +7,7 @@ Always optimized for profit, never random guesses
 
 import logging
 import numpy as np
-import random
+# import random  # REMOVED - NO RANDOMNESS IN TRADING SIGNALS
 from typing import Dict, List, Optional
 from datetime import datetime, timedelta
 import asyncio
@@ -254,8 +254,8 @@ class SignalGenerator:
             # Meta-intelligence components
             components['ghost_transcendence'] = self._evaluate_ghost_transcendence(strategy)
             
-            # Add randomness factor for realistic signal generation
-            components['market_noise'] = random.uniform(0.85, 1.15)  # ±15% randomness
+            # DETERMINISTIC market analysis (no randomness)
+            components['market_noise'] = 1.0  # Consistent analysis
             
             return components
             
@@ -513,8 +513,8 @@ class SignalGenerator:
             if len(self.signal_history) > 10:
                 confidence *= 1.03  # Experience boost
             
-            # Add random variation for realism
-            confidence *= random.uniform(0.95, 1.1)
+            # DETERMINISTIC confidence (no randomness)
+            # confidence *= 1.0  # Keep original confidence
             
             # Apply self-calibration
             confidence *= self.confidence_calibration
@@ -539,18 +539,18 @@ class SignalGenerator:
             volatility = context.get('volatility', {})
             vol_level = volatility.get('level', 'medium')
             
-            # Calculate optimal entry time
+            # Calculate DETERMINISTIC entry time (no randomness)
             if momentum_strength > 0.8:
                 # Strong momentum - enter quickly
-                target_time = current_time + timedelta(seconds=random.randint(15, 30))
+                target_time = current_time + timedelta(seconds=30)  # Fixed timing
                 time_desc = "Next candle (Strong momentum)"
             elif vol_level in ['high', 'very_high']:
                 # High volatility - be more precise with timing
-                target_time = current_time + timedelta(seconds=random.randint(20, 40))
+                target_time = current_time + timedelta(seconds=45)  # Fixed timing
                 time_desc = "Next candle (High volatility)"
             else:
                 # Normal conditions
-                target_time = current_time + timedelta(seconds=random.randint(30, 60))
+                target_time = current_time + timedelta(seconds=60)  # Fixed timing
                 time_desc = "Next 1-2 candles"
             
             return f"{target_time.strftime('%H:%M')} | {time_desc}"
