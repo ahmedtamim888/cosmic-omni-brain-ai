@@ -1,0 +1,202 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>🔥 GHOST TRANSCENDENCE CORE ∞ vX</title>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <link href="{{ url_for('static', filename='css/style.css') }}" rel="stylesheet">
+</head>
+<body>
+    <div class="container">
+        <!-- Header -->
+        <header class="header">
+            <div class="logo">
+                <i class="fas fa-ghost"></i>
+                <h1>GHOST TRANSCENDENCE CORE ∞ vX</h1>
+                <p class="subtitle">The God-Level AI Trading Bot</p>
+            </div>
+            <div class="status-indicator">
+                <div class="status-dot active"></div>
+                <span>AI Core Active</span>
+            </div>
+        </header>
+
+        <!-- Main Interface -->
+        <main class="main-content">
+            <!-- Upload Section -->
+            <section class="upload-section">
+                <div class="upload-area" id="uploadArea">
+                    <div class="upload-content">
+                        <i class="fas fa-cloud-upload-alt upload-icon"></i>
+                        <h3>Upload Your Chart Screenshot</h3>
+                        <p>Drop your candlestick chart image here or click to select</p>
+                        <p class="supported-formats">Supports: PNG, JPG, JPEG | Any broker, any timeframe</p>
+                        <input type="file" id="fileInput" accept="image/*" style="display: none;">
+                        <button class="upload-btn" onclick="document.getElementById('fileInput').click()">
+                            <i class="fas fa-upload"></i> Select Chart Image
+                        </button>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Analysis Section -->
+            <section class="analysis-section" id="analysisSection" style="display: none;">
+                <div class="analysis-header">
+                    <h2><i class="fas fa-brain"></i> AI Analysis in Progress</h2>
+                    <div class="progress-container">
+                        <div class="progress-bar">
+                            <div class="progress-fill" id="progressFill"></div>
+                        </div>
+                        <div class="progress-steps">
+                            <div class="step active" id="step1">
+                                <i class="fas fa-eye"></i>
+                                <span>Perception Engine</span>
+                            </div>
+                            <div class="step" id="step2">
+                                <i class="fas fa-brain"></i>
+                                <span>Context Analysis</span>
+                            </div>
+                            <div class="step" id="step3">
+                                <i class="fas fa-cogs"></i>
+                                <span>Intelligence Engine</span>
+                            </div>
+                            <div class="step" id="step4">
+                                <i class="fas fa-bolt"></i>
+                                <span>Signal Generation</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Results Section -->
+            <section class="results-section" id="resultsSection" style="display: none;">
+                <div class="signal-card">
+                    <div class="signal-header">
+                        <h2><i class="fas fa-chart-line"></i> Trading Signal Generated</h2>
+                        <div class="signal-badge" id="signalBadge"></div>
+                    </div>
+                    <div class="signal-content">
+                        <div class="signal-main">
+                            <div class="signal-type" id="signalType"></div>
+                            <div class="confidence-meter">
+                                <div class="confidence-label">AI Confidence</div>
+                                <div class="confidence-bar">
+                                    <div class="confidence-fill" id="confidenceFill"></div>
+                                </div>
+                                <div class="confidence-value" id="confidenceValue"></div>
+                            </div>
+                        </div>
+                        <div class="signal-details">
+                            <div class="detail-item">
+                                <i class="fas fa-clock"></i>
+                                <span class="label">Timeframe:</span>
+                                <span class="value" id="timeframe">1M</span>
+                            </div>
+                            <div class="detail-item">
+                                <i class="fas fa-crosshairs"></i>
+                                <span class="label">Target:</span>
+                                <span class="value" id="target"></span>
+                            </div>
+                            <div class="detail-item">
+                                <i class="fas fa-robot"></i>
+                                <span class="label">Strategy:</span>
+                                <span class="value" id="strategy"></span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- AI Reasoning -->
+                <div class="reasoning-card">
+                    <h3><i class="fas fa-lightbulb"></i> AI Reasoning</h3>
+                    <div class="reasoning-content" id="reasoningContent"></div>
+                </div>
+
+                <!-- Market Analysis -->
+                <div class="market-analysis-grid">
+                    <div class="analysis-card">
+                        <h4><i class="fas fa-chart-bar"></i> Market Conditions</h4>
+                        <div class="market-conditions" id="marketConditions"></div>
+                    </div>
+                    <div class="analysis-card">
+                        <h4><i class="fas fa-shield-alt"></i> Risk Assessment</h4>
+                        <div class="risk-assessment" id="riskAssessment"></div>
+                    </div>
+                    <div class="analysis-card">
+                        <h4><i class="fas fa-ghost"></i> Ghost Factor</h4>
+                        <div class="ghost-factor" id="ghostFactor"></div>
+                    </div>
+                </div>
+
+                <!-- Action Buttons -->
+                <div class="action-buttons">
+                    <button class="btn btn-primary" onclick="analyzeNew()">
+                        <i class="fas fa-plus"></i> Analyze New Chart
+                    </button>
+                    <button class="btn btn-secondary" onclick="downloadReport()">
+                        <i class="fas fa-download"></i> Download Report
+                    </button>
+                </div>
+            </section>
+
+            <!-- Features Section -->
+            <section class="features-section">
+                <h2><i class="fas fa-magic"></i> Ghost Transcendence Features</h2>
+                <div class="features-grid">
+                    <div class="feature-card">
+                        <i class="fas fa-eye"></i>
+                        <h3>Advanced Perception</h3>
+                        <p>Reads any chart with OpenCV + HSV filters. Adapts to light/dark themes, any broker UI.</p>
+                    </div>
+                    <div class="feature-card">
+                        <i class="fas fa-brain"></i>
+                        <h3>Context Intelligence</h3>
+                        <p>Understands momentum, reversals, trap candles, structure breaks, and market manipulation.</p>
+                    </div>
+                    <div class="feature-card">
+                        <i class="fas fa-robot"></i>
+                        <h3>Dynamic Strategy</h3>
+                        <p>Never uses fixed rules. Creates unique strategies for each market condition.</p>
+                    </div>
+                    <div class="feature-card">
+                        <i class="fas fa-shield-alt"></i>
+                        <h3>Manipulation Resistance</h3>
+                        <p>Detects broker traps, OTC manipulation, and fake signals with 95% accuracy.</p>
+                    </div>
+                    <div class="feature-card">
+                        <i class="fas fa-infinity"></i>
+                        <h3>Infinite Learning</h3>
+                        <p>Evolves and adapts with each analysis. Never makes the same mistake twice.</p>
+                    </div>
+                    <div class="feature-card">
+                        <i class="fas fa-ghost"></i>
+                        <h3>Ghost Transcendence</h3>
+                        <p>Invisible to market manipulation. Transcends broker limitations and OTC chaos.</p>
+                    </div>
+                </div>
+            </section>
+        </main>
+
+        <!-- Footer -->
+        <footer class="footer">
+            <p>&copy; 2024 GHOST TRANSCENDENCE CORE ∞ vX - The Ultimate AI Trading Bot</p>
+            <p>🎯 No-Loss Logic Builder | 👻 Manipulation Resistant | ⚡ Infinite Intelligence</p>
+        </footer>
+    </div>
+
+    <!-- Loading Overlay -->
+    <div class="loading-overlay" id="loadingOverlay" style="display: none;">
+        <div class="loading-content">
+            <div class="ghost-loader">
+                <i class="fas fa-ghost"></i>
+            </div>
+            <h3>GHOST TRANSCENDENCE CORE ACTIVATED</h3>
+            <p>Analyzing chart with infinite intelligence...</p>
+        </div>
+    </div>
+
+    <script src="{{ url_for('static', filename='js/app.js') }}"></script>
+</body>
+</html>
