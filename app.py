@@ -8,7 +8,7 @@ import logging
 
 from config import Config
 from logic.ai_engine import CosmicAIEngine, MarketSignal
-from telegram_bot import send_signal_to_telegram
+from telegram_bot_pro import send_signal_to_telegram, start_telegram_bot
 
 # Configure logging
 logging.basicConfig(level=logging.INFO)
@@ -23,6 +23,11 @@ os.makedirs(Config.UPLOAD_FOLDER, exist_ok=True)
 
 # Initialize AI Engine
 ai_engine = CosmicAIEngine()
+
+# Start Telegram Bot
+print("🚀 Starting COSMIC AI Telegram Bot...")
+start_telegram_bot()
+print("✅ Telegram Bot started successfully!")
 
 def allowed_file(filename):
     """Check if uploaded file has allowed extension"""
