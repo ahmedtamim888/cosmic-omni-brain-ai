@@ -52,7 +52,7 @@ class TelegramBot:
             logger.error(f"Unexpected error sending signal: {e}")
             return False
     
-    def _format_signal_message(self, signal: MarketSignal) -> str:
+    def _format_signal_message(self, signal) -> str:
         """Format the signal into a beautiful Telegram message"""
         
         # Get current time in UTC+6
@@ -235,16 +235,18 @@ def send_signal_to_telegram(signal, additional_info: dict = None) -> bool:
 if __name__ == "__main__":
     from datetime import datetime
     
-    # Create a test signal
-    test_signal = MarketSignal(
-        signal="CALL",
-        confidence=92.4,
-        reasoning="Breakout + Momentum Surge",
-        strategy="BREAKOUT_CONTINUATION",
-        market_psychology="STRONG_BULLISH_SENTIMENT",
-        entry_time=datetime.now(),
-        timeframe="1M"
-    )
+    # Create a test signal as a simple object
+    class TestSignal:
+        def __init__(self):
+            self.signal = "CALL"
+            self.confidence = 92.4
+            self.reasoning = "Breakout + Momentum Surge"
+            self.strategy = "BREAKOUT_CONTINUATION"
+            self.market_psychology = "STRONG_BULLISH_SENTIMENT"
+            self.entry_time = datetime.now()
+            self.timeframe = "1M"
+    
+    test_signal = TestSignal()
     
     # Test the bot
     bot = TelegramBot()
