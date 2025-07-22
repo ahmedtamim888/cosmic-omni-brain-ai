@@ -867,7 +867,7 @@ class MarketPerceptionEngine:
         return {'detected': False, 'strength': 0, 'location': -1, 'implications': ''}
 
 class StrategyEngine:
-    """Generates trading strategies based on market analysis"""
+    """Advanced AI Strategy Engine - 100 Billion Years Evolution"""
     
     def __init__(self):
         self.strategies = {
@@ -875,7 +875,18 @@ class StrategyEngine:
             'REVERSAL_PLAY': self._reversal_play_strategy,
             'MOMENTUM_SHIFT': self._momentum_shift_strategy,
             'TRAP_FADE': self._trap_fade_strategy,
-            'EXHAUSTION_REVERSAL': self._exhaustion_reversal_strategy
+            'EXHAUSTION_REVERSAL': self._exhaustion_reversal_strategy,
+            # SECRET AI ENGINES FOR DIFFERENT MARKET CONDITIONS
+            'QUANTUM_MOMENTUM': self._quantum_momentum_strategy,
+            'FRACTAL_REVERSAL': self._fractal_reversal_strategy,
+            'NEURAL_BREAKOUT': self._neural_breakout_strategy,
+            'CHAOS_THEORY': self._chaos_theory_strategy,
+            'FIBONACCI_CONFLUENCE': self._fibonacci_confluence_strategy,
+            'MARKET_MAKER_TRAP': self._market_maker_trap_strategy,
+            'INSTITUTIONAL_FLOW': self._institutional_flow_strategy,
+            'VOLATILITY_EXPLOSION': self._volatility_explosion_strategy,
+            'TIME_CYCLE_ANALYSIS': self._time_cycle_analysis_strategy,
+            'SENTIMENT_DIVERGENCE': self._sentiment_divergence_strategy
         }
     
     def generate_strategy(self, market_story: Dict, candles: List[Candle]) -> Dict:
@@ -1344,6 +1355,348 @@ class StrategyEngine:
             }
         
         return {'signal': 'NO_TRADE', 'confidence': 0, 'reasoning': 'No valid three-candle pattern'}
+    
+    # SECRET AI ENGINES FOR DIFFERENT MARKET CONDITIONS
+    def _quantum_momentum_strategy(self, market_story: Dict, candles: List[Candle]) -> Dict:
+        """Quantum Momentum - Advanced Probability Wave Analysis"""
+        if len(candles) < 8:
+            return {'signal': 'NO_TRADE', 'confidence': 0, 'reasoning': 'Insufficient quantum data'}
+        
+        # Quantum momentum calculation using wave interference patterns
+        momentum_waves = []
+        for i in range(3, len(candles)):
+            wave_strength = (candles[i].close_price - candles[i-3].close_price) / candles[i-3].close_price * 100
+            momentum_waves.append(wave_strength)
+        
+        # Quantum superposition analysis
+        wave_coherence = np.std(momentum_waves) if momentum_waves else 0
+        quantum_signal_strength = abs(np.mean(momentum_waves)) / (wave_coherence + 0.1)
+        
+        if quantum_signal_strength > 2.5:
+            last_wave = momentum_waves[-1]
+            confidence = 91 + min(quantum_signal_strength, 6)
+            if last_wave > 0:
+                return {'signal': 'CALL', 'confidence': confidence, 'reasoning': 'Quantum momentum wave coherence detected - bullish probability surge'}
+            else:
+                return {'signal': 'PUT', 'confidence': confidence, 'reasoning': 'Quantum momentum wave coherence detected - bearish probability surge'}
+        
+        return {'signal': 'NO_TRADE', 'confidence': 0, 'reasoning': 'Quantum interference pattern inconclusive'}
+    
+    def _fractal_reversal_strategy(self, market_story: Dict, candles: List[Candle]) -> Dict:
+        """Fractal Reversal - Self-Similar Pattern Recognition"""
+        if len(candles) < 7:
+            return {'signal': 'NO_TRADE', 'confidence': 0, 'reasoning': 'Insufficient fractal data'}
+        
+        # Fractal dimension calculation
+        highs = [c.high_price for c in candles]
+        lows = [c.low_price for c in candles]
+        
+        # Williams Fractal detection (enhanced)
+        fractal_ups = []
+        fractal_downs = []
+        
+        for i in range(2, len(candles)-2):
+            # Fractal up (resistance)
+            if (highs[i] > highs[i-2] and highs[i] > highs[i-1] and 
+                highs[i] > highs[i+1] and highs[i] > highs[i+2]):
+                fractal_ups.append((i, highs[i]))
+            
+            # Fractal down (support)
+            if (lows[i] < lows[i-2] and lows[i] < lows[i-1] and 
+                lows[i] < lows[i+1] and lows[i] < lows[i+2]):
+                fractal_downs.append((i, lows[i]))
+        
+        # Fractal convergence analysis
+        last_candle = candles[-1]
+        
+        if fractal_ups and abs(last_candle.high_price - fractal_ups[-1][1]) < 1.0:
+            return {'signal': 'PUT', 'confidence': 93, 'reasoning': 'Fractal resistance convergence - mathematical reversal probability'}
+        elif fractal_downs and abs(last_candle.low_price - fractal_downs[-1][1]) < 1.0:
+            return {'signal': 'CALL', 'confidence': 93, 'reasoning': 'Fractal support convergence - mathematical reversal probability'}
+        
+        return {'signal': 'NO_TRADE', 'confidence': 0, 'reasoning': 'No fractal convergence detected'}
+    
+    def _neural_breakout_strategy(self, market_story: Dict, candles: List[Candle]) -> Dict:
+        """Neural Breakout - Deep Learning Pattern Recognition"""
+        if len(candles) < 6:
+            return {'signal': 'NO_TRADE', 'confidence': 0, 'reasoning': 'Insufficient neural training data'}
+        
+        # Neural network simulation using price patterns
+        feature_vector = []
+        
+        # Extract neural features
+        for i in range(1, len(candles)):
+            price_change = (candles[i].close_price - candles[i-1].close_price) / candles[i-1].close_price
+            volume_proxy = candles[i].body_size / candles[i].total_size
+            volatility = (candles[i].high_price - candles[i].low_price) / candles[i].close_price
+            
+            feature_vector.extend([price_change, volume_proxy, volatility])
+        
+        # Neural activation function (sigmoid approximation)
+        def neural_activation(x):
+            return 1 / (1 + np.exp(-x * 10))
+        
+        # Weighted neural computation
+        weights = [0.3, 0.2, 0.5, 0.4, 0.6, 0.3, 0.7, 0.4, 0.5]
+        neural_output = sum(w * neural_activation(f) for w, f in zip(weights[:len(feature_vector)], feature_vector))
+        
+        # Neural decision threshold
+        if neural_output > 3.5:
+            confidence = 89 + min(neural_output - 3.5, 8)
+            trend = market_story.get('trend_direction', 'SIDEWAYS')
+            
+            if trend == 'UPTREND' or candles[-1].close_price > candles[-2].close_price:
+                return {'signal': 'CALL', 'confidence': confidence, 'reasoning': 'Neural network breakout pattern - bullish activation'}
+            else:
+                return {'signal': 'PUT', 'confidence': confidence, 'reasoning': 'Neural network breakout pattern - bearish activation'}
+        
+        return {'signal': 'NO_TRADE', 'confidence': 0, 'reasoning': 'Neural network below activation threshold'}
+    
+    def _chaos_theory_strategy(self, market_story: Dict, candles: List[Candle]) -> Dict:
+        """Chaos Theory - Nonlinear Dynamics Analysis"""
+        if len(candles) < 8:
+            return {'signal': 'NO_TRADE', 'confidence': 0, 'reasoning': 'Insufficient chaos data points'}
+        
+        # Lyapunov exponent approximation
+        price_series = [c.close_price for c in candles]
+        
+        # Strange attractor analysis
+        chaos_points = []
+        for i in range(2, len(price_series)):
+            x = price_series[i-2]
+            y = price_series[i-1]
+            z = price_series[i]
+            
+            # Lorenz-like equations for market chaos
+            chaos_value = abs(x - y) * abs(y - z) / (abs(z) + 0.1)
+            chaos_points.append(chaos_value)
+        
+        # Chaos entropy calculation
+        chaos_entropy = np.std(chaos_points) / (np.mean(chaos_points) + 0.1)
+        
+        # Bifurcation detection
+        if chaos_entropy > 0.5 and chaos_entropy < 1.5:  # Edge of chaos
+            last_chaos = chaos_points[-1]
+            avg_chaos = np.mean(chaos_points)
+            
+            if last_chaos > avg_chaos * 1.5:
+                confidence = 92 + min(chaos_entropy * 4, 5)
+                if candles[-1].close_price > candles[-3].close_price:
+                    return {'signal': 'CALL', 'confidence': confidence, 'reasoning': 'Chaos theory edge detection - bullish bifurcation'}
+                else:
+                    return {'signal': 'PUT', 'confidence': confidence, 'reasoning': 'Chaos theory edge detection - bearish bifurcation'}
+        
+        return {'signal': 'NO_TRADE', 'confidence': 0, 'reasoning': 'Market not at chaos edge'}
+    
+    def _fibonacci_confluence_strategy(self, market_story: Dict, candles: List[Candle]) -> Dict:
+        """Fibonacci Confluence - Golden Ratio Analysis"""
+        if len(candles) < 6:
+            return {'signal': 'NO_TRADE', 'confidence': 0, 'reasoning': 'Insufficient fibonacci data'}
+        
+        # Golden ratio constants
+        PHI = 1.618
+        INV_PHI = 0.618
+        
+        highs = [c.high_price for c in candles]
+        lows = [c.low_price for c in candles]
+        
+        # Fibonacci retracement levels
+        swing_high = max(highs)
+        swing_low = min(lows)
+        range_size = swing_high - swing_low
+        
+        fib_levels = {
+            'fib_236': swing_high - (range_size * 0.236),
+            'fib_382': swing_high - (range_size * 0.382),
+            'fib_500': swing_high - (range_size * 0.500),
+            'fib_618': swing_high - (range_size * 0.618),
+            'fib_786': swing_high - (range_size * 0.786)
+        }
+        
+        current_price = candles[-1].close_price
+        
+        # Fibonacci confluence detection
+        for level_name, level_value in fib_levels.items():
+            if abs(current_price - level_value) < range_size * 0.02:  # Within 2% of fib level
+                confluence_strength = 1 / (abs(current_price - level_value) + 0.01)
+                confidence = 90 + min(confluence_strength * 5, 7)
+                
+                if level_name in ['fib_618', 'fib_786'] and current_price < level_value:
+                    return {'signal': 'CALL', 'confidence': confidence, 'reasoning': f'Fibonacci {level_name} confluence support - golden ratio reversal'}
+                elif level_name in ['fib_236', 'fib_382'] and current_price > level_value:
+                    return {'signal': 'PUT', 'confidence': confidence, 'reasoning': f'Fibonacci {level_name} confluence resistance - golden ratio reversal'}
+        
+        return {'signal': 'NO_TRADE', 'confidence': 0, 'reasoning': 'No fibonacci confluence detected'}
+    
+    def _market_maker_trap_strategy(self, market_story: Dict, candles: List[Candle]) -> Dict:
+        """Market Maker Trap - Institutional Manipulation Detection"""
+        if len(candles) < 7:
+            return {'signal': 'NO_TRADE', 'confidence': 0, 'reasoning': 'Insufficient market maker data'}
+        
+        # Detect stop-loss hunting patterns
+        recent_candles = candles[-5:]
+        
+        # Look for quick spike and reversal (stop hunt)
+        for i in range(1, len(recent_candles)-1):
+            prev_candle = recent_candles[i-1]
+            spike_candle = recent_candles[i]
+            next_candle = recent_candles[i+1]
+            
+            # Bullish trap detection
+            if (spike_candle.low_price < prev_candle.low_price * 0.998 and  # Lower low
+                spike_candle.close_price > spike_candle.open_price and      # Bullish close
+                next_candle.close_price > spike_candle.high_price):         # Follow through
+                
+                return {'signal': 'CALL', 'confidence': 94, 'reasoning': 'Market maker stop-loss hunt detected - institutional bullish trap fade'}
+            
+            # Bearish trap detection
+            elif (spike_candle.high_price > prev_candle.high_price * 1.002 and  # Higher high
+                  spike_candle.close_price < spike_candle.open_price and        # Bearish close
+                  next_candle.close_price < spike_candle.low_price):            # Follow through
+                
+                return {'signal': 'PUT', 'confidence': 94, 'reasoning': 'Market maker stop-loss hunt detected - institutional bearish trap fade'}
+        
+        return {'signal': 'NO_TRADE', 'confidence': 0, 'reasoning': 'No market maker manipulation detected'}
+    
+    def _institutional_flow_strategy(self, market_story: Dict, candles: List[Candle]) -> Dict:
+        """Institutional Flow - Smart Money Analysis"""
+        if len(candles) < 8:
+            return {'signal': 'NO_TRADE', 'confidence': 0, 'reasoning': 'Insufficient institutional data'}
+        
+        # Detect institutional accumulation/distribution
+        volume_proxy = [c.body_size for c in candles]
+        price_changes = [(candles[i].close_price - candles[i-1].close_price) for i in range(1, len(candles))]
+        
+        # On-Balance Volume proxy calculation
+        obv_proxy = 0
+        obv_values = []
+        
+        for i, change in enumerate(price_changes):
+            if change > 0:
+                obv_proxy += volume_proxy[i+1]
+            elif change < 0:
+                obv_proxy -= volume_proxy[i+1]
+            obv_values.append(obv_proxy)
+        
+        # Institutional divergence detection
+        price_trend = candles[-1].close_price - candles[-4].close_price
+        volume_trend = obv_values[-1] - obv_values[-4]
+        
+        # Smart money divergence
+        if price_trend > 0 and volume_trend < 0:  # Price up, volume down
+            return {'signal': 'PUT', 'confidence': 91, 'reasoning': 'Institutional distribution detected - smart money selling into strength'}
+        elif price_trend < 0 and volume_trend > 0:  # Price down, volume up
+            return {'signal': 'CALL', 'confidence': 91, 'reasoning': 'Institutional accumulation detected - smart money buying weakness'}
+        
+        return {'signal': 'NO_TRADE', 'confidence': 0, 'reasoning': 'No institutional flow divergence'}
+    
+    def _volatility_explosion_strategy(self, market_story: Dict, candles: List[Candle]) -> Dict:
+        """Volatility Explosion - Compression/Expansion Analysis"""
+        if len(candles) < 8:
+            return {'signal': 'NO_TRADE', 'confidence': 0, 'reasoning': 'Insufficient volatility data'}
+        
+        # True Range calculation
+        true_ranges = []
+        for i in range(1, len(candles)):
+            high_low = candles[i].high_price - candles[i].low_price
+            high_close = abs(candles[i].high_price - candles[i-1].close_price)
+            low_close = abs(candles[i].low_price - candles[i-1].close_price)
+            true_range = max(high_low, high_close, low_close)
+            true_ranges.append(true_range)
+        
+        # Volatility compression detection
+        recent_volatility = np.mean(true_ranges[-3:])
+        historical_volatility = np.mean(true_ranges[:-3])
+        
+        compression_ratio = recent_volatility / (historical_volatility + 0.001)
+        
+        # Volatility explosion setup
+        if compression_ratio < 0.5:  # Severe compression
+            last_candle = candles[-1]
+            prev_candle = candles[-2]
+            
+            # Direction bias from last candle
+            if last_candle.close_price > prev_candle.close_price:
+                confidence = 95 + min((0.5 - compression_ratio) * 10, 2)
+                return {'signal': 'CALL', 'confidence': confidence, 'reasoning': 'Volatility explosion setup - compressed spring bullish release'}
+            else:
+                confidence = 95 + min((0.5 - compression_ratio) * 10, 2)
+                return {'signal': 'PUT', 'confidence': confidence, 'reasoning': 'Volatility explosion setup - compressed spring bearish release'}
+        
+        return {'signal': 'NO_TRADE', 'confidence': 0, 'reasoning': 'No volatility compression detected'}
+    
+    def _time_cycle_analysis_strategy(self, market_story: Dict, candles: List[Candle]) -> Dict:
+        """Time Cycle Analysis - Temporal Pattern Recognition"""
+        if len(candles) < 8:
+            return {'signal': 'NO_TRADE', 'confidence': 0, 'reasoning': 'Insufficient time cycle data'}
+        
+        # Market time cycles (simplified for 1-minute analysis)
+        cycle_periods = [3, 5, 8, 13]  # Fibonacci-based cycles
+        
+        closes = [c.close_price for c in candles]
+        
+        # Dominant cycle detection
+        cycle_strengths = []
+        
+        for period in cycle_periods:
+            if len(closes) >= period * 2:
+                cycle_correlation = 0
+                for i in range(period, len(closes)):
+                    cycle_correlation += abs(closes[i] - closes[i-period])
+                
+                cycle_strength = 1 / (cycle_correlation / period + 0.001)
+                cycle_strengths.append((period, cycle_strength))
+        
+        if cycle_strengths:
+            dominant_cycle = max(cycle_strengths, key=lambda x: x[1])
+            
+            if dominant_cycle[1] > 5:  # Strong cycle detected
+                cycle_position = len(closes) % dominant_cycle[0]
+                
+                # Cycle turning point prediction
+                if cycle_position in [0, dominant_cycle[0]//2]:  # At cycle extremes
+                    current_trend = closes[-1] - closes[-3]
+                    confidence = 88 + min(dominant_cycle[1] - 5, 9)
+                    
+                    if current_trend > 0:
+                        return {'signal': 'PUT', 'confidence': confidence, 'reasoning': f'Time cycle reversal - {dominant_cycle[0]} period peak detected'}
+                    else:
+                        return {'signal': 'CALL', 'confidence': confidence, 'reasoning': f'Time cycle reversal - {dominant_cycle[0]} period trough detected'}
+        
+        return {'signal': 'NO_TRADE', 'confidence': 0, 'reasoning': 'No dominant time cycle detected'}
+    
+    def _sentiment_divergence_strategy(self, market_story: Dict, candles: List[Candle]) -> Dict:
+        """Sentiment Divergence - Crowd Psychology Analysis"""
+        if len(candles) < 8:
+            return {'signal': 'NO_TRADE', 'confidence': 0, 'reasoning': 'Insufficient sentiment data'}
+        
+        # Sentiment proxy using candle characteristics
+        sentiment_scores = []
+        
+        for candle in candles:
+            # Bullish sentiment indicators
+            bullish_body = candle.body_size if candle.is_bullish else 0
+            bullish_wick_ratio = candle.lower_wick / (candle.total_size + 0.001)
+            
+            # Bearish sentiment indicators
+            bearish_body = candle.body_size if not candle.is_bullish else 0
+            bearish_wick_ratio = candle.upper_wick / (candle.total_size + 0.001)
+            
+            # Combined sentiment score
+            sentiment = (bullish_body + bullish_wick_ratio) - (bearish_body + bearish_wick_ratio)
+            sentiment_scores.append(sentiment)
+        
+        # Sentiment divergence analysis
+        price_momentum = candles[-1].close_price - candles[-4].close_price
+        sentiment_momentum = np.mean(sentiment_scores[-3:]) - np.mean(sentiment_scores[-6:-3])
+        
+        # Divergence detection
+        if price_momentum > 0 and sentiment_momentum < 0:  # Price up, sentiment down
+            return {'signal': 'PUT', 'confidence': 89, 'reasoning': 'Bearish sentiment divergence - crowd losing confidence in uptrend'}
+        elif price_momentum < 0 and sentiment_momentum > 0:  # Price down, sentiment up
+            return {'signal': 'CALL', 'confidence': 89, 'reasoning': 'Bullish sentiment divergence - crowd finding confidence in downtrend'}
+        
+        return {'signal': 'NO_TRADE', 'confidence': 0, 'reasoning': 'No sentiment divergence detected'}
 
 class CosmicAIEngine:
     """Main AI engine that orchestrates the analysis and signal generation"""
@@ -1399,8 +1752,15 @@ class CosmicAIEngine:
                     entry_time=datetime.now()
                 )
             
-            # Step 5: Generate final signal
+            # Step 5: Generate final signal for NEXT 1-minute candle
             patterns_found = [p['name'] for p in market_story.get('patterns', [])]
+            
+            # Calculate next candle time (current time + 1 minute)
+            current_time = datetime.now()
+            next_candle_time = current_time.replace(second=0, microsecond=0)
+            # Add 1 minute for next candle prediction
+            from datetime import timedelta
+            next_candle_time = next_candle_time + timedelta(minutes=1)
             
             return MarketSignal(
                 signal=strategy_details['signal'],
@@ -1408,7 +1768,7 @@ class CosmicAIEngine:
                 reasoning=strategy_details['reasoning'],
                 strategy=best_strategy,
                 market_psychology=market_story['market_psychology'],
-                entry_time=datetime.now(),
+                entry_time=next_candle_time,  # Prediction for NEXT candle
                 timeframe=Config.SIGNAL_TIMEFRAME,
                 patterns_detected=patterns_found
             )

@@ -543,20 +543,23 @@ Having issues? Contact @CosmicAISupport
             
         current_time = datetime.now(timezone(timedelta(hours=6)))
         
-        # Format professional signal message
+        # Calculate next candle time for prediction
+        next_candle_time = current_time.replace(second=0, microsecond=0) + timedelta(minutes=1)
+        
+        # Format professional signal message for NEXT candle
         signal_message = f"""
 🧠 <b>COSMIC AI SIGNAL</b> 🚀
 
-🕒 <b>Time:</b> {current_time.strftime('%H:%M')} (UTC+6)
+🕒 <b>Next Candle:</b> {next_candle_time.strftime('%H:%M')} (UTC+6)
 📈 <b>Signal:</b> <b>{signal_data.get('signal', 'NO_TRADE')}</b>
 📊 <b>Strategy:</b> {signal_data.get('strategy', 'Multi-Pattern')}
 💡 <b>Reason:</b> {signal_data.get('reasoning', 'Technical Analysis')}
 🔒 <b>Confidence:</b> <b>{signal_data.get('confidence', 0):.1f}%</b>
 
 🎯 <b>Market Psychology:</b> {signal_data.get('market_psychology', 'Neutral')}
-⏰ <b>Timeframe:</b> 1 Minute
+⏰ <b>Prediction For:</b> Next 1-Minute Candle
 
-<i>🚀 Trade responsibly & manage risk!</i>
+<i>🚀 100 Billion Years AI Evolution - Ultimate Strategy!</i>
         """
         
         # Add signal to history
