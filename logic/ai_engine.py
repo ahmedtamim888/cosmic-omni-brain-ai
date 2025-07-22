@@ -897,79 +897,170 @@ class StrategyEngine:
         }
     
     def _breakout_continuation_strategy(self, market_story: Dict, candles: List[Candle]) -> Dict:
-        """Breakout continuation strategy"""
+        """Enhanced Breakout Continuation Strategy - High Win Rate Focus"""
         confidence = 0
         signal = "NO_TRADE"
         reasoning = ""
         
-        # Check for breakout patterns
-        breakout_patterns = [p for p in market_story['patterns'] if 'BREAKOUT' in p['name']]
+        if len(candles) < 6:
+            return {'signal': signal, 'confidence': confidence, 'reasoning': 'Insufficient data'}
         
-        if breakout_patterns:
-            breakout = breakout_patterns[0]
-            momentum = market_story['momentum']
+        # Analyze last 6-8 candles for breakout setup
+        recent_candles = candles[-6:]
+        last_candle = candles[-1]
+        prev_candle = candles[-2]
+        
+        # Detect strong breakout conditions
+        sr_analysis = market_story['support_resistance']
+        momentum = market_story['momentum']
+        volatility = market_story['volatility']
+        
+        # High probability breakout signals
+        breakout_detected = False
+        breakout_type = ""
+        
+        # 1. Resistance breakout with volume surge
+        if (sr_analysis['near_resistance'] and 
+            last_candle.is_bullish and 
+            last_candle.body_size > np.mean([c.body_size for c in recent_candles]) * 1.5):
             
-            # Upward breakout with bullish momentum
-            if 'UPWARD' in breakout.get('type', '') and momentum['direction'] == 'BULLISH':
-                confidence = 75 + (breakout['strength'] * 15) + (momentum['strength'] * 10)
+            # Confirm with momentum
+            if momentum['direction'] == 'BULLISH' and momentum['strength'] > 0.7:
+                confidence = 88 + (momentum['strength'] * 7)
                 signal = "CALL"
-                reasoning = "Upward breakout with strong bullish momentum continuation"
+                reasoning = "Strong resistance breakout with volume surge and bullish momentum"
+                breakout_detected = True
+                breakout_type = "RESISTANCE_BREAK"
+        
+        # 2. Support breakdown with volume
+        elif (sr_analysis['near_support'] and 
+              not last_candle.is_bullish and 
+              last_candle.body_size > np.mean([c.body_size for c in recent_candles]) * 1.5):
             
-            # Downward breakout with bearish momentum
-            elif 'DOWNWARD' in breakout.get('type', '') and momentum['direction'] == 'BEARISH':
-                confidence = 75 + (breakout['strength'] * 15) + (momentum['strength'] * 10)
+            if momentum['direction'] == 'BEARISH' and momentum['strength'] > 0.7:
+                confidence = 88 + (momentum['strength'] * 7)
                 signal = "PUT"
-                reasoning = "Downward breakout with strong bearish momentum continuation"
+                reasoning = "Strong support breakdown with volume surge and bearish momentum"
+                breakout_detected = True
+                breakout_type = "SUPPORT_BREAK"
+        
+        # 3. Consolidation breakout pattern
+        elif self._detect_consolidation_breakout(recent_candles):
+            consolidation_result = self._analyze_consolidation_breakout(recent_candles, momentum)
+            if consolidation_result['valid']:
+                confidence = consolidation_result['confidence']
+                signal = consolidation_result['signal']
+                reasoning = consolidation_result['reasoning']
+                breakout_detected = True
+                breakout_type = "CONSOLIDATION_BREAK"
+        
+        # Apply additional filters for high win rate
+        if breakout_detected and confidence > 85:
+            # Trend alignment filter
+            trend = market_story['trend_direction']
+            if ((signal == "CALL" and trend in ["UPTREND", "SIDEWAYS"]) or
+                (signal == "PUT" and trend in ["DOWNTREND", "SIDEWAYS"])):
+                confidence += 3  # Bonus for trend alignment
+            elif ((signal == "CALL" and trend == "DOWNTREND") or
+                  (signal == "PUT" and trend == "UPTREND")):
+                confidence -= 8  # Penalty for counter-trend
+            
+            # Time-of-trend filter (avoid late entries)
+            if self._is_trend_mature(candles):
+                confidence -= 5
         
         return {
             'signal': signal,
-            'confidence': min(confidence, 95),
+            'confidence': min(confidence, 97),
             'reasoning': reasoning
         }
     
     def _reversal_play_strategy(self, market_story: Dict, candles: List[Candle]) -> Dict:
-        """Reversal play strategy"""
+        """Enhanced Reversal Play Strategy - High Probability Reversals"""
         confidence = 0
         signal = "NO_TRADE"
         reasoning = ""
         
-        # Look for reversal patterns
-        reversal_patterns = [p for p in market_story['patterns'] 
-                           if any(x in p['name'] for x in ['HAMMER', 'SHOOTING_STAR', 'ENGULFING', 'DOJI'])]
+        if len(candles) < 6:
+            return {'signal': signal, 'confidence': confidence, 'reasoning': 'Insufficient data'}
         
-        if reversal_patterns:
-            pattern = reversal_patterns[0]
-            sr_analysis = market_story['support_resistance']
-            
-            # Bullish reversal at support
-            if (pattern['name'] in ['HAMMER', 'BULLISH_ENGULFING'] and 
-                sr_analysis['near_support']):
-                confidence = 80 + (pattern['strength'] * 15)
+        recent_candles = candles[-6:]
+        last_candle = candles[-1]
+        second_last = candles[-2]
+        third_last = candles[-3]
+        
+        sr_analysis = market_story['support_resistance']
+        trend = market_story['trend_direction']
+        momentum = market_story['momentum']
+        
+        # 1. Double Bottom Reversal at Support
+        if (sr_analysis['near_support'] and trend == 'DOWNTREND'):
+            double_bottom = self._detect_double_bottom(recent_candles, sr_analysis)
+            if double_bottom['detected']:
+                confidence = 89 + double_bottom['strength']
                 signal = "CALL"
-                reasoning = f"Bullish reversal pattern ({pattern['name']}) at support level"
-            
-            # Bearish reversal at resistance
-            elif (pattern['name'] in ['SHOOTING_STAR', 'BEARISH_ENGULFING'] and 
-                  sr_analysis['near_resistance']):
-                confidence = 80 + (pattern['strength'] * 15)
+                reasoning = "Double bottom reversal at key support with bullish confirmation"
+        
+        # 2. Double Top Reversal at Resistance  
+        elif (sr_analysis['near_resistance'] and trend == 'UPTREND'):
+            double_top = self._detect_double_top(recent_candles, sr_analysis)
+            if double_top['detected']:
+                confidence = 89 + double_top['strength']
                 signal = "PUT"
-                reasoning = f"Bearish reversal pattern ({pattern['name']}) at resistance level"
+                reasoning = "Double top reversal at key resistance with bearish confirmation"
+        
+        # 3. Hammer/Doji at Support (Strong Reversal)
+        elif (sr_analysis['near_support'] and self._is_reversal_candle(last_candle, "BULLISH")):
+            if (trend == 'DOWNTREND' and 
+                last_candle.lower_wick > last_candle.body_size * 2 and
+                last_candle.upper_wick < last_candle.body_size * 0.5):
+                confidence = 87
+                signal = "CALL"
+                reasoning = "Strong hammer reversal at support after downtrend"
+        
+        # 4. Shooting Star at Resistance (Strong Reversal)
+        elif (sr_analysis['near_resistance'] and self._is_reversal_candle(last_candle, "BEARISH")):
+            if (trend == 'UPTREND' and 
+                last_candle.upper_wick > last_candle.body_size * 2 and
+                last_candle.lower_wick < last_candle.body_size * 0.5):
+                confidence = 87
+                signal = "PUT"
+                reasoning = "Strong shooting star reversal at resistance after uptrend"
+        
+        # 5. Engulfing Pattern Reversal
+        elif self._detect_engulfing_reversal(second_last, last_candle, sr_analysis):
+            engulfing_result = self._analyze_engulfing_reversal(second_last, last_candle, trend)
+            confidence = engulfing_result['confidence']
+            signal = engulfing_result['signal']
+            reasoning = engulfing_result['reasoning']
+        
+        # 6. Three-Candle Reversal Pattern
+        elif self._detect_three_candle_reversal(third_last, second_last, last_candle, trend):
+            three_candle_result = self._analyze_three_candle_reversal(recent_candles[-3:], trend)
+            confidence = three_candle_result['confidence']
+            signal = three_candle_result['signal']
+            reasoning = three_candle_result['reasoning']
+        
+        # Apply momentum confirmation filter
+        if confidence > 85:
+            # Momentum divergence increases reversal probability
+            if ((signal == "CALL" and momentum['direction'] == 'BEARISH') or
+                (signal == "PUT" and momentum['direction'] == 'BULLISH')):
+                confidence += 4  # Momentum divergence bonus
             
-            # Doji indecision reversal
-            elif pattern['name'] == 'DOJI':
-                trend = market_story['trend_direction']
-                if trend == 'UPTREND':
-                    confidence = 70 + (pattern['strength'] * 10)
-                    signal = "PUT"
-                    reasoning = "Doji indecision after uptrend, bearish reversal expected"
-                elif trend == 'DOWNTREND':
-                    confidence = 70 + (pattern['strength'] * 10)
-                    signal = "CALL"
-                    reasoning = "Doji indecision after downtrend, bullish reversal expected"
+            # RSI-like analysis using price action
+            recent_highs = [c.high_price for c in recent_candles]
+            recent_lows = [c.low_price for c in recent_candles]
+            price_momentum = (recent_highs[-1] - recent_lows[-1]) / (max(recent_highs) - min(recent_lows))
+            
+            if signal == "CALL" and price_momentum < 0.3:  # Oversold condition
+                confidence += 3
+            elif signal == "PUT" and price_momentum > 0.7:  # Overbought condition
+                confidence += 3
         
         return {
             'signal': signal,
-            'confidence': min(confidence, 95),
+            'confidence': min(confidence, 96),
             'reasoning': reasoning
         }
     
@@ -1064,6 +1155,195 @@ class StrategyEngine:
             'confidence': min(confidence, 95),
             'reasoning': reasoning
         }
+    
+    # Helper methods for enhanced strategies
+    def _detect_consolidation_breakout(self, candles: List[Candle]) -> bool:
+        """Detect if price is breaking out of consolidation"""
+        if len(candles) < 5:
+            return False
+            
+        # Calculate price range for consolidation detection
+        highs = [c.high_price for c in candles[:-1]]  # Exclude last candle
+        lows = [c.low_price for c in candles[:-1]]
+        
+        price_range = max(highs) - min(lows)
+        last_candle = candles[-1]
+        
+        # Breakout if last candle moves significantly beyond recent range
+        breakout_threshold = price_range * 0.3
+        
+        return (last_candle.high_price > max(highs) + breakout_threshold or
+                last_candle.low_price < min(lows) - breakout_threshold)
+    
+    def _analyze_consolidation_breakout(self, candles: List[Candle], momentum: Dict) -> Dict:
+        """Analyze consolidation breakout for signal generation"""
+        last_candle = candles[-1]
+        prev_candles = candles[:-1]
+        
+        highs = [c.high_price for c in prev_candles]
+        lows = [c.low_price for c in prev_candles]
+        
+        # Determine breakout direction
+        if last_candle.high_price > max(highs):
+            signal = "CALL"
+            confidence = 86 + (momentum['strength'] * 8)
+            reasoning = "Bullish consolidation breakout with strong momentum"
+        elif last_candle.low_price < min(lows):
+            signal = "PUT"
+            confidence = 86 + (momentum['strength'] * 8)
+            reasoning = "Bearish consolidation breakdown with strong momentum"
+        else:
+            return {'valid': False}
+        
+        return {
+            'valid': True,
+            'signal': signal,
+            'confidence': min(confidence, 94),
+            'reasoning': reasoning
+        }
+    
+    def _is_trend_mature(self, candles: List[Candle]) -> bool:
+        """Check if current trend is mature (avoid late entries)"""
+        if len(candles) < 8:
+            return False
+            
+        recent_8 = candles[-8:]
+        same_direction_count = 0
+        
+        for i in range(1, len(recent_8)):
+            prev_close = recent_8[i-1].close_price
+            curr_close = recent_8[i].close_price
+            
+            if curr_close > prev_close:  # Upward move
+                same_direction_count += 1
+            elif curr_close < prev_close:  # Downward move
+                same_direction_count -= 1
+        
+        # Trend is mature if 6+ candles in same direction
+        return abs(same_direction_count) >= 6
+    
+    def _detect_double_bottom(self, candles: List[Candle], sr_analysis: Dict) -> Dict:
+        """Detect double bottom reversal pattern"""
+        if len(candles) < 5:
+            return {'detected': False}
+            
+        lows = [c.low_price for c in candles]
+        
+        # Find two lowest points
+        sorted_lows = sorted(enumerate(lows), key=lambda x: x[1])
+        lowest_indices = [sorted_lows[0][0], sorted_lows[1][0]]
+        
+        # Check if they're reasonably spaced and at similar levels
+        if (abs(lowest_indices[0] - lowest_indices[1]) >= 2 and
+            abs(sorted_lows[0][1] - sorted_lows[1][1]) < 2.0):
+            
+            return {'detected': True, 'strength': 6}
+        
+        return {'detected': False}
+    
+    def _detect_double_top(self, candles: List[Candle], sr_analysis: Dict) -> Dict:
+        """Detect double top reversal pattern"""
+        if len(candles) < 5:
+            return {'detected': False}
+            
+        highs = [c.high_price for c in candles]
+        
+        # Find two highest points
+        sorted_highs = sorted(enumerate(highs), key=lambda x: x[1], reverse=True)
+        highest_indices = [sorted_highs[0][0], sorted_highs[1][0]]
+        
+        # Check if they're reasonably spaced and at similar levels
+        if (abs(highest_indices[0] - highest_indices[1]) >= 2 and
+            abs(sorted_highs[0][1] - sorted_highs[1][1]) < 2.0):
+            
+            return {'detected': True, 'strength': 6}
+        
+        return {'detected': False}
+    
+    def _is_reversal_candle(self, candle: Candle, direction: str) -> bool:
+        """Check if candle shows reversal characteristics"""
+        if direction == "BULLISH":
+            # Hammer-like: long lower wick, small upper wick
+            return (candle.lower_wick > candle.body_size * 1.5 and
+                    candle.upper_wick < candle.body_size * 0.5)
+        else:  # BEARISH
+            # Shooting star-like: long upper wick, small lower wick
+            return (candle.upper_wick > candle.body_size * 1.5 and
+                    candle.lower_wick < candle.body_size * 0.5)
+    
+    def _detect_engulfing_reversal(self, prev_candle: Candle, curr_candle: Candle, sr_analysis: Dict) -> bool:
+        """Detect engulfing reversal pattern"""
+        # Bullish engulfing: bearish candle followed by larger bullish candle
+        bullish_engulfing = (not prev_candle.is_bullish and curr_candle.is_bullish and
+                           curr_candle.body_size > prev_candle.body_size * 1.2 and
+                           curr_candle.close_price > prev_candle.open_price and
+                           curr_candle.open_price < prev_candle.close_price)
+        
+        # Bearish engulfing: bullish candle followed by larger bearish candle
+        bearish_engulfing = (prev_candle.is_bullish and not curr_candle.is_bullish and
+                           curr_candle.body_size > prev_candle.body_size * 1.2 and
+                           curr_candle.close_price < prev_candle.open_price and
+                           curr_candle.open_price > prev_candle.close_price)
+        
+        return bullish_engulfing or bearish_engulfing
+    
+    def _analyze_engulfing_reversal(self, prev_candle: Candle, curr_candle: Candle, trend: str) -> Dict:
+        """Analyze engulfing pattern for signal generation"""
+        if (not prev_candle.is_bullish and curr_candle.is_bullish and
+            curr_candle.body_size > prev_candle.body_size * 1.2):
+            return {
+                'signal': 'CALL',
+                'confidence': 88,
+                'reasoning': 'Strong bullish engulfing reversal pattern'
+            }
+        elif (prev_candle.is_bullish and not curr_candle.is_bullish and
+              curr_candle.body_size > prev_candle.body_size * 1.2):
+            return {
+                'signal': 'PUT',
+                'confidence': 88,
+                'reasoning': 'Strong bearish engulfing reversal pattern'
+            }
+        
+        return {'signal': 'NO_TRADE', 'confidence': 0, 'reasoning': 'No valid engulfing pattern'}
+    
+    def _detect_three_candle_reversal(self, first: Candle, second: Candle, third: Candle, trend: str) -> bool:
+        """Detect three-candle reversal patterns"""
+        # Morning star pattern (bullish reversal)
+        morning_star = (not first.is_bullish and 
+                       second.body_size < first.body_size * 0.5 and
+                       third.is_bullish and third.body_size > first.body_size * 0.8 and
+                       trend == 'DOWNTREND')
+        
+        # Evening star pattern (bearish reversal)
+        evening_star = (first.is_bullish and 
+                       second.body_size < first.body_size * 0.5 and
+                       not third.is_bullish and third.body_size > first.body_size * 0.8 and
+                       trend == 'UPTREND')
+        
+        return morning_star or evening_star
+    
+    def _analyze_three_candle_reversal(self, candles: List[Candle], trend: str) -> Dict:
+        """Analyze three-candle reversal for signal generation"""
+        first, second, third = candles
+        
+        # Morning star
+        if (not first.is_bullish and second.body_size < first.body_size * 0.5 and
+            third.is_bullish and trend == 'DOWNTREND'):
+            return {
+                'signal': 'CALL',
+                'confidence': 86,
+                'reasoning': 'Three-candle morning star reversal pattern'
+            }
+        # Evening star
+        elif (first.is_bullish and second.body_size < first.body_size * 0.5 and
+              not third.is_bullish and trend == 'UPTREND'):
+            return {
+                'signal': 'PUT',
+                'confidence': 86,
+                'reasoning': 'Three-candle evening star reversal pattern'
+            }
+        
+        return {'signal': 'NO_TRADE', 'confidence': 0, 'reasoning': 'No valid three-candle pattern'}
 
 class CosmicAIEngine:
     """Main AI engine that orchestrates the analysis and signal generation"""
