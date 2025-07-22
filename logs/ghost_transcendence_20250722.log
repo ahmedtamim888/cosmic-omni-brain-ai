@@ -209,3 +209,13 @@
 2025-07-22 02:56:10 |     INFO | GHOST_TRANSCENDENCE_CORE | analyze_chart:186 | 🎯 Signal: CALL
 2025-07-22 02:57:18 |     INFO | GHOST_TRANSCENDENCE_CORE | start_telegram_bot:363 | 📱 Telegram bot started in separate process
 2025-07-22 02:57:18 |     INFO | GHOST_TRANSCENDENCE_CORE | <module>:373 | 🔥 GHOST TRANSCENDENCE CORE ∞ vX STARTING UP
+2025-07-22 03:00:38 |     INFO | GHOST_TRANSCENDENCE_CORE | analyze_chart:137 | 🕯️ CANDLE WHISPERER: Starting chart analysis...
+2025-07-22 03:00:38 |     INFO | GHOST_TRANSCENDENCE_CORE | analyze_chart:155 | 🖼️ Image loaded: (1280, 574, 3)
+2025-07-22 03:00:38 |     INFO | GHOST_TRANSCENDENCE_CORE | analyze_chart:174 | 🕯️ REAL ANALYSIS: 5 ACTUAL candles detected in your chart
+2025-07-22 03:00:38 |     INFO | GHOST_TRANSCENDENCE_CORE | analyze_chart:182 | 🧠 Strategy: candle_whisperer_call
+2025-07-22 03:00:38 |     INFO | GHOST_TRANSCENDENCE_CORE | analyze_chart:186 | 🎯 Signal: CALL
+2025-07-22 03:02:44 |     INFO | GHOST_TRANSCENDENCE_CORE | analyze_chart:137 | 🕯️ CANDLE WHISPERER: Starting chart analysis...
+2025-07-22 03:02:44 |     INFO | GHOST_TRANSCENDENCE_CORE | analyze_chart:155 | 🖼️ Image loaded: (1280, 574, 3)
+2025-07-22 03:02:44 |     INFO | GHOST_TRANSCENDENCE_CORE | analyze_chart:174 | 🕯️ REAL ANALYSIS: 11 ACTUAL candles detected in your chart
+2025-07-22 03:02:44 |     INFO | GHOST_TRANSCENDENCE_CORE | analyze_chart:182 | 🧠 Strategy: candle_whisperer_call
+2025-07-22 03:02:44 |     INFO | GHOST_TRANSCENDENCE_CORE | analyze_chart:186 | 🎯 Signal: CALL
