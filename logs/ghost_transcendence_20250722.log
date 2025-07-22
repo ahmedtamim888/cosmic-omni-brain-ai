@@ -1,0 +1,267 @@
+2025-07-22 01:08:42 |     INFO | GHOST_TRANSCENDENCE_CORE | start_telegram_bot:157 | 📱 Telegram bot started in separate process
+2025-07-22 01:08:42 |     INFO | GHOST_TRANSCENDENCE_CORE | <module>:167 | 🔥 GHOST TRANSCENDENCE CORE ∞ vX STARTING UP
+2025-07-22 01:11:47 |     INFO | GHOST_TRANSCENDENCE_CORE | analyze_chart:59 | 🧠 GHOST TRANSCENDENCE CORE ACTIVATED - Beginning chart analysis
+2025-07-22 01:11:47 |     INFO | GHOST_TRANSCENDENCE_CORE | analyze_chart:82 | 🎯 Signal Generated: {'signal': 'NO SIGNAL', 'confidence': 0.0, 'timeframe': '1M', 'time_target': '01:12 | Next candle (Strong momentum)', 'reasoning': '🚫 NO SIGNAL: Confidence below threshold (38.8% < 75.0%) | Market manipulation signs detected', 'strategy_type': 'volatility_scalping_strategy', 'market_conditions': {'phase': 'weak_uptrend', 'momentum': 'neutral', 'volatility': 'very_high', 'sentiment': 'neutral', 'structure': 'unclear_structure', 'risk_level': 'medium'}, 'risk_assessment': {'level': 'high', 'score': 0.4, 'factors': 1, 'manipulation_risk': True}, 'entry_timing': {'optimal_window_seconds': 10, 'timing_score': 0.8, 'delay_compensation': True, 'broker_adjustment': 1.0}, 'ghost_factor': 1.0}
+2025-07-22 01:12:26 |     INFO | GHOST_TRANSCENDENCE_CORE | analyze_chart:59 | 🧠 GHOST TRANSCENDENCE CORE ACTIVATED - Beginning chart analysis
+2025-07-22 01:12:26 |     INFO | GHOST_TRANSCENDENCE_CORE | analyze_chart:82 | 🎯 Signal Generated: {'signal': 'NO SIGNAL', 'confidence': 0.0, 'timeframe': '1M', 'time_target': '01:12 | Next candle (Strong momentum)', 'reasoning': '🚫 NO SIGNAL: Confidence below threshold (46.2% < 75.0%) | Market manipulation signs detected', 'strategy_type': 'evolved_strategy', 'market_conditions': {'phase': 'strong_downtrend', 'momentum': 'neutral', 'volatility': 'very_high', 'sentiment': 'neutral', 'structure': 'unclear_structure', 'risk_level': 'medium'}, 'risk_assessment': {'level': 'high', 'score': 0.35, 'factors': 1, 'manipulation_risk': True}, 'entry_timing': {'optimal_window_seconds': 30, 'timing_score': 0.5, 'delay_compensation': True, 'broker_adjustment': 0.5}, 'ghost_factor': 1.0}
+2025-07-22 01:12:50 |     INFO | GHOST_TRANSCENDENCE_CORE | analyze_chart:59 | 🧠 GHOST TRANSCENDENCE CORE ACTIVATED - Beginning chart analysis
+2025-07-22 01:12:50 |     INFO | GHOST_TRANSCENDENCE_CORE | analyze_chart:82 | 🎯 Signal Generated: {'signal': 'NO SIGNAL', 'confidence': 0.0, 'timeframe': '1M', 'time_target': '01:13 | Next candle (High volatility)', 'reasoning': '🚫 NO SIGNAL: Confidence below threshold (47.3% < 75.0%) | Market manipulation signs detected', 'strategy_type': 'volatility_scalping_strategy', 'market_conditions': {'phase': 'strong_uptrend', 'momentum': 'neutral', 'volatility': 'very_high', 'sentiment': 'bullish', 'structure': 'unclear_structure', 'risk_level': 'medium'}, 'risk_assessment': {'level': 'high', 'score': 0.65, 'factors': 2, 'manipulation_risk': True}, 'entry_timing': {'optimal_window_seconds': 10, 'timing_score': 0.5, 'delay_compensation': True, 'broker_adjustment': 1.0}, 'ghost_factor': 1.0}
+2025-07-22 01:13:38 |     INFO | GHOST_TRANSCENDENCE_CORE | analyze_chart:59 | 🧠 GHOST TRANSCENDENCE CORE ACTIVATED - Beginning chart analysis
+2025-07-22 01:13:38 |     INFO | GHOST_TRANSCENDENCE_CORE | analyze_chart:82 | 🎯 Signal Generated: {'signal': 'NO SIGNAL', 'confidence': 0.0, 'timeframe': '1M', 'time_target': '01:14 | Next candle (High volatility)', 'reasoning': '🚫 NO SIGNAL: Confidence below threshold (47.9% < 75.0%) | Market manipulation signs detected', 'strategy_type': 'volatility_scalping_strategy', 'market_conditions': {'phase': 'strong_downtrend', 'momentum': 'neutral', 'volatility': 'very_high', 'sentiment': 'bearish', 'structure': 'unclear_structure', 'risk_level': 'medium'}, 'risk_assessment': {'level': 'high', 'score': 0.6000000000000001, 'factors': 2, 'manipulation_risk': True}, 'entry_timing': {'optimal_window_seconds': 10, 'timing_score': 0.5, 'delay_compensation': True, 'broker_adjustment': 1.0}, 'ghost_factor': 1.0}
+2025-07-22 01:16:38 |     INFO | GHOST_TRANSCENDENCE_CORE | start_telegram_bot:157 | 📱 Telegram bot started in separate process
+2025-07-22 01:16:38 |     INFO | GHOST_TRANSCENDENCE_CORE | <module>:167 | 🔥 GHOST TRANSCENDENCE CORE ∞ vX STARTING UP
+2025-07-22 01:16:50 |     INFO | GHOST_TRANSCENDENCE_CORE | analyze_chart:59 | 🧠 GHOST TRANSCENDENCE CORE ACTIVATED - Beginning chart analysis
+2025-07-22 01:16:50 |     INFO | GHOST_TRANSCENDENCE_CORE | analyze_chart:82 | 🎯 Signal Generated: {'signal': 'CALL', 'confidence': 48.700775377783806, 'timeframe': '1M', 'time_target': '01:17 | Next candle (High volatility)', 'reasoning': '🧠 Strategy: Manipulation Resistant Strategy\n📊 Market Phase: Sideways Consolidation\n⚡ Momentum: Bullish (77.6% strength)\n🏗️ Structure: Insufficient Data\n⚠️ Risk Factors: 1 identified\n👻 Manipulation resistance active\n🎯 AI Confidence: 40.6%', 'strategy_type': 'manipulation_resistant_strategy', 'market_conditions': {'phase': 'sideways_consolidation', 'momentum': 'bullish', 'volatility': 'very_high', 'sentiment': 'bullish', 'structure': 'insufficient_data', 'risk_level': 'medium'}, 'risk_assessment': {'level': 'high', 'score': 0.35000000000000003, 'factors': 1, 'manipulation_risk': True}, 'entry_timing': {'optimal_window_seconds': 10, 'timing_score': 0.5, 'delay_compensation': True, 'broker_adjustment': 1.0}, 'ghost_factor': 1.0}
+2025-07-22 01:17:05 |     INFO | GHOST_TRANSCENDENCE_CORE | analyze_chart:59 | 🧠 GHOST TRANSCENDENCE CORE ACTIVATED - Beginning chart analysis
+2025-07-22 01:17:05 |     INFO | GHOST_TRANSCENDENCE_CORE | analyze_chart:82 | 🎯 Signal Generated: {'signal': 'CALL', 'confidence': 52.703900318370025, 'timeframe': '1M', 'time_target': '01:17 | Next candle (Strong momentum)', 'reasoning': '🧠 Strategy: Manipulation Resistant Strategy\n📊 Market Phase: Strong Downtrend\n⚡ Momentum: Bullish (100.0% strength)\n🏗️ Structure: Descending Structure\n⚠️ Risk Factors: 1 identified\n👻 Manipulation resistance active\n🎯 AI Confidence: 50.7%', 'strategy_type': 'manipulation_resistant_strategy', 'market_conditions': {'phase': 'strong_downtrend', 'momentum': 'bullish', 'volatility': 'very_high', 'sentiment': 'bullish', 'structure': 'descending_structure', 'risk_level': 'medium'}, 'risk_assessment': {'level': 'high', 'score': 0.35000000000000003, 'factors': 1, 'manipulation_risk': True}, 'entry_timing': {'optimal_window_seconds': 10, 'timing_score': 0.8, 'delay_compensation': True, 'broker_adjustment': 1.0}, 'ghost_factor': 1.0}
+2025-07-22 01:17:05 |     INFO | GHOST_TRANSCENDENCE_CORE | analyze_chart:59 | 🧠 GHOST TRANSCENDENCE CORE ACTIVATED - Beginning chart analysis
+2025-07-22 01:17:05 |     INFO | GHOST_TRANSCENDENCE_CORE | analyze_chart:82 | 🎯 Signal Generated: {'signal': 'CALL', 'confidence': 47.38096493339774, 'timeframe': '1M', 'time_target': '01:17 | Next candle (Strong momentum)', 'reasoning': '🧠 Strategy: Evolved Strategy\n📊 Market Phase: Weak Downtrend\n⚡ Momentum: Bullish (84.5% strength)\n🏗️ Structure: Unclear Structure\n⚠️ Risk Factors: 1 identified\n👻 Manipulation resistance active\n🎯 AI Confidence: 47.5%', 'strategy_type': 'evolved_strategy', 'market_conditions': {'phase': 'weak_downtrend', 'momentum': 'bullish', 'volatility': 'very_high', 'sentiment': 'bullish', 'structure': 'unclear_structure', 'risk_level': 'medium'}, 'risk_assessment': {'level': 'high', 'score': 0.35000000000000003, 'factors': 1, 'manipulation_risk': True}, 'entry_timing': {'optimal_window_seconds': 30, 'timing_score': 0.5, 'delay_compensation': True, 'broker_adjustment': 0.5}, 'ghost_factor': 1.0}
+2025-07-22 01:17:05 |     INFO | GHOST_TRANSCENDENCE_CORE | analyze_chart:59 | 🧠 GHOST TRANSCENDENCE CORE ACTIVATED - Beginning chart analysis
+2025-07-22 01:17:05 |     INFO | GHOST_TRANSCENDENCE_CORE | analyze_chart:82 | 🎯 Signal Generated: {'signal': 'CALL', 'confidence': 57.016727544696074, 'timeframe': '1M', 'time_target': '01:17 | Next candle (High volatility)', 'reasoning': '🧠 Strategy: Manipulation Resistant Strategy\n📊 Market Phase: Weak Uptrend\n⚡ Momentum: Bullish (66.3% strength)\n🏗️ Structure: Insufficient Data\n⚠️ Risk Factors: 1 identified\n👻 Manipulation resistance active\n🎯 AI Confidence: 37.3%', 'strategy_type': 'manipulation_resistant_strategy', 'market_conditions': {'phase': 'weak_uptrend', 'momentum': 'bullish', 'volatility': 'very_high', 'sentiment': 'neutral', 'structure': 'insufficient_data', 'risk_level': 'medium'}, 'risk_assessment': {'level': 'medium', 'score': 0.3, 'factors': 1, 'manipulation_risk': True}, 'entry_timing': {'optimal_window_seconds': 10, 'timing_score': 0.5, 'delay_compensation': True, 'broker_adjustment': 1.0}, 'ghost_factor': 1.0}
+2025-07-22 01:17:05 |     INFO | GHOST_TRANSCENDENCE_CORE | analyze_chart:59 | 🧠 GHOST TRANSCENDENCE CORE ACTIVATED - Beginning chart analysis
+2025-07-22 01:17:05 |     INFO | GHOST_TRANSCENDENCE_CORE | analyze_chart:82 | 🎯 Signal Generated: {'signal': 'CALL', 'confidence': 46.53503241503318, 'timeframe': '1M', 'time_target': '01:17 | Next candle (High volatility)', 'reasoning': '🧠 Strategy: Manipulation Resistant Strategy\n📊 Market Phase: Low Volatility Range\n⚡ Momentum: Bullish (72.6% strength)\n🏗️ Structure: Unclear Structure\n⚠️ Risk Factors: 1 identified\n👻 Manipulation resistance active\n🎯 AI Confidence: 39.6%', 'strategy_type': 'manipulation_resistant_strategy', 'market_conditions': {'phase': 'low_volatility_range', 'momentum': 'bullish', 'volatility': 'very_high', 'sentiment': 'bullish', 'structure': 'unclear_structure', 'risk_level': 'medium'}, 'risk_assessment': {'level': 'high', 'score': 0.35000000000000003, 'factors': 1, 'manipulation_risk': True}, 'entry_timing': {'optimal_window_seconds': 10, 'timing_score': 0.5, 'delay_compensation': True, 'broker_adjustment': 1.0}, 'ghost_factor': 1.0}
+2025-07-22 01:17:05 |     INFO | GHOST_TRANSCENDENCE_CORE | analyze_chart:59 | 🧠 GHOST TRANSCENDENCE CORE ACTIVATED - Beginning chart analysis
+2025-07-22 01:17:05 |     INFO | GHOST_TRANSCENDENCE_CORE | analyze_chart:82 | 🎯 Signal Generated: {'signal': 'CALL', 'confidence': 48.04280646230376, 'timeframe': '1M', 'time_target': '01:17 | Next candle (Strong momentum)', 'reasoning': '🧠 Strategy: Evolved Strategy\n📊 Market Phase: Weak Uptrend\n⚡ Momentum: Bullish (95.6% strength)\n🏗️ Structure: Unclear Structure\n⚠️ Risk Factors: 1 identified\n👻 Manipulation resistance active\n🎯 AI Confidence: 54.2%', 'strategy_type': 'evolved_strategy', 'market_conditions': {'phase': 'weak_uptrend', 'momentum': 'bullish', 'volatility': 'very_high', 'sentiment': 'bullish', 'structure': 'unclear_structure', 'risk_level': 'medium'}, 'risk_assessment': {'level': 'high', 'score': 0.35000000000000003, 'factors': 1, 'manipulation_risk': True}, 'entry_timing': {'optimal_window_seconds': 30, 'timing_score': 0.5, 'delay_compensation': True, 'broker_adjustment': 0.5}, 'ghost_factor': 1.0}
+2025-07-22 01:20:28 |     INFO | GHOST_TRANSCENDENCE_CORE | analyze_chart:59 | 🧠 GHOST TRANSCENDENCE CORE ACTIVATED - Beginning chart analysis
+2025-07-22 01:20:28 |     INFO | GHOST_TRANSCENDENCE_CORE | analyze_chart:82 | 🎯 Signal Generated: {'signal': 'CALL', 'confidence': 51.19048903192953, 'timeframe': '1M', 'time_target': '01:21 | Next candle (High volatility)', 'reasoning': '🧠 Strategy: Volatility Scalping Strategy\n📊 Market Phase: Strong Downtrend\n⚡ Momentum: Neutral (3.9% strength)\n🏗️ Structure: Unclear Structure\n⚠️ Risk Factors: 2 identified\n👻 Manipulation resistance active\n🎯 AI Confidence: 48.6%', 'strategy_type': 'volatility_scalping_strategy', 'market_conditions': {'phase': 'strong_downtrend', 'momentum': 'neutral', 'volatility': 'very_high', 'sentiment': 'bullish', 'structure': 'unclear_structure', 'risk_level': 'medium'}, 'risk_assessment': {'level': 'high', 'score': 0.55, 'factors': 2, 'manipulation_risk': True}, 'entry_timing': {'optimal_window_seconds': 10, 'timing_score': 0.5, 'delay_compensation': True, 'broker_adjustment': 1.0}, 'ghost_factor': 1.0}
+2025-07-22 01:23:56 |     INFO | GHOST_TRANSCENDENCE_CORE | analyze_chart:59 | 🧠 GHOST TRANSCENDENCE CORE ACTIVATED - Beginning chart analysis
+2025-07-22 01:23:56 |     INFO | GHOST_TRANSCENDENCE_CORE | analyze_chart:82 | 🎯 Signal Generated: {'signal': 'NO SIGNAL', 'confidence': 42.50788436505237, 'timeframe': '1M', 'time_target': '01:24 | Next candle (Strong momentum)', 'reasoning': '🚫 NO SIGNAL: Market manipulation signs detected', 'strategy_type': 'evolved_strategy', 'market_conditions': {'phase': 'sideways_consolidation', 'momentum': 'bullish', 'volatility': 'very_high', 'sentiment': 'bullish', 'structure': 'unclear_structure', 'risk_level': 'medium'}, 'risk_assessment': {'level': 'high', 'score': 0.35000000000000003, 'factors': 1, 'manipulation_risk': True}, 'entry_timing': {'optimal_window_seconds': 30, 'timing_score': 0.5, 'delay_compensation': True, 'broker_adjustment': 0.5}, 'ghost_factor': 1.0}
+2025-07-22 01:31:07 |     INFO | GHOST_TRANSCENDENCE_CORE | start_telegram_bot:157 | 📱 Telegram bot started in separate process
+2025-07-22 01:31:07 |     INFO | GHOST_TRANSCENDENCE_CORE | <module>:167 | 🔥 GHOST TRANSCENDENCE CORE ∞ vX STARTING UP
+2025-07-22 01:33:08 |     INFO | GHOST_TRANSCENDENCE_CORE | analyze_chart:59 | 🧠 GHOST TRANSCENDENCE CORE ACTIVATED - Beginning chart analysis
+2025-07-22 01:33:08 |    ERROR | GHOST_TRANSCENDENCE_CORE | analyze_chart:86 | ❌ Analysis failed: 'IntelligenceEngine' object has no attribute '_create_emergency_ultra_strategy'
+2025-07-22 01:34:27 |     INFO | GHOST_TRANSCENDENCE_CORE | start_telegram_bot:157 | 📱 Telegram bot started in separate process
+2025-07-22 01:34:27 |     INFO | GHOST_TRANSCENDENCE_CORE | <module>:167 | 🔥 GHOST TRANSCENDENCE CORE ∞ vX STARTING UP
+2025-07-22 01:35:06 |     INFO | GHOST_TRANSCENDENCE_CORE | analyze_chart:59 | 🧠 GHOST TRANSCENDENCE CORE ACTIVATED - Beginning chart analysis
+2025-07-22 01:35:06 |     INFO | GHOST_TRANSCENDENCE_CORE | analyze_chart:82 | 🎯 Signal Generated: {'signal': 'PUT', 'confidence': 93.39039958856019, 'timeframe': '1M', 'time_target': '01:35 | Next candle (Strong momentum)', 'reasoning': '🧠 Strategy: Ultra Pattern Convergence Strategy\n📊 Market Phase: Weak Uptrend\n⚡ Momentum: Neutral (100.0% strength)\n🏗️ Structure: Unclear Structure\n⚠️ Risk Factors: 1 identified\n🎯 AI Confidence: 91.6%', 'strategy_type': 'ultra_pattern_convergence_strategy', 'market_conditions': {'phase': 'weak_uptrend', 'momentum': 'neutral', 'volatility': 'very_high', 'sentiment': 'neutral', 'structure': 'unclear_structure', 'risk_level': 'medium'}, 'risk_assessment': {'level': 'high', 'score': 0.35000000000000003, 'factors': 1, 'manipulation_risk': True}, 'entry_timing': {'optimal_window_seconds': 30, 'timing_score': 0.5, 'delay_compensation': True, 'broker_adjustment': 0.5}, 'ghost_factor': 0.44999999999999996}
+2025-07-22 01:36:58 |     INFO | GHOST_TRANSCENDENCE_CORE | analyze_chart:59 | 🧠 GHOST TRANSCENDENCE CORE ACTIVATED - Beginning chart analysis
+2025-07-22 01:36:58 |     INFO | GHOST_TRANSCENDENCE_CORE | analyze_chart:82 | 🎯 Signal Generated: {'signal': 'CALL', 'confidence': 96.0, 'timeframe': '1M', 'time_target': '01:37 | Next candle (Strong momentum)', 'reasoning': '🧠 Strategy: Ultra Pattern Convergence Strategy\n📊 Market Phase: Sideways Consolidation\n⚡ Momentum: Bullish (99.9% strength)\n🏗️ Structure: Unclear Structure\n⚠️ Risk Factors: 1 identified\n🎯 AI Confidence: 95.0%', 'strategy_type': 'ultra_pattern_convergence_strategy', 'market_conditions': {'phase': 'sideways_consolidation', 'momentum': 'bullish', 'volatility': 'very_high', 'sentiment': 'bullish', 'structure': 'unclear_structure', 'risk_level': 'medium'}, 'risk_assessment': {'level': 'high', 'score': 0.35000000000000003, 'factors': 1, 'manipulation_risk': True}, 'entry_timing': {'optimal_window_seconds': 30, 'timing_score': 0.5, 'delay_compensation': True, 'broker_adjustment': 0.5}, 'ghost_factor': 0.44999999999999996}
+2025-07-22 01:42:27 |     INFO | GHOST_TRANSCENDENCE_CORE | analyze_chart:59 | 🧠 GHOST TRANSCENDENCE CORE ACTIVATED - Beginning chart analysis
+2025-07-22 01:42:27 |     INFO | GHOST_TRANSCENDENCE_CORE | analyze_chart:82 | 🎯 Signal Generated: {'signal': 'CALL', 'confidence': 95.54803570024696, 'timeframe': '1M', 'time_target': '01:42 | Next candle (Strong momentum)', 'reasoning': '🧠 Strategy: Ultra Pattern Convergence Strategy\n📊 Market Phase: Sideways Consolidation\n⚡ Momentum: Bullish (99.9% strength)\n🏗️ Structure: Unclear Structure\n⚠️ Risk Factors: 1 identified\n🎯 AI Confidence: 93.3%', 'strategy_type': 'ultra_pattern_convergence_strategy', 'market_conditions': {'phase': 'sideways_consolidation', 'momentum': 'bullish', 'volatility': 'very_high', 'sentiment': 'bullish', 'structure': 'unclear_structure', 'risk_level': 'medium'}, 'risk_assessment': {'level': 'high', 'score': 0.35000000000000003, 'factors': 1, 'manipulation_risk': True}, 'entry_timing': {'optimal_window_seconds': 30, 'timing_score': 0.5, 'delay_compensation': True, 'broker_adjustment': 0.5}, 'ghost_factor': 0.44999999999999996}
+2025-07-22 01:44:33 |     INFO | GHOST_TRANSCENDENCE_CORE | analyze_chart:59 | 🧠 GHOST TRANSCENDENCE CORE ACTIVATED - Beginning chart analysis
+2025-07-22 01:44:33 |     INFO | GHOST_TRANSCENDENCE_CORE | analyze_chart:82 | 🎯 Signal Generated: {'signal': 'CALL', 'confidence': 96.0, 'timeframe': '1M', 'time_target': '01:44 | Next candle (Strong momentum)', 'reasoning': '🧠 Strategy: Ultra Pattern Convergence Strategy\n📊 Market Phase: Sideways Consolidation\n⚡ Momentum: Bullish (99.9% strength)\n🏗️ Structure: Unclear Structure\n⚠️ Risk Factors: 1 identified\n🎯 AI Confidence: 95.0%', 'strategy_type': 'ultra_pattern_convergence_strategy', 'market_conditions': {'phase': 'sideways_consolidation', 'momentum': 'bullish', 'volatility': 'very_high', 'sentiment': 'bullish', 'structure': 'unclear_structure', 'risk_level': 'medium'}, 'risk_assessment': {'level': 'high', 'score': 0.35000000000000003, 'factors': 1, 'manipulation_risk': True}, 'entry_timing': {'optimal_window_seconds': 30, 'timing_score': 0.5, 'delay_compensation': True, 'broker_adjustment': 0.5}, 'ghost_factor': 0.44999999999999996}
+2025-07-22 01:54:52 |     INFO | GHOST_TRANSCENDENCE_CORE | start_telegram_bot:157 | 📱 Telegram bot started in separate process
+2025-07-22 01:54:52 |     INFO | GHOST_TRANSCENDENCE_CORE | <module>:167 | 🔥 GHOST TRANSCENDENCE CORE ∞ vX STARTING UP
+2025-07-22 01:55:25 |     INFO | GHOST_TRANSCENDENCE_CORE | analyze_chart:59 | 🧠 GHOST TRANSCENDENCE CORE ACTIVATED - Beginning chart analysis
+2025-07-22 01:55:26 |     INFO | GHOST_TRANSCENDENCE_CORE | analyze_chart:82 | 🎯 Signal Generated: {'signal': 'CALL', 'confidence': 90.0, 'timeframe': '1M', 'time_target': '01:55 | Next candle (Strong momentum)', 'reasoning': '🧠 Strategy: Perfect Emergency Ultimate Strategy\n📊 Market Phase: Weak Uptrend\n⚡ Momentum: Bullish (100.0% strength)\n🏗️ Structure: Unclear Structure\n⚠️ Risk Factors: 2 identified\n🎯 AI Confidence: 95.0%', 'strategy_type': 'perfect_emergency_ultimate_strategy', 'market_conditions': {'phase': 'weak_uptrend', 'momentum': 'bullish', 'volatility': 'very_high', 'sentiment': 'neutral', 'structure': 'unclear_structure', 'risk_level': 'medium'}, 'risk_assessment': {'level': 'high', 'score': 0.5, 'factors': 2, 'manipulation_risk': True}, 'entry_timing': {'optimal_window_seconds': 30, 'timing_score': 0.5, 'delay_compensation': True, 'broker_adjustment': 0.5}, 'ghost_factor': 0.0}
+2025-07-22 02:01:27 |     INFO | GHOST_TRANSCENDENCE_CORE | analyze_chart:59 | 🧠 GHOST TRANSCENDENCE CORE ACTIVATED - Beginning chart analysis
+2025-07-22 02:01:28 |     INFO | GHOST_TRANSCENDENCE_CORE | analyze_chart:82 | 🎯 Signal Generated: {'signal': 'CALL', 'confidence': 90.0, 'timeframe': '1M', 'time_target': '02:01 | Next candle (Strong momentum)', 'reasoning': '🧠 Strategy: Perfect Emergency Ultimate Strategy\n📊 Market Phase: Sideways Consolidation\n⚡ Momentum: Bullish (99.9% strength)\n🏗️ Structure: Unclear Structure\n⚠️ Risk Factors: 1 identified\n🎯 AI Confidence: 95.0%', 'strategy_type': 'perfect_emergency_ultimate_strategy', 'market_conditions': {'phase': 'sideways_consolidation', 'momentum': 'bullish', 'volatility': 'very_high', 'sentiment': 'bullish', 'structure': 'unclear_structure', 'risk_level': 'medium'}, 'risk_assessment': {'level': 'high', 'score': 0.35000000000000003, 'factors': 1, 'manipulation_risk': True}, 'entry_timing': {'optimal_window_seconds': 30, 'timing_score': 0.5, 'delay_compensation': True, 'broker_adjustment': 0.5}, 'ghost_factor': 0.0}
+2025-07-22 02:01:56 |     INFO | GHOST_TRANSCENDENCE_CORE | analyze_chart:59 | 🧠 GHOST TRANSCENDENCE CORE ACTIVATED - Beginning chart analysis
+2025-07-22 02:01:56 |     INFO | GHOST_TRANSCENDENCE_CORE | analyze_chart:82 | 🎯 Signal Generated: {'signal': 'CALL', 'confidence': 90.0, 'timeframe': '1M', 'time_target': '02:02 | Next candle (Strong momentum)', 'reasoning': '🧠 Strategy: Perfect Emergency Ultimate Strategy\n📊 Market Phase: Sideways Consolidation\n⚡ Momentum: Bullish (99.9% strength)\n🏗️ Structure: Unclear Structure\n⚠️ Risk Factors: 1 identified\n🎯 AI Confidence: 95.0%', 'strategy_type': 'perfect_emergency_ultimate_strategy', 'market_conditions': {'phase': 'sideways_consolidation', 'momentum': 'bullish', 'volatility': 'very_high', 'sentiment': 'bullish', 'structure': 'unclear_structure', 'risk_level': 'medium'}, 'risk_assessment': {'level': 'high', 'score': 0.35000000000000003, 'factors': 1, 'manipulation_risk': True}, 'entry_timing': {'optimal_window_seconds': 30, 'timing_score': 0.5, 'delay_compensation': True, 'broker_adjustment': 0.5}, 'ghost_factor': 0.0}
+2025-07-22 02:02:59 |     INFO | GHOST_TRANSCENDENCE_CORE | analyze_chart:59 | 🧠 GHOST TRANSCENDENCE CORE ACTIVATED - Beginning chart analysis
+2025-07-22 02:03:00 |     INFO | GHOST_TRANSCENDENCE_CORE | analyze_chart:82 | 🎯 Signal Generated: {'signal': 'CALL', 'confidence': 90.0, 'timeframe': '1M', 'time_target': '02:03 | Next candle (High volatility)', 'reasoning': '🧠 Strategy: Perfect Emergency Ultimate Strategy\n📊 Market Phase: Weak Downtrend\n⚡ Momentum: Neutral (63.5% strength)\n🏗️ Structure: Unclear Structure\n⚠️ Risk Factors: 2 identified\n🎯 AI Confidence: 95.0%', 'strategy_type': 'perfect_emergency_ultimate_strategy', 'market_conditions': {'phase': 'weak_downtrend', 'momentum': 'neutral', 'volatility': 'very_high', 'sentiment': 'bullish', 'structure': 'unclear_structure', 'risk_level': 'medium'}, 'risk_assessment': {'level': 'high', 'score': 0.5, 'factors': 2, 'manipulation_risk': True}, 'entry_timing': {'optimal_window_seconds': 30, 'timing_score': 0.5, 'delay_compensation': True, 'broker_adjustment': 0.5}, 'ghost_factor': 0.0}
+2025-07-22 02:07:27 |     INFO | GHOST_TRANSCENDENCE_CORE | analyze_chart:59 | 🧠 GHOST TRANSCENDENCE CORE ACTIVATED - Beginning chart analysis
+2025-07-22 02:07:28 |     INFO | GHOST_TRANSCENDENCE_CORE | analyze_chart:82 | 🎯 Signal Generated: {'signal': 'PUT', 'confidence': 90.0, 'timeframe': '1M', 'time_target': '02:07 | Next candle (High volatility)', 'reasoning': '🧠 Strategy: Perfect Emergency Ultimate Strategy\n📊 Market Phase: Weak Downtrend\n⚡ Momentum: Neutral (75.2% strength)\n🏗️ Structure: Unclear Structure\n⚠️ Risk Factors: 2 identified\n🎯 AI Confidence: 95.0%', 'strategy_type': 'perfect_emergency_ultimate_strategy', 'market_conditions': {'phase': 'weak_downtrend', 'momentum': 'neutral', 'volatility': 'very_high', 'sentiment': 'neutral', 'structure': 'unclear_structure', 'risk_level': 'medium'}, 'risk_assessment': {'level': 'high', 'score': 0.5, 'factors': 2, 'manipulation_risk': True}, 'entry_timing': {'optimal_window_seconds': 30, 'timing_score': 0.5, 'delay_compensation': True, 'broker_adjustment': 0.5}, 'ghost_factor': 0.0}
+2025-07-22 02:11:41 |     INFO | GHOST_TRANSCENDENCE_CORE | start_telegram_bot:157 | 📱 Telegram bot started in separate process
+2025-07-22 02:11:41 |     INFO | GHOST_TRANSCENDENCE_CORE | <module>:167 | 🔥 GHOST TRANSCENDENCE CORE ∞ vX STARTING UP
+2025-07-22 02:17:32 |     INFO | GHOST_TRANSCENDENCE_CORE | start_telegram_bot:313 | 📱 Telegram bot started in separate process
+2025-07-22 02:17:32 |     INFO | GHOST_TRANSCENDENCE_CORE | <module>:323 | 🔥 GHOST TRANSCENDENCE CORE ∞ vX STARTING UP
+2025-07-22 02:20:08 |     INFO | GHOST_TRANSCENDENCE_CORE | start_telegram_bot:326 | 📱 Telegram bot started in separate process
+2025-07-22 02:20:08 |     INFO | GHOST_TRANSCENDENCE_CORE | <module>:336 | 🔥 GHOST TRANSCENDENCE CORE ∞ vX STARTING UP
+2025-07-22 02:20:12 |     INFO | GHOST_TRANSCENDENCE_CORE | start_telegram_bot:326 | 📱 Telegram bot started in separate process
+2025-07-22 02:20:12 |     INFO | GHOST_TRANSCENDENCE_CORE | <module>:336 | 🔥 GHOST TRANSCENDENCE CORE ∞ vX STARTING UP
+2025-07-22 02:20:29 |     INFO | GHOST_TRANSCENDENCE_CORE | analyze_chart:135 | 🕯️ CANDLE WHISPERER: Starting chart analysis...
+2025-07-22 02:20:29 |     INFO | GHOST_TRANSCENDENCE_CORE | analyze_chart:153 | 🖼️ Image loaded: (600, 800, 3)
+2025-07-22 02:20:29 |    ERROR | GHOST_TRANSCENDENCE_CORE | analyze_chart:185 | Analysis error: 'PerceptionEngine' object has no attribute 'analyze_chart'
+2025-07-22 02:20:31 |     INFO | GHOST_TRANSCENDENCE_CORE | analyze_chart:135 | 🕯️ CANDLE WHISPERER: Starting chart analysis...
+2025-07-22 02:20:31 |     INFO | GHOST_TRANSCENDENCE_CORE | analyze_chart:153 | 🖼️ Image loaded: (600, 800, 3)
+2025-07-22 02:20:31 |    ERROR | GHOST_TRANSCENDENCE_CORE | analyze_chart:185 | Analysis error: 'PerceptionEngine' object has no attribute 'analyze_chart'
+2025-07-22 02:20:33 |     INFO | GHOST_TRANSCENDENCE_CORE | analyze_chart:135 | 🕯️ CANDLE WHISPERER: Starting chart analysis...
+2025-07-22 02:20:33 |     INFO | GHOST_TRANSCENDENCE_CORE | analyze_chart:153 | 🖼️ Image loaded: (600, 800, 3)
+2025-07-22 02:20:33 |    ERROR | GHOST_TRANSCENDENCE_CORE | analyze_chart:185 | Analysis error: 'PerceptionEngine' object has no attribute 'analyze_chart'
+2025-07-22 02:20:35 |     INFO | GHOST_TRANSCENDENCE_CORE | analyze_chart:135 | 🕯️ CANDLE WHISPERER: Starting chart analysis...
+2025-07-22 02:20:35 |     INFO | GHOST_TRANSCENDENCE_CORE | analyze_chart:153 | 🖼️ Image loaded: (600, 800, 3)
+2025-07-22 02:20:35 |    ERROR | GHOST_TRANSCENDENCE_CORE | analyze_chart:185 | Analysis error: 'PerceptionEngine' object has no attribute 'analyze_chart'
+2025-07-22 02:20:37 |     INFO | GHOST_TRANSCENDENCE_CORE | analyze_chart:135 | 🕯️ CANDLE WHISPERER: Starting chart analysis...
+2025-07-22 02:20:37 |     INFO | GHOST_TRANSCENDENCE_CORE | analyze_chart:153 | 🖼️ Image loaded: (600, 800, 3)
+2025-07-22 02:20:37 |    ERROR | GHOST_TRANSCENDENCE_CORE | analyze_chart:185 | Analysis error: 'PerceptionEngine' object has no attribute 'analyze_chart'
+2025-07-22 02:21:19 |     INFO | GHOST_TRANSCENDENCE_CORE | start_telegram_bot:330 | 📱 Telegram bot started in separate process
+2025-07-22 02:21:19 |     INFO | GHOST_TRANSCENDENCE_CORE | <module>:340 | 🔥 GHOST TRANSCENDENCE CORE ∞ vX STARTING UP
+2025-07-22 02:21:37 |     INFO | GHOST_TRANSCENDENCE_CORE | analyze_chart:135 | 🕯️ CANDLE WHISPERER: Starting chart analysis...
+2025-07-22 02:21:37 |     INFO | GHOST_TRANSCENDENCE_CORE | analyze_chart:153 | 🖼️ Image loaded: (600, 800, 3)
+2025-07-22 02:21:37 |     INFO | GHOST_TRANSCENDENCE_CORE | analyze_chart:170 | 👁️ Perception: 18 candles detected
+2025-07-22 02:21:37 |     INFO | GHOST_TRANSCENDENCE_CORE | analyze_chart:174 | 🧠 Strategy: candle_whisperer_put
+2025-07-22 02:21:37 |     INFO | GHOST_TRANSCENDENCE_CORE | analyze_chart:178 | 🎯 Signal: PUT
+2025-07-22 02:21:39 |     INFO | GHOST_TRANSCENDENCE_CORE | analyze_chart:135 | 🕯️ CANDLE WHISPERER: Starting chart analysis...
+2025-07-22 02:21:39 |     INFO | GHOST_TRANSCENDENCE_CORE | analyze_chart:153 | 🖼️ Image loaded: (600, 800, 3)
+2025-07-22 02:21:39 |     INFO | GHOST_TRANSCENDENCE_CORE | analyze_chart:170 | 👁️ Perception: 18 candles detected
+2025-07-22 02:21:39 |     INFO | GHOST_TRANSCENDENCE_CORE | analyze_chart:174 | 🧠 Strategy: candle_whisperer_no signal
+2025-07-22 02:21:39 |     INFO | GHOST_TRANSCENDENCE_CORE | analyze_chart:178 | 🎯 Signal: PUT
+2025-07-22 02:21:41 |     INFO | GHOST_TRANSCENDENCE_CORE | analyze_chart:135 | 🕯️ CANDLE WHISPERER: Starting chart analysis...
+2025-07-22 02:21:41 |     INFO | GHOST_TRANSCENDENCE_CORE | analyze_chart:153 | 🖼️ Image loaded: (600, 800, 3)
+2025-07-22 02:21:41 |     INFO | GHOST_TRANSCENDENCE_CORE | analyze_chart:170 | 👁️ Perception: 18 candles detected
+2025-07-22 02:21:41 |     INFO | GHOST_TRANSCENDENCE_CORE | analyze_chart:174 | 🧠 Strategy: candle_whisperer_put
+2025-07-22 02:21:41 |     INFO | GHOST_TRANSCENDENCE_CORE | analyze_chart:178 | 🎯 Signal: PUT
+2025-07-22 02:21:43 |     INFO | GHOST_TRANSCENDENCE_CORE | analyze_chart:135 | 🕯️ CANDLE WHISPERER: Starting chart analysis...
+2025-07-22 02:21:43 |     INFO | GHOST_TRANSCENDENCE_CORE | analyze_chart:153 | 🖼️ Image loaded: (600, 800, 3)
+2025-07-22 02:21:43 |     INFO | GHOST_TRANSCENDENCE_CORE | analyze_chart:170 | 👁️ Perception: 18 candles detected
+2025-07-22 02:21:43 |     INFO | GHOST_TRANSCENDENCE_CORE | analyze_chart:174 | 🧠 Strategy: candle_whisperer_put
+2025-07-22 02:21:43 |     INFO | GHOST_TRANSCENDENCE_CORE | analyze_chart:178 | 🎯 Signal: PUT
+2025-07-22 02:21:45 |     INFO | GHOST_TRANSCENDENCE_CORE | analyze_chart:135 | 🕯️ CANDLE WHISPERER: Starting chart analysis...
+2025-07-22 02:21:45 |     INFO | GHOST_TRANSCENDENCE_CORE | analyze_chart:153 | 🖼️ Image loaded: (600, 800, 3)
+2025-07-22 02:21:45 |     INFO | GHOST_TRANSCENDENCE_CORE | analyze_chart:170 | 👁️ Perception: 18 candles detected
+2025-07-22 02:21:45 |     INFO | GHOST_TRANSCENDENCE_CORE | analyze_chart:174 | 🧠 Strategy: candle_whisperer_no signal
+2025-07-22 02:21:45 |     INFO | GHOST_TRANSCENDENCE_CORE | analyze_chart:178 | 🎯 Signal: PUT
+2025-07-22 02:24:28 |     INFO | GHOST_TRANSCENDENCE_CORE | analyze_chart:60 | 🧠 GHOST TRANSCENDENCE CORE ACTIVATED - Beginning chart analysis
+2025-07-22 02:24:28 |    ERROR | GHOST_TRANSCENDENCE_CORE | analyze_chart:87 | ❌ Analysis failed: SignalGenerator.generate_signal() missing 1 required positional argument: 'context'
+2025-07-22 02:24:42 |     INFO | GHOST_TRANSCENDENCE_CORE | analyze_chart:60 | 🧠 GHOST TRANSCENDENCE CORE ACTIVATED - Beginning chart analysis
+2025-07-22 02:24:42 |    ERROR | GHOST_TRANSCENDENCE_CORE | analyze_chart:87 | ❌ Analysis failed: SignalGenerator.generate_signal() missing 1 required positional argument: 'context'
+2025-07-22 02:26:22 |     INFO | GHOST_TRANSCENDENCE_CORE | start_telegram_bot:347 | 📱 Telegram bot started in separate process
+2025-07-22 02:26:22 |     INFO | GHOST_TRANSCENDENCE_CORE | <module>:357 | 🔥 GHOST TRANSCENDENCE CORE ∞ vX STARTING UP
+2025-07-22 02:26:40 |     INFO | GHOST_TRANSCENDENCE_CORE | analyze_chart:135 | 🕯️ CANDLE WHISPERER: Starting chart analysis...
+2025-07-22 02:26:40 |     INFO | GHOST_TRANSCENDENCE_CORE | analyze_chart:153 | 🖼️ Image loaded: (400, 600, 3)
+2025-07-22 02:26:40 |     INFO | GHOST_TRANSCENDENCE_CORE | analyze_chart:170 | 👁️ Perception: 20 candles detected
+2025-07-22 02:26:40 |     INFO | GHOST_TRANSCENDENCE_CORE | analyze_chart:174 | 🧠 Strategy: candle_whisperer_no signal
+2025-07-22 02:26:40 |     INFO | GHOST_TRANSCENDENCE_CORE | analyze_chart:178 | 🎯 Signal: PUT
+2025-07-22 02:27:17 |     INFO | GHOST_TRANSCENDENCE_CORE | analyze_chart:135 | 🕯️ CANDLE WHISPERER: Starting chart analysis...
+2025-07-22 02:27:17 |     INFO | GHOST_TRANSCENDENCE_CORE | analyze_chart:153 | 🖼️ Image loaded: (600, 800, 3)
+2025-07-22 02:27:17 |     INFO | GHOST_TRANSCENDENCE_CORE | analyze_chart:170 | 👁️ Perception: 20 candles detected
+2025-07-22 02:27:17 |     INFO | GHOST_TRANSCENDENCE_CORE | analyze_chart:174 | 🧠 Strategy: candle_whisperer_call
+2025-07-22 02:27:17 |     INFO | GHOST_TRANSCENDENCE_CORE | analyze_chart:178 | 🎯 Signal: CALL
+2025-07-22 02:31:49 |     INFO | GHOST_TRANSCENDENCE_CORE | analyze_chart:135 | 🕯️ CANDLE WHISPERER: Starting chart analysis...
+2025-07-22 02:31:49 |     INFO | GHOST_TRANSCENDENCE_CORE | analyze_chart:153 | 🖼️ Image loaded: (1280, 574, 3)
+2025-07-22 02:31:49 |     INFO | GHOST_TRANSCENDENCE_CORE | analyze_chart:170 | 👁️ Perception: 20 candles detected
+2025-07-22 02:31:49 |     INFO | GHOST_TRANSCENDENCE_CORE | analyze_chart:174 | 🧠 Strategy: candle_whisperer_no signal
+2025-07-22 02:31:49 |     INFO | GHOST_TRANSCENDENCE_CORE | analyze_chart:178 | 🎯 Signal: PUT
+2025-07-22 02:41:44 |     INFO | GHOST_TRANSCENDENCE_CORE | analyze_chart:135 | 🕯️ CANDLE WHISPERER: Starting chart analysis...
+2025-07-22 02:41:44 |     INFO | GHOST_TRANSCENDENCE_CORE | analyze_chart:153 | 🖼️ Image loaded: (1280, 574, 3)
+2025-07-22 02:41:44 |     INFO | GHOST_TRANSCENDENCE_CORE | analyze_chart:170 | 👁️ Perception: 20 candles detected
+2025-07-22 02:41:44 |     INFO | GHOST_TRANSCENDENCE_CORE | analyze_chart:174 | 🧠 Strategy: candle_whisperer_no signal
+2025-07-22 02:41:44 |     INFO | GHOST_TRANSCENDENCE_CORE | analyze_chart:178 | 🎯 Signal: PUT
+2025-07-22 02:42:11 |     INFO | GHOST_TRANSCENDENCE_CORE | analyze_chart:135 | 🕯️ CANDLE WHISPERER: Starting chart analysis...
+2025-07-22 02:42:11 |     INFO | GHOST_TRANSCENDENCE_CORE | analyze_chart:153 | 🖼️ Image loaded: (400, 600, 3)
+2025-07-22 02:42:11 |     INFO | GHOST_TRANSCENDENCE_CORE | analyze_chart:170 | 👁️ Perception: 7 candles detected
+2025-07-22 02:42:11 |     INFO | GHOST_TRANSCENDENCE_CORE | analyze_chart:174 | 🧠 Strategy: candle_whisperer_call
+2025-07-22 02:42:11 |     INFO | GHOST_TRANSCENDENCE_CORE | analyze_chart:178 | 🎯 Signal: CALL
+2025-07-22 02:42:31 |     INFO | GHOST_TRANSCENDENCE_CORE | analyze_chart:135 | 🕯️ CANDLE WHISPERER: Starting chart analysis...
+2025-07-22 02:42:31 |     INFO | GHOST_TRANSCENDENCE_CORE | analyze_chart:153 | 🖼️ Image loaded: (1280, 574, 3)
+2025-07-22 02:42:31 |     INFO | GHOST_TRANSCENDENCE_CORE | analyze_chart:170 | 👁️ Perception: 20 candles detected
+2025-07-22 02:42:31 |     INFO | GHOST_TRANSCENDENCE_CORE | analyze_chart:174 | 🧠 Strategy: candle_whisperer_put
+2025-07-22 02:42:31 |     INFO | GHOST_TRANSCENDENCE_CORE | analyze_chart:178 | 🎯 Signal: PUT
+2025-07-22 02:43:47 |     INFO | GHOST_TRANSCENDENCE_CORE | analyze_chart:135 | 🕯️ CANDLE WHISPERER: Starting chart analysis...
+2025-07-22 02:43:47 |     INFO | GHOST_TRANSCENDENCE_CORE | analyze_chart:153 | 🖼️ Image loaded: (1280, 574, 3)
+2025-07-22 02:43:47 |     INFO | GHOST_TRANSCENDENCE_CORE | analyze_chart:170 | 👁️ Perception: 20 candles detected
+2025-07-22 02:43:47 |     INFO | GHOST_TRANSCENDENCE_CORE | analyze_chart:174 | 🧠 Strategy: candle_whisperer_call
+2025-07-22 02:43:47 |     INFO | GHOST_TRANSCENDENCE_CORE | analyze_chart:178 | 🎯 Signal: CALL
+2025-07-22 02:44:11 |     INFO | GHOST_TRANSCENDENCE_CORE | analyze_chart:135 | 🕯️ CANDLE WHISPERER: Starting chart analysis...
+2025-07-22 02:44:11 |     INFO | GHOST_TRANSCENDENCE_CORE | analyze_chart:153 | 🖼️ Image loaded: (1280, 574, 3)
+2025-07-22 02:44:11 |     INFO | GHOST_TRANSCENDENCE_CORE | analyze_chart:170 | 👁️ Perception: 20 candles detected
+2025-07-22 02:44:11 |     INFO | GHOST_TRANSCENDENCE_CORE | analyze_chart:174 | 🧠 Strategy: candle_whisperer_put
+2025-07-22 02:44:11 |     INFO | GHOST_TRANSCENDENCE_CORE | analyze_chart:178 | 🎯 Signal: PUT
+2025-07-22 02:46:12 |     INFO | GHOST_TRANSCENDENCE_CORE | analyze_chart:135 | 🕯️ CANDLE WHISPERER: Starting chart analysis...
+2025-07-22 02:46:12 |     INFO | GHOST_TRANSCENDENCE_CORE | analyze_chart:153 | 🖼️ Image loaded: (1280, 574, 3)
+2025-07-22 02:46:12 |     INFO | GHOST_TRANSCENDENCE_CORE | analyze_chart:170 | 👁️ Perception: 20 candles detected
+2025-07-22 02:46:12 |     INFO | GHOST_TRANSCENDENCE_CORE | analyze_chart:174 | 🧠 Strategy: candle_whisperer_no signal
+2025-07-22 02:46:12 |     INFO | GHOST_TRANSCENDENCE_CORE | analyze_chart:178 | 🎯 Signal: PUT
+2025-07-22 02:46:16 |     INFO | GHOST_TRANSCENDENCE_CORE | analyze_chart:135 | 🕯️ CANDLE WHISPERER: Starting chart analysis...
+2025-07-22 02:46:16 |     INFO | GHOST_TRANSCENDENCE_CORE | analyze_chart:153 | 🖼️ Image loaded: (1280, 574, 3)
+2025-07-22 02:46:16 |     INFO | GHOST_TRANSCENDENCE_CORE | analyze_chart:170 | 👁️ Perception: 20 candles detected
+2025-07-22 02:46:16 |     INFO | GHOST_TRANSCENDENCE_CORE | analyze_chart:174 | 🧠 Strategy: candle_whisperer_call
+2025-07-22 02:46:16 |     INFO | GHOST_TRANSCENDENCE_CORE | analyze_chart:178 | 🎯 Signal: CALL
+2025-07-22 02:48:54 |     INFO | GHOST_TRANSCENDENCE_CORE | start_telegram_bot:347 | 📱 Telegram bot started in separate process
+2025-07-22 02:48:54 |     INFO | GHOST_TRANSCENDENCE_CORE | <module>:357 | 🔥 GHOST TRANSCENDENCE CORE ∞ vX STARTING UP
+2025-07-22 02:49:16 |     INFO | GHOST_TRANSCENDENCE_CORE | analyze_chart:135 | 🕯️ CANDLE WHISPERER: Starting chart analysis...
+2025-07-22 02:49:16 |     INFO | GHOST_TRANSCENDENCE_CORE | analyze_chart:153 | 🖼️ Image loaded: (400, 600, 3)
+2025-07-22 02:49:17 |     INFO | GHOST_TRANSCENDENCE_CORE | analyze_chart:170 | 👁️ Perception: 7 candles detected
+2025-07-22 02:49:17 |     INFO | GHOST_TRANSCENDENCE_CORE | analyze_chart:174 | 🧠 Strategy: candle_whisperer_no signal
+2025-07-22 02:49:17 |     INFO | GHOST_TRANSCENDENCE_CORE | analyze_chart:178 | 🎯 Signal: PUT
+2025-07-22 02:49:17 |     INFO | GHOST_TRANSCENDENCE_CORE | analyze_chart:135 | 🕯️ CANDLE WHISPERER: Starting chart analysis...
+2025-07-22 02:49:17 |     INFO | GHOST_TRANSCENDENCE_CORE | analyze_chart:153 | 🖼️ Image loaded: (400, 600, 3)
+2025-07-22 02:49:17 |     INFO | GHOST_TRANSCENDENCE_CORE | analyze_chart:170 | 👁️ Perception: 7 candles detected
+2025-07-22 02:49:17 |     INFO | GHOST_TRANSCENDENCE_CORE | analyze_chart:174 | 🧠 Strategy: candle_whisperer_no signal
+2025-07-22 02:49:17 |     INFO | GHOST_TRANSCENDENCE_CORE | analyze_chart:178 | 🎯 Signal: PUT
+2025-07-22 02:49:17 |     INFO | GHOST_TRANSCENDENCE_CORE | analyze_chart:135 | 🕯️ CANDLE WHISPERER: Starting chart analysis...
+2025-07-22 02:49:17 |     INFO | GHOST_TRANSCENDENCE_CORE | analyze_chart:153 | 🖼️ Image loaded: (400, 600, 3)
+2025-07-22 02:49:17 |     INFO | GHOST_TRANSCENDENCE_CORE | analyze_chart:170 | 👁️ Perception: 7 candles detected
+2025-07-22 02:49:17 |     INFO | GHOST_TRANSCENDENCE_CORE | analyze_chart:174 | 🧠 Strategy: candle_whisperer_no signal
+2025-07-22 02:49:17 |     INFO | GHOST_TRANSCENDENCE_CORE | analyze_chart:178 | 🎯 Signal: PUT
+2025-07-22 02:50:52 |     INFO | GHOST_TRANSCENDENCE_CORE | analyze_chart:135 | 🕯️ CANDLE WHISPERER: Starting chart analysis...
+2025-07-22 02:50:52 |     INFO | GHOST_TRANSCENDENCE_CORE | analyze_chart:153 | 🖼️ Image loaded: (1280, 574, 3)
+2025-07-22 02:50:52 |     INFO | GHOST_TRANSCENDENCE_CORE | analyze_chart:170 | 👁️ Perception: 20 candles detected
+2025-07-22 02:50:52 |     INFO | GHOST_TRANSCENDENCE_CORE | analyze_chart:174 | 🧠 Strategy: candle_whisperer_call
+2025-07-22 02:50:52 |     INFO | GHOST_TRANSCENDENCE_CORE | analyze_chart:178 | 🎯 Signal: CALL
+2025-07-22 02:50:59 |     INFO | GHOST_TRANSCENDENCE_CORE | analyze_chart:135 | 🕯️ CANDLE WHISPERER: Starting chart analysis...
+2025-07-22 02:50:59 |     INFO | GHOST_TRANSCENDENCE_CORE | analyze_chart:153 | 🖼️ Image loaded: (1280, 574, 3)
+2025-07-22 02:50:59 |     INFO | GHOST_TRANSCENDENCE_CORE | analyze_chart:170 | 👁️ Perception: 20 candles detected
+2025-07-22 02:50:59 |     INFO | GHOST_TRANSCENDENCE_CORE | analyze_chart:174 | 🧠 Strategy: candle_whisperer_no signal
+2025-07-22 02:50:59 |     INFO | GHOST_TRANSCENDENCE_CORE | analyze_chart:178 | 🎯 Signal: PUT
+2025-07-22 02:53:16 |     INFO | GHOST_TRANSCENDENCE_CORE | analyze_chart:135 | 🕯️ CANDLE WHISPERER: Starting chart analysis...
+2025-07-22 02:53:16 |     INFO | GHOST_TRANSCENDENCE_CORE | analyze_chart:153 | 🖼️ Image loaded: (1280, 574, 3)
+2025-07-22 02:53:16 |     INFO | GHOST_TRANSCENDENCE_CORE | analyze_chart:170 | 👁️ Perception: 20 candles detected
+2025-07-22 02:53:16 |     INFO | GHOST_TRANSCENDENCE_CORE | analyze_chart:174 | 🧠 Strategy: candle_whisperer_no signal
+2025-07-22 02:53:16 |     INFO | GHOST_TRANSCENDENCE_CORE | analyze_chart:178 | 🎯 Signal: PUT
+2025-07-22 02:55:49 |     INFO | GHOST_TRANSCENDENCE_CORE | start_telegram_bot:363 | 📱 Telegram bot started in separate process
+2025-07-22 02:55:49 |     INFO | GHOST_TRANSCENDENCE_CORE | <module>:373 | 🔥 GHOST TRANSCENDENCE CORE ∞ vX STARTING UP
+2025-07-22 02:56:10 |     INFO | GHOST_TRANSCENDENCE_CORE | analyze_chart:137 | 🕯️ CANDLE WHISPERER: Starting chart analysis...
+2025-07-22 02:56:10 |     INFO | GHOST_TRANSCENDENCE_CORE | analyze_chart:155 | 🖼️ Image loaded: (500, 800, 3)
+2025-07-22 02:56:10 |     INFO | GHOST_TRANSCENDENCE_CORE | analyze_chart:174 | 🕯️ REAL ANALYSIS: 15 ACTUAL candles detected in your chart
+2025-07-22 02:56:10 |     INFO | GHOST_TRANSCENDENCE_CORE | analyze_chart:182 | 🧠 Strategy: candle_whisperer_call
+2025-07-22 02:56:10 |     INFO | GHOST_TRANSCENDENCE_CORE | analyze_chart:186 | 🎯 Signal: CALL
+2025-07-22 02:56:10 |     INFO | GHOST_TRANSCENDENCE_CORE | analyze_chart:137 | 🕯️ CANDLE WHISPERER: Starting chart analysis...
+2025-07-22 02:56:10 |     INFO | GHOST_TRANSCENDENCE_CORE | analyze_chart:155 | 🖼️ Image loaded: (500, 800, 3)
+2025-07-22 02:56:10 |     INFO | GHOST_TRANSCENDENCE_CORE | analyze_chart:174 | 🕯️ REAL ANALYSIS: 19 ACTUAL candles detected in your chart
+2025-07-22 02:56:10 |     INFO | GHOST_TRANSCENDENCE_CORE | analyze_chart:182 | 🧠 Strategy: candle_whisperer_call
+2025-07-22 02:56:10 |     INFO | GHOST_TRANSCENDENCE_CORE | analyze_chart:186 | 🎯 Signal: CALL
+2025-07-22 02:56:10 |     INFO | GHOST_TRANSCENDENCE_CORE | analyze_chart:137 | 🕯️ CANDLE WHISPERER: Starting chart analysis...
+2025-07-22 02:56:10 |     INFO | GHOST_TRANSCENDENCE_CORE | analyze_chart:155 | 🖼️ Image loaded: (500, 800, 3)
+2025-07-22 02:56:10 |     INFO | GHOST_TRANSCENDENCE_CORE | analyze_chart:174 | 🕯️ REAL ANALYSIS: 2 ACTUAL candles detected in your chart
+2025-07-22 02:56:10 |     INFO | GHOST_TRANSCENDENCE_CORE | analyze_chart:182 | 🧠 Strategy: candle_whisperer_call
+2025-07-22 02:56:10 |     INFO | GHOST_TRANSCENDENCE_CORE | analyze_chart:186 | 🎯 Signal: CALL
+2025-07-22 02:57:18 |     INFO | GHOST_TRANSCENDENCE_CORE | start_telegram_bot:363 | 📱 Telegram bot started in separate process
+2025-07-22 02:57:18 |     INFO | GHOST_TRANSCENDENCE_CORE | <module>:373 | 🔥 GHOST TRANSCENDENCE CORE ∞ vX STARTING UP
+2025-07-22 03:00:38 |     INFO | GHOST_TRANSCENDENCE_CORE | analyze_chart:137 | 🕯️ CANDLE WHISPERER: Starting chart analysis...
+2025-07-22 03:00:38 |     INFO | GHOST_TRANSCENDENCE_CORE | analyze_chart:155 | 🖼️ Image loaded: (1280, 574, 3)
+2025-07-22 03:00:38 |     INFO | GHOST_TRANSCENDENCE_CORE | analyze_chart:174 | 🕯️ REAL ANALYSIS: 5 ACTUAL candles detected in your chart
+2025-07-22 03:00:38 |     INFO | GHOST_TRANSCENDENCE_CORE | analyze_chart:182 | 🧠 Strategy: candle_whisperer_call
+2025-07-22 03:00:38 |     INFO | GHOST_TRANSCENDENCE_CORE | analyze_chart:186 | 🎯 Signal: CALL
+2025-07-22 03:02:44 |     INFO | GHOST_TRANSCENDENCE_CORE | analyze_chart:137 | 🕯️ CANDLE WHISPERER: Starting chart analysis...
+2025-07-22 03:02:44 |     INFO | GHOST_TRANSCENDENCE_CORE | analyze_chart:155 | 🖼️ Image loaded: (1280, 574, 3)
+2025-07-22 03:02:44 |     INFO | GHOST_TRANSCENDENCE_CORE | analyze_chart:174 | 🕯️ REAL ANALYSIS: 11 ACTUAL candles detected in your chart
+2025-07-22 03:02:44 |     INFO | GHOST_TRANSCENDENCE_CORE | analyze_chart:182 | 🧠 Strategy: candle_whisperer_call
+2025-07-22 03:02:44 |     INFO | GHOST_TRANSCENDENCE_CORE | analyze_chart:186 | 🎯 Signal: CALL
+2025-07-22 03:11:18 |     INFO | GHOST_TRANSCENDENCE_CORE | start_telegram_bot:363 | 📱 Telegram bot started in separate process
+2025-07-22 03:11:18 |     INFO | GHOST_TRANSCENDENCE_CORE | <module>:373 | 🔥 GHOST TRANSCENDENCE CORE ∞ vX STARTING UP
+2025-07-22 03:11:46 |     INFO | GHOST_TRANSCENDENCE_CORE | analyze_chart:137 | 🕯️ CANDLE WHISPERER: Starting chart analysis...
+2025-07-22 03:11:46 |     INFO | GHOST_TRANSCENDENCE_CORE | analyze_chart:155 | 🖼️ Image loaded: (400, 800, 3)
+2025-07-22 03:11:46 |     INFO | GHOST_TRANSCENDENCE_CORE | analyze_chart:174 | 🎯 PRECISE ANALYSIS: 8 PRECISE candles detected with geometry analysis
+2025-07-22 03:11:46 |     INFO | GHOST_TRANSCENDENCE_CORE | analyze_chart:182 | 🧠 Strategy: candle_whisperer_no signal
+2025-07-22 03:11:46 |     INFO | GHOST_TRANSCENDENCE_CORE | analyze_chart:186 | 🎯 Signal: PUT
+2025-07-22 03:11:46 |     INFO | GHOST_TRANSCENDENCE_CORE | analyze_chart:137 | 🕯️ CANDLE WHISPERER: Starting chart analysis...
+2025-07-22 03:11:46 |     INFO | GHOST_TRANSCENDENCE_CORE | analyze_chart:155 | 🖼️ Image loaded: (400, 800, 3)
+2025-07-22 03:11:46 |     INFO | GHOST_TRANSCENDENCE_CORE | analyze_chart:174 | 🎯 PRECISE ANALYSIS: 0 PRECISE candles detected with geometry analysis
+2025-07-22 03:11:46 |     INFO | GHOST_TRANSCENDENCE_CORE | analyze_chart:182 | 🧠 Strategy: candle_whisperer_no signal
+2025-07-22 03:11:46 |     INFO | GHOST_TRANSCENDENCE_CORE | analyze_chart:186 | 🎯 Signal: PUT
+2025-07-22 03:11:46 |     INFO | GHOST_TRANSCENDENCE_CORE | analyze_chart:137 | 🕯️ CANDLE WHISPERER: Starting chart analysis...
+2025-07-22 03:11:46 |     INFO | GHOST_TRANSCENDENCE_CORE | analyze_chart:155 | 🖼️ Image loaded: (400, 800, 3)
+2025-07-22 03:11:46 |     INFO | GHOST_TRANSCENDENCE_CORE | analyze_chart:174 | 🎯 PRECISE ANALYSIS: 0 PRECISE candles detected with geometry analysis
+2025-07-22 03:11:46 |     INFO | GHOST_TRANSCENDENCE_CORE | analyze_chart:182 | 🧠 Strategy: candle_whisperer_no signal
+2025-07-22 03:11:46 |     INFO | GHOST_TRANSCENDENCE_CORE | analyze_chart:186 | 🎯 Signal: PUT
+2025-07-22 03:12:20 |     INFO | GHOST_TRANSCENDENCE_CORE | analyze_chart:137 | 🕯️ CANDLE WHISPERER: Starting chart analysis...
+2025-07-22 03:12:21 |     INFO | GHOST_TRANSCENDENCE_CORE | analyze_chart:155 | 🖼️ Image loaded: (1280, 574, 3)
+2025-07-22 03:12:21 |     INFO | GHOST_TRANSCENDENCE_CORE | analyze_chart:174 | 🎯 PRECISE ANALYSIS: 8 PRECISE candles detected with geometry analysis
+2025-07-22 03:12:21 |     INFO | GHOST_TRANSCENDENCE_CORE | analyze_chart:182 | 🧠 Strategy: candle_whisperer_no signal
+2025-07-22 03:12:21 |     INFO | GHOST_TRANSCENDENCE_CORE | analyze_chart:186 | 🎯 Signal: PUT
+2025-07-22 03:12:33 |     INFO | GHOST_TRANSCENDENCE_CORE | start_telegram_bot:363 | 📱 Telegram bot started in separate process
+2025-07-22 03:12:33 |     INFO | GHOST_TRANSCENDENCE_CORE | <module>:373 | 🔥 GHOST TRANSCENDENCE CORE ∞ vX STARTING UP
+2025-07-22 03:13:00 |     INFO | GHOST_TRANSCENDENCE_CORE | analyze_chart:137 | 🕯️ CANDLE WHISPERER: Starting chart analysis...
+2025-07-22 03:13:00 |     INFO | GHOST_TRANSCENDENCE_CORE | analyze_chart:155 | 🖼️ Image loaded: (500, 900, 3)
+2025-07-22 03:13:00 |     INFO | GHOST_TRANSCENDENCE_CORE | analyze_chart:174 | 🎯 PRECISE ANALYSIS: 15 PRECISE candles detected with geometry analysis
+2025-07-22 03:13:00 |     INFO | GHOST_TRANSCENDENCE_CORE | analyze_chart:182 | 🧠 Strategy: candle_whisperer_call
+2025-07-22 03:13:00 |     INFO | GHOST_TRANSCENDENCE_CORE | analyze_chart:186 | 🎯 Signal: CALL
+2025-07-22 03:13:00 |     INFO | GHOST_TRANSCENDENCE_CORE | analyze_chart:137 | 🕯️ CANDLE WHISPERER: Starting chart analysis...
+2025-07-22 03:13:00 |     INFO | GHOST_TRANSCENDENCE_CORE | analyze_chart:155 | 🖼️ Image loaded: (500, 900, 3)
+2025-07-22 03:13:00 |     INFO | GHOST_TRANSCENDENCE_CORE | analyze_chart:174 | 🎯 PRECISE ANALYSIS: 0 PRECISE candles detected with geometry analysis
+2025-07-22 03:13:00 |     INFO | GHOST_TRANSCENDENCE_CORE | analyze_chart:182 | 🧠 Strategy: candle_whisperer_call
+2025-07-22 03:13:00 |     INFO | GHOST_TRANSCENDENCE_CORE | analyze_chart:186 | 🎯 Signal: CALL
+2025-07-22 03:13:00 |     INFO | GHOST_TRANSCENDENCE_CORE | analyze_chart:137 | 🕯️ CANDLE WHISPERER: Starting chart analysis...
+2025-07-22 03:13:00 |     INFO | GHOST_TRANSCENDENCE_CORE | analyze_chart:155 | 🖼️ Image loaded: (500, 900, 3)
+2025-07-22 03:13:00 |     INFO | GHOST_TRANSCENDENCE_CORE | analyze_chart:174 | 🎯 PRECISE ANALYSIS: 0 PRECISE candles detected with geometry analysis
+2025-07-22 03:13:00 |     INFO | GHOST_TRANSCENDENCE_CORE | analyze_chart:182 | 🧠 Strategy: candle_whisperer_call
+2025-07-22 03:13:00 |     INFO | GHOST_TRANSCENDENCE_CORE | analyze_chart:186 | 🎯 Signal: CALL
+2025-07-22 03:13:44 |     INFO | GHOST_TRANSCENDENCE_CORE | start_telegram_bot:363 | 📱 Telegram bot started in separate process
+2025-07-22 03:13:44 |     INFO | GHOST_TRANSCENDENCE_CORE | <module>:373 | 🔥 GHOST TRANSCENDENCE CORE ∞ vX STARTING UP
+2025-07-22 03:13:51 |     INFO | GHOST_TRANSCENDENCE_CORE | analyze_chart:137 | 🕯️ CANDLE WHISPERER: Starting chart analysis...
+2025-07-22 03:13:51 |     INFO | GHOST_TRANSCENDENCE_CORE | analyze_chart:155 | 🖼️ Image loaded: (1280, 574, 3)
+2025-07-22 03:13:52 |     INFO | GHOST_TRANSCENDENCE_CORE | analyze_chart:174 | 🎯 PRECISE ANALYSIS: 8 PRECISE candles detected with geometry analysis
+2025-07-22 03:13:52 |     INFO | GHOST_TRANSCENDENCE_CORE | analyze_chart:182 | 🧠 Strategy: candle_whisperer_call
+2025-07-22 03:13:52 |     INFO | GHOST_TRANSCENDENCE_CORE | analyze_chart:186 | 🎯 Signal: CALL
