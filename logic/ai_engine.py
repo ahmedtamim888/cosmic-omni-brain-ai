@@ -35,6 +35,11 @@ class MarketSignal:
     market_psychology: str
     entry_time: datetime
     timeframe: str = "1M"
+    patterns_detected: List[str] = None
+    
+    def __post_init__(self):
+        if self.patterns_detected is None:
+            self.patterns_detected = []
 
 class CandleDetector:
     """Detects and extracts candlestick data from chart images"""
@@ -898,6 +903,8 @@ class CosmicAIEngine:
                 )
             
             # Step 5: Generate final signal
+            patterns_found = [p['name'] for p in market_story.get('patterns', [])]
+            
             return MarketSignal(
                 signal=strategy_details['signal'],
                 confidence=strategy_details['confidence'],
@@ -905,7 +912,8 @@ class CosmicAIEngine:
                 strategy=best_strategy,
                 market_psychology=market_story['market_psychology'],
                 entry_time=datetime.now(),
-                timeframe=Config.SIGNAL_TIMEFRAME
+                timeframe=Config.SIGNAL_TIMEFRAME,
+                patterns_detected=patterns_found
             )
             
         except Exception as e:
