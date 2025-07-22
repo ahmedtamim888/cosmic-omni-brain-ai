@@ -14,8 +14,6 @@ import cv2
 import numpy as np
 from PIL import Image
 import base64
-from telegram import Update, Bot
-from telegram.ext import Application, CommandHandler, MessageHandler, filters, ContextTypes
 import threading
 import time
 
@@ -97,7 +95,7 @@ def index():
     return render_template('index.html')
 
 @app.route('/analyze', methods=['POST'])
-async def analyze_endpoint():
+def analyze_endpoint():
     """Web API endpoint for chart analysis"""
     try:
         if 'chart_image' not in request.files:
@@ -110,8 +108,8 @@ async def analyze_endpoint():
         # Read image data
         image_data = file.read()
         
-        # Analyze with AI
-        result = await ghost_core.analyze_chart(image_data)
+        # Analyze with AI (synchronous wrapper)
+        result = asyncio.run(ghost_core.analyze_chart(image_data))
         
         return jsonify(result)
         
@@ -119,182 +117,51 @@ async def analyze_endpoint():
         logger.error(f"API Error: {str(e)}")
         return jsonify({"error": str(e)}), 500
 
-@app.route('/webhook', methods=['POST'])
-async def telegram_webhook():
-    """Telegram webhook endpoint"""
+@app.route('/api/stats', methods=['GET'])
+def get_stats():
+    """API endpoint for bot statistics"""
     try:
-        json_data = request.get_json()
-        update = Update.de_json(json_data, bot)
-        
-        # Process the update
-        await process_telegram_update(update)
-        
-        return jsonify({"status": "ok"})
+        stats = {
+            "total_analyses": len(ghost_core.learning_history),
+            "version": ghost_core.version,
+            "personality": ghost_core.personality,
+            "confidence_threshold": ghost_core.confidence_threshold,
+            "uptime": datetime.now().isoformat()
+        }
+        return jsonify(stats)
     except Exception as e:
-        logger.error(f"Webhook error: {str(e)}")
+        logger.error(f"Stats API error: {str(e)}")
         return jsonify({"error": str(e)}), 500
 
-async def process_telegram_update(update: Update):
-    """Process incoming Telegram messages"""
+def start_telegram_bot():
+    """Start Telegram bot in a separate process"""
+    # Check if Telegram is disabled
+    if os.environ.get('DISABLE_TELEGRAM') == 'true':
+        logger.info("📱 Telegram bot disabled by configuration")
+        return
+    
+    # Check if token is configured
+    if not TELEGRAM_BOT_TOKEN or TELEGRAM_BOT_TOKEN == 'your_bot_token_here':
+        logger.warning("⚠️ Telegram bot token not configured, skipping bot startup")
+        return
+    
     try:
-        if update.message:
-            chat_id = update.message.chat_id
-            
-            # Handle photo messages
-            if update.message.photo:
-                await handle_chart_image(update.message, chat_id)
-            
-            # Handle commands
-            elif update.message.text:
-                await handle_text_command(update.message, chat_id)
-                
-    except Exception as e:
-        logger.error(f"Update processing error: {str(e)}")
-
-async def handle_chart_image(message, chat_id):
-    """Handle chart image analysis from Telegram"""
-    try:
-        # Get the highest resolution photo
-        photo = message.photo[-1]
+        import subprocess
+        import sys
         
-        # Download image
-        bot = Bot(token=TELEGRAM_BOT_TOKEN)
-        file = await bot.get_file(photo.file_id)
-        image_data = await file.download_as_bytearray()
+        # Start the separate bot process
+        subprocess.Popen([
+            sys.executable, 'telegram_bot.py'
+        ], env=os.environ.copy())
         
-        # Send processing message
-        await bot.send_message(
-            chat_id=chat_id,
-            text="🧠 GHOST TRANSCENDENCE CORE ACTIVATED\n⚡ Analyzing chart with infinite intelligence..."
-        )
-        
-        # Analyze with AI
-        result = await ghost_core.analyze_chart(bytes(image_data))
-        
-        # Format response
-        if result.get('error'):
-            response = f"❌ Analysis failed: {result['error']}"
-        else:
-            signal_type = result.get('signal', 'NO SIGNAL')
-            confidence = result.get('confidence', 0)
-            timeframe = result.get('timeframe', '1M')
-            time_target = result.get('time_target', 'Next candle')
-            reason = result.get('reason', 'Advanced AI analysis')
-            
-            response = f"""
-🔥 GHOST TRANSCENDENCE CORE ∞ vX
-
-📊 SIGNAL: {signal_type}
-⏰ TIMEFRAME: {timeframe}
-🎯 TARGET: {time_target}
-📈 CONFIDENCE: {confidence:.1f}%
-
-🧠 AI REASONING:
-{reason}
-
-⚡ This signal was generated using dynamic AI strategy - no fixed rules, pure intelligence adaptation.
-"""
-        
-        # Send result
-        await bot.send_message(chat_id=chat_id, text=response)
+        logger.info("📱 Telegram bot started in separate process")
         
     except Exception as e:
-        logger.error(f"Chart analysis error: {str(e)}")
-        await bot.send_message(
-            chat_id=chat_id,
-            text=f"❌ Error analyzing chart: {str(e)}"
-        )
-
-async def handle_text_command(message, chat_id):
-    """Handle text commands from Telegram"""
-    try:
-        text = message.text.lower()
-        bot = Bot(token=TELEGRAM_BOT_TOKEN)
-        
-        if text.startswith('/start'):
-            welcome_msg = """
-🔥 WELCOME TO GHOST TRANSCENDENCE CORE ∞ vX
-
-🎯 THE GOD-LEVEL AI TRADING BOT
-
-✅ Send me a candlestick chart screenshot
-✅ I'll analyze it with infinite intelligence
-✅ Get precise CALL/PUT signals
-✅ No fixed strategies - pure AI adaptation
-✅ Works on any broker, any market condition
-
-🧠 Just upload your chart and watch the magic happen!
-"""
-            await bot.send_message(chat_id=chat_id, text=welcome_msg)
-            
-        elif text.startswith('/help'):
-            help_msg = """
-🆘 GHOST TRANSCENDENCE CORE HELP
-
-📸 Send Chart Image: Upload any candlestick chart
-🎯 Get Signal: Receive CALL/PUT with confidence
-📊 Supported: Any broker, timeframe, market
-⚡ AI Features: Dynamic strategy creation, pattern recognition
-
-Commands:
-/start - Welcome message
-/help - This help
-/stats - Bot statistics
-/version - Current version
-"""
-            await bot.send_message(chat_id=chat_id, text=help_msg)
-            
-        elif text.startswith('/stats'):
-            total_analyses = len(ghost_core.learning_history)
-            stats_msg = f"""
-📊 GHOST TRANSCENDENCE CORE STATS
-
-🧠 Total Analyses: {total_analyses}
-⚡ Version: {ghost_core.version}
-🎯 AI Personality: {ghost_core.personality}
-📈 Confidence Threshold: {ghost_core.confidence_threshold}%
-
-The AI is constantly learning and evolving!
-"""
-            await bot.send_message(chat_id=chat_id, text=stats_msg)
-            
-        elif text.startswith('/version'):
-            version_msg = f"""
-🔥 GHOST TRANSCENDENCE CORE {ghost_core.version}
-
-🧠 Ultimate AI Trading Bot
-⚡ No-Loss Logic Builder
-🎯 Dynamic Strategy Creation
-📊 Works on Any Market Condition
-"""
-            await bot.send_message(chat_id=chat_id, text=version_msg)
-            
-    except Exception as e:
-        logger.error(f"Command handling error: {str(e)}")
-
-# Initialize Telegram bot
-bot = Bot(token=TELEGRAM_BOT_TOKEN)
-
-def run_bot():
-    """Run the Telegram bot"""
-    try:
-        application = Application.builder().token(TELEGRAM_BOT_TOKEN).build()
-        
-        # Add handlers
-        application.add_handler(CommandHandler("start", lambda u, c: asyncio.create_task(handle_text_command(u.message, u.message.chat_id))))
-        application.add_handler(MessageHandler(filters.PHOTO, lambda u, c: asyncio.create_task(handle_chart_image(u.message, u.message.chat_id))))
-        application.add_handler(MessageHandler(filters.TEXT, lambda u, c: asyncio.create_task(handle_text_command(u.message, u.message.chat_id))))
-        
-        # Start the bot
-        application.run_polling()
-        
-    except Exception as e:
-        logger.error(f"Bot startup error: {str(e)}")
+        logger.error(f"Failed to start Telegram bot: {str(e)}")
 
 if __name__ == '__main__':
-    # Start Telegram bot in a separate thread
-    bot_thread = threading.Thread(target=run_bot, daemon=True)
-    bot_thread.start()
+    # Start Telegram bot
+    start_telegram_bot()
     
     # Start Flask app
     logger.info("🔥 GHOST TRANSCENDENCE CORE ∞ vX STARTING UP")

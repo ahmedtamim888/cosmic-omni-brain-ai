@@ -1,178 +1,225 @@
 #!/usr/bin/env python3
 """
 🔥 GHOST TRANSCENDENCE CORE ∞ vX - Startup Script
-Simple launcher with configuration options
+Enhanced startup script with Telegram bot support
 """
 
 import os
 import sys
+import subprocess
 import argparse
-import logging
+import time
 from pathlib import Path
-
-def setup_environment():
-    """Setup environment variables and paths"""
-    # Create necessary directories
-    directories = ['logs', 'temp', 'static/uploads']
-    for directory in directories:
-        Path(directory).mkdir(exist_ok=True)
-    
-    # Set default environment variables if not set
-    env_defaults = {
-        'FLASK_ENV': 'production',
-        'LOG_LEVEL': 'INFO',
-        'PORT': '5000',
-        'SECRET_KEY': 'ghost_transcendence_core_infinity_vx'
-    }
-    
-    for key, value in env_defaults.items():
-        if key not in os.environ:
-            os.environ[key] = value
-
-def check_dependencies():
-    """Check if all required dependencies are installed"""
-    required_modules = [
-        'flask', 'opencv-python', 'numpy', 'pillow', 
-        'python-telegram-bot', 'scikit-image'
-    ]
-    
-    missing_modules = []
-    
-    for module in required_modules:
-        try:
-            if module == 'opencv-python':
-                import cv2
-            elif module == 'python-telegram-bot':
-                import telegram
-            elif module == 'scikit-image':
-                import skimage
-            else:
-                __import__(module)
-        except ImportError:
-            missing_modules.append(module)
-    
-    if missing_modules:
-        print("❌ Missing required dependencies:")
-        for module in missing_modules:
-            print(f"   - {module}")
-        print("\n💡 Install missing dependencies with:")
-        print(f"   pip install {' '.join(missing_modules)}")
-        return False
-    
-    return True
 
 def print_banner():
     """Print the Ghost Transcendence Core banner"""
     banner = """
-🔥 ══════════════════════════════════════════════════════════════ 🔥
+🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥
 
-    ██████╗ ██╗  ██╗ ██████╗ ███████╗████████╗
-    ██╔══██╗██║  ██║██╔═══██╗██╔════╝╚══██╔══╝
-    ██████╔╝███████║██║   ██║███████╗   ██║   
-    ██╔══██╗██╔══██║██║   ██║╚════██║   ██║   
-    ██████╔╝██║  ██║╚██████╔╝███████║   ██║   
-    ╚═════╝ ╚═╝  ╚═╝ ╚═════╝ ╚══════╝   ╚═╝   
+     ██████╗ ██╗  ██╗ ██████╗ ███████╗████████╗
+    ██╔════╝ ██║  ██║██╔═══██╗██╔════╝╚══██╔══╝
+    ██║  ███╗███████║██║   ██║███████╗   ██║   
+    ██║   ██║██╔══██║██║   ██║╚════██║   ██║   
+    ╚██████╔╝██║  ██║╚██████╔╝███████║   ██║   
+     ╚═════╝ ╚═╝  ╚═╝ ╚═════╝ ╚══════╝   ╚═╝   
 
-        TRANSCENDENCE CORE ∞ vX
-    🎯 The God-Level AI Trading Bot
+ ████████╗██████╗  █████╗ ███╗   ██╗███████╗ ██████╗███████╗███╗   ██╗██████╗ 
+ ╚══██╔══╝██╔══██╗██╔══██╗████╗  ██║██╔════╝██╔════╝██╔════╝████╗  ██║██╔══██╗
+    ██║   ██████╔╝███████║██╔██╗ ██║███████╗██║     █████╗  ██╔██╗ ██║██║  ██║
+    ██║   ██╔══██╗██╔══██║██║╚██╗██║╚════██║██║     ██╔══╝  ██║╚██╗██║██║  ██║
+    ██║   ██║  ██║██║  ██║██║ ╚████║███████║╚██████╗███████╗██║ ╚████║██████╔╝
+    ╚═╝   ╚═╝  ╚═╝╚═╝  ╚═╝╚═╝  ╚═══╝╚══════╝ ╚═════╝╚══════╝╚═╝  ╚═══╝╚═════╝ 
 
-👻 No-Loss Logic Builder
-⚡ Manipulation Resistant  
-🧠 Infinite Intelligence
-🎯 Dynamic Strategy Creation
+         ██████╗ ██████╗ ██████╗ ███████╗    ∞    ██╗   ██╗██╗  ██╗
+        ██╔════╝██╔═══██╗██╔══██╗██╔════╝         ██║   ██║╚██╗██╔╝
+        ██║     ██║   ██║██████╔╝█████╗           ██║   ██║ ╚███╔╝ 
+        ██║     ██║   ██║██╔══██╗██╔══╝           ╚██╗ ██╔╝ ██╔██╗ 
+        ╚██████╗╚██████╔╝██║  ██║███████╗          ╚████╔╝ ██╔╝ ██╗
+         ╚═════╝ ╚═════╝ ╚═╝  ╚═╝╚══════╝           ╚═══╝  ╚═╝  ╚═╝
 
-🔥 ══════════════════════════════════════════════════════════════ 🔥
+🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥
+
+             🎯 THE GOD-LEVEL AI TRADING BOT
+        ⚡ Infinite Intelligence • No-Loss Logic Builder
+          🧠 Dynamic Strategy Creation • Manipulation Resistant
+                👻 Ghost Transcendence Core Activated
+
+🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥
 """
     print(banner)
 
+def check_dependencies():
+    """Check if all required dependencies are installed"""
+    print("🔍 Checking dependencies...")
+    
+    required_packages = [
+        'flask', 'opencv-python', 'numpy', 'pillow', 
+        'python-telegram-bot', 'scikit-image', 'matplotlib'
+    ]
+    
+    missing_packages = []
+    
+    for package in required_packages:
+        try:
+            if package == 'opencv-python':
+                import cv2
+            elif package == 'python-telegram-bot':
+                import telegram
+            elif package == 'scikit-image':
+                import skimage
+            else:
+                __import__(package.replace('-', '_'))
+            print(f"✅ {package}")
+        except ImportError:
+            print(f"❌ {package}")
+            missing_packages.append(package)
+    
+    if missing_packages:
+        print(f"\n⚠️  Missing packages: {', '.join(missing_packages)}")
+        print("Installing missing packages...")
+        
+        for package in missing_packages:
+            print(f"📦 Installing {package}...")
+            subprocess.check_call([sys.executable, '-m', 'pip', 'install', package])
+        
+        print("✅ All dependencies installed!")
+    else:
+        print("✅ All dependencies are installed!")
+
+def setup_environment():
+    """Setup environment variables"""
+    print("🌍 Setting up environment...")
+    
+    # Default environment variables
+    defaults = {
+        'FLASK_ENV': 'production',
+        'FLASK_DEBUG': 'false',
+        'HOST': '0.0.0.0',
+        'PORT': '5000',
+        'SECRET_KEY': 'ghost_transcendence_core_infinity_key',
+        'TELEGRAM_BOT_TOKEN': '7604218758:AAHJj2zMDTfVwyJHpLClVCDzukNr2Psj-38',
+        'API_URL': 'http://localhost:5000',
+        'LOG_LEVEL': 'INFO'
+    }
+    
+    for key, value in defaults.items():
+        if key not in os.environ:
+            os.environ[key] = value
+            print(f"🔧 Set {key}={value}")
+        else:
+            print(f"✅ {key} already configured")
+
+def start_flask_app(host='0.0.0.0', port=5000, debug=False):
+    """Start the Flask application"""
+    print(f"🚀 Starting Flask app on {host}:{port}")
+    
+    # Import and run the app
+    try:
+        from app import app
+        app.run(host=host, port=port, debug=debug, threaded=True)
+    except Exception as e:
+        print(f"❌ Flask startup error: {e}")
+        return False
+    
+    return True
+
+def start_telegram_bot():
+    """Start the Telegram bot in a separate process"""
+    print("📱 Starting Telegram bot...")
+    
+    try:
+        # Check if bot token is configured
+        token = os.environ.get('TELEGRAM_BOT_TOKEN')
+        if not token or token == 'your_bot_token_here':
+            print("⚠️  Telegram bot token not configured, skipping bot startup")
+            return False
+        
+        # Start bot in subprocess
+        bot_process = subprocess.Popen([
+            sys.executable, 'telegram_bot.py'
+        ], env=os.environ.copy())
+        
+        print("✅ Telegram bot started successfully!")
+        return bot_process
+        
+    except Exception as e:
+        print(f"❌ Telegram bot startup error: {e}")
+        return False
+
 def main():
-    """Main startup function"""
+    """Main function"""
     parser = argparse.ArgumentParser(
-        description='🔥 Ghost Transcendence Core ∞ vX - AI Trading Bot'
+        description='🔥 Ghost Transcendence Core ∞ vX - Ultimate AI Trading Bot'
     )
-    parser.add_argument(
-        '--port', '-p', 
-        type=int, 
-        default=int(os.environ.get('PORT', 5000)),
-        help='Port to run the web server on (default: 5000)'
-    )
-    parser.add_argument(
-        '--debug', '-d',
-        action='store_true',
-        help='Run in debug mode'
-    )
-    parser.add_argument(
-        '--host',
-        default='0.0.0.0',
-        help='Host to bind to (default: 0.0.0.0)'
-    )
-    parser.add_argument(
-        '--no-telegram',
-        action='store_true',
-        help='Disable Telegram bot'
-    )
-    parser.add_argument(
-        '--log-level',
-        choices=['DEBUG', 'INFO', 'WARNING', 'ERROR'],
-        default='INFO',
-        help='Logging level (default: INFO)'
-    )
+    
+    parser.add_argument('--host', default='0.0.0.0', help='Host to bind Flask app')
+    parser.add_argument('--port', type=int, default=5000, help='Port to bind Flask app')
+    parser.add_argument('--debug', action='store_true', help='Enable debug mode')
+    parser.add_argument('--no-telegram', action='store_true', help='Disable Telegram bot')
+    parser.add_argument('--telegram-only', action='store_true', help='Run only Telegram bot')
+    parser.add_argument('--check-deps', action='store_true', help='Check dependencies only')
+    parser.add_argument('--install-deps', action='store_true', help='Install missing dependencies')
     
     args = parser.parse_args()
     
     # Print banner
     print_banner()
     
+    # Check dependencies if requested
+    if args.check_deps or args.install_deps:
+        check_dependencies()
+        if args.check_deps:
+            return
+    
     # Setup environment
-    print("🔧 Setting up environment...")
     setup_environment()
     
-    # Check dependencies
-    print("📦 Checking dependencies...")
-    if not check_dependencies():
-        sys.exit(1)
-    
-    # Set configuration
+    # Set environment variables from args
+    os.environ['HOST'] = args.host
     os.environ['PORT'] = str(args.port)
-    os.environ['LOG_LEVEL'] = args.log_level
-    
-    if args.debug:
-        os.environ['FLASK_ENV'] = 'development'
+    os.environ['FLASK_DEBUG'] = 'true' if args.debug else 'false'
     
     if args.no_telegram:
         os.environ['DISABLE_TELEGRAM'] = 'true'
     
-    print("✅ Environment setup complete")
-    print(f"🌐 Starting Ghost Transcendence Core on http://{args.host}:{args.port}")
-    
-    if not args.no_telegram:
-        telegram_token = os.environ.get('TELEGRAM_BOT_TOKEN')
-        if telegram_token and telegram_token != 'your_bot_token_here':
-            print("📱 Telegram bot will be activated")
-        else:
-            print("⚠️  Telegram bot token not configured (set TELEGRAM_BOT_TOKEN)")
-    
-    print("🎯 No-Loss Logic Builder - ACTIVE")
-    print("👻 Manipulation Resistance - MAXIMUM")
-    print("⚡ Infinite Intelligence - ENGAGED")
-    print("\n" + "="*60)
-    
-    # Import and run the main app
     try:
-        from app import app, logger
-        logger.info("🔥 GHOST TRANSCENDENCE CORE ∞ vX STARTUP COMPLETE")
-        
-        app.run(
-            host=args.host,
-            port=args.port,
-            debug=args.debug,
-            threaded=True
-        )
+        if args.telegram_only:
+            # Run only Telegram bot
+            print("📱 Running in Telegram-only mode...")
+            bot_process = start_telegram_bot()
+            if bot_process:
+                print("📱 Telegram bot is running. Press Ctrl+C to stop.")
+                try:
+                    bot_process.wait()
+                except KeyboardInterrupt:
+                    print("\n🛑 Shutting down Telegram bot...")
+                    bot_process.terminate()
+        else:
+            # Run Flask app (with or without Telegram bot)
+            if not args.no_telegram:
+                bot_process = start_telegram_bot()
+                if bot_process:
+                    print("📱 Telegram bot started in background")
+                    time.sleep(2)  # Give bot time to start
+            
+            print("🚀 Starting Flask application...")
+            print(f"🌐 Web interface: http://{args.host}:{args.port}")
+            print(f"🔗 API endpoint: http://{args.host}:{args.port}/analyze")
+            
+            if not args.no_telegram:
+                print("📱 Telegram bot: Active (send charts for analysis)")
+            
+            print("\n🎯 Ghost Transcendence Core is ready to dominate the charts!")
+            print("👻 Send chart screenshots and watch the AI magic happen...")
+            print("\n🛑 Press Ctrl+C to stop")
+            
+            # Start Flask app
+            start_flask_app(args.host, args.port, args.debug)
+            
     except KeyboardInterrupt:
-        print("\n\n👻 Ghost Transcendence Core shutting down...")
-        print("🎯 All trades dominated. See you in the markets!")
+        print("\n🛑 Shutting down Ghost Transcendence Core...")
     except Exception as e:
-        print(f"\n❌ Startup failed: {str(e)}")
+        print(f"❌ Startup error: {e}")
         sys.exit(1)
 
 if __name__ == '__main__':
