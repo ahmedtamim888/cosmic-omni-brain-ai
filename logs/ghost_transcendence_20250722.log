@@ -138,3 +138,13 @@
 2025-07-22 02:42:31 |     INFO | GHOST_TRANSCENDENCE_CORE | analyze_chart:170 | 👁️ Perception: 20 candles detected
 2025-07-22 02:42:31 |     INFO | GHOST_TRANSCENDENCE_CORE | analyze_chart:174 | 🧠 Strategy: candle_whisperer_put
 2025-07-22 02:42:31 |     INFO | GHOST_TRANSCENDENCE_CORE | analyze_chart:178 | 🎯 Signal: PUT
+2025-07-22 02:43:47 |     INFO | GHOST_TRANSCENDENCE_CORE | analyze_chart:135 | 🕯️ CANDLE WHISPERER: Starting chart analysis...
+2025-07-22 02:43:47 |     INFO | GHOST_TRANSCENDENCE_CORE | analyze_chart:153 | 🖼️ Image loaded: (1280, 574, 3)
+2025-07-22 02:43:47 |     INFO | GHOST_TRANSCENDENCE_CORE | analyze_chart:170 | 👁️ Perception: 20 candles detected
+2025-07-22 02:43:47 |     INFO | GHOST_TRANSCENDENCE_CORE | analyze_chart:174 | 🧠 Strategy: candle_whisperer_call
+2025-07-22 02:43:47 |     INFO | GHOST_TRANSCENDENCE_CORE | analyze_chart:178 | 🎯 Signal: CALL
+2025-07-22 02:44:11 |     INFO | GHOST_TRANSCENDENCE_CORE | analyze_chart:135 | 🕯️ CANDLE WHISPERER: Starting chart analysis...
+2025-07-22 02:44:11 |     INFO | GHOST_TRANSCENDENCE_CORE | analyze_chart:153 | 🖼️ Image loaded: (1280, 574, 3)
+2025-07-22 02:44:11 |     INFO | GHOST_TRANSCENDENCE_CORE | analyze_chart:170 | 👁️ Perception: 20 candles detected
+2025-07-22 02:44:11 |     INFO | GHOST_TRANSCENDENCE_CORE | analyze_chart:174 | 🧠 Strategy: candle_whisperer_put
+2025-07-22 02:44:11 |     INFO | GHOST_TRANSCENDENCE_CORE | analyze_chart:178 | 🎯 Signal: PUT
