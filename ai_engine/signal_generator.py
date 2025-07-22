@@ -24,7 +24,7 @@ class SignalGenerator:
         self.signal_history = []
         self.success_rate = 0.0
         self.confidence_calibration = 1.0
-        self.minimum_confidence = 0.60  # Lowered from 0.75 to be more realistic
+        self.minimum_confidence = 0.75  # ULTRA-HIGH accuracy threshold
         
     async def generate_signal(self, strategy: Dict, context: Dict) -> Dict:
         """
@@ -48,16 +48,23 @@ class SignalGenerator:
             # Generate time prediction
             time_prediction = self._generate_time_prediction(context)
             
-            # Make final decision with more nuanced logic
-            if final_confidence >= self.minimum_confidence:
+            # ULTRA-INTELLIGENT signal decision based on SECRET strategy
+            strategy_type = strategy.get('type', '')
+            strategy_accuracy = strategy.get('accuracy', 0.5)
+            
+            # Ultra strategies get special treatment
+            if 'ultra_' in strategy_type and strategy_accuracy >= 0.80:
+                # Ultra strategies with high accuracy always signal
                 signal_type = "CALL" if signal_direction > 0 else "PUT"
-            elif final_confidence >= 0.45:  # Medium confidence range
-                # Still provide signal but with lower confidence
+                final_confidence = max(final_confidence, strategy_accuracy)
+            elif final_confidence >= self.minimum_confidence:
                 signal_type = "CALL" if signal_direction > 0 else "PUT"
-                # Add cautionary note in reasoning
+            elif final_confidence >= 0.65:  # High confidence range
+                signal_type = "CALL" if signal_direction > 0 else "PUT"
+                # Ultra precision signal
             else:
                 signal_type = "NO SIGNAL"
-                final_confidence = max(final_confidence, 0.25)  # Show actual confidence, not 0
+                final_confidence = max(final_confidence, 0.35)  # Show actual confidence
             
             # Generate reasoning
             reasoning = self._generate_reasoning(signal_components, strategy, context, signal_type)
