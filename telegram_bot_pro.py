@@ -13,6 +13,9 @@ from typing import Optional, Dict, List
 import requests
 from telegram import Update, InlineKeyboardButton, InlineKeyboardMarkup
 from telegram.ext import Application, CommandHandler, MessageHandler, CallbackQueryHandler, filters, ContextTypes
+import io
+import os
+from PIL import Image
 from config import Config
 
 # Configure logging
@@ -38,6 +41,8 @@ class CosmicTelegramBot:
             'win_rate': 0.0,
             'last_update': datetime.now()
         }
+        # Import AI engine when needed to avoid circular imports
+        self.ai_engine = None
         
     async def start_command(self, update: Update, context: ContextTypes.DEFAULT_TYPE):
         """Handle /start command"""
@@ -57,13 +62,19 @@ I'm your professional AI trading assistant.
 /status - Check bot status
 /stats - View trading statistics
 /help - Show detailed help
-/analyze - Request manual analysis
+/analyze - Chart analysis guide
+
+📱 <b>INSTANT ANALYSIS:</b>
+• Send any chart screenshot directly here
+• Get CALL/PUT signals in 2-5 seconds
+• Support for all major brokers
 
 🎯 <b>Features:</b>
 • Real-time CALL/PUT signals
 • 85%+ confidence threshold
 • Market psychology analysis
 • Multi-strategy AI engine
+• Direct photo analysis
 • Professional support 24/7
 
 <i>Ready to start your cosmic trading journey!</i>
@@ -217,16 +228,205 @@ Having issues? Contact @CosmicAISupport
         
         await update.message.reply_text(help_message, parse_mode='HTML')
         
+    async def handle_photo(self, update: Update, context: ContextTypes.DEFAULT_TYPE):
+        """Handle photo uploads for chart analysis"""
+        try:
+            user = update.effective_user
+            chat_id = update.effective_chat.id
+            
+            # Send processing message
+            processing_msg = await update.message.reply_text(
+                "🔍 <b>ANALYZING CHART...</b>\n\n"
+                "🧠 AI Engine: Processing candlestick patterns\n"
+                "📊 Detecting: Support/Resistance levels\n"
+                "🎯 Calculating: Market psychology\n\n"
+                "⏱️ <i>Analysis takes 2-5 seconds...</i>",
+                parse_mode='HTML'
+            )
+            
+            # Get the photo
+            photo = update.message.photo[-1]  # Get highest resolution
+            photo_file = await photo.get_file()
+            
+            # Download photo to memory
+            photo_bytes = io.BytesIO()
+            await photo_file.download_to_memory(photo_bytes)
+            photo_bytes.seek(0)
+            
+            # Convert to PIL Image
+            image = Image.open(photo_bytes)
+            
+            # Save temporarily for AI analysis
+            temp_filename = f"temp_chart_{chat_id}_{int(time.time())}.png"
+            temp_path = os.path.join("uploads", temp_filename)
+            os.makedirs("uploads", exist_ok=True)
+            image.save(temp_path)
+            
+            # Initialize AI engine if not done
+            if self.ai_engine is None:
+                from logic.ai_engine import CosmicAIEngine
+                self.ai_engine = CosmicAIEngine()
+            
+            # Analyze the chart
+            try:
+                signal = await asyncio.get_event_loop().run_in_executor(
+                    None, self.ai_engine.analyze_chart, temp_path
+                )
+                
+                # Clean up temp file
+                if os.path.exists(temp_path):
+                    os.remove(temp_path)
+                
+                if signal and signal.confidence >= Config.CONFIDENCE_THRESHOLD:
+                    # Generate professional signal message
+                    current_time = datetime.now(timezone(timedelta(hours=6)))
+                    
+                    signal_message = f"""
+🧠 <b>COSMIC AI ANALYSIS COMPLETE</b> ✅
+
+👤 <b>Analyst:</b> {user.first_name}
+🕒 <b>Time:</b> {current_time.strftime('%H:%M:%S')} (UTC+6)
+
+📈 <b>SIGNAL:</b> <b>{signal.signal}</b>
+🎯 <b>Strategy:</b> {signal.strategy}
+💡 <b>Reasoning:</b> {signal.reasoning}
+🔒 <b>Confidence:</b> <b>{signal.confidence:.1f}%</b>
+
+🧠 <b>Market Psychology:</b> {signal.market_psychology}
+📊 <b>Patterns Detected:</b> {len(signal.patterns_detected)}
+⏰ <b>Timeframe:</b> 1 Minute
+
+<b>🚀 EXECUTE WITH CAUTION!</b>
+<i>Always manage your risk properly</i>
+                    """
+                    
+                    # Create action buttons
+                    keyboard = [
+                        [InlineKeyboardButton("📊 Get More Analysis", callback_data="analyze"),
+                         InlineKeyboardButton("📈 View Stats", callback_data="stats")],
+                        [InlineKeyboardButton("🔔 Subscribe to Auto-Signals", callback_data="subscribe")]
+                    ]
+                    reply_markup = InlineKeyboardMarkup(keyboard)
+                    
+                    # Edit the processing message with results
+                    await processing_msg.edit_text(
+                        signal_message,
+                        parse_mode='HTML',
+                        reply_markup=reply_markup
+                    )
+                    
+                    # If user is subscribed, also send to other subscribers
+                    if chat_id in self.signal_subscribers:
+                        signal_data = {
+                            'signal': signal.signal,
+                            'confidence': signal.confidence,
+                            'reasoning': signal.reasoning,
+                            'strategy': signal.strategy,
+                            'market_psychology': signal.market_psychology,
+                            'timeframe': '1M'
+                        }
+                        await self.send_signal_to_subscribers(signal_data)
+                        
+                    # Update statistics
+                    self.stats['total_signals'] += 1
+                    if signal.confidence > 90:
+                        self.stats['successful_signals'] += 1
+                    if self.stats['total_signals'] > 0:
+                        self.stats['win_rate'] = (self.stats['successful_signals'] / self.stats['total_signals']) * 100
+                    
+                else:
+                    # Low confidence or no signal
+                    no_signal_message = f"""
+🧠 <b>COSMIC AI ANALYSIS COMPLETE</b> ⚠️
+
+👤 <b>Analyst:</b> {user.first_name}
+🔍 <b>Result:</b> NO CLEAR SIGNAL
+
+📊 <b>Analysis Details:</b>
+• Confidence: {signal.confidence:.1f}% (Below {Config.CONFIDENCE_THRESHOLD}% threshold)
+• Market State: {signal.market_psychology if signal else 'UNCLEAR'}
+• Recommendation: <b>WAIT FOR BETTER SETUP</b>
+
+💡 <b>Suggestions:</b>
+• Wait for clearer patterns
+• Look for higher timeframe confirmation
+• Monitor for breakout/breakdown
+
+<i>🎯 COSMIC AI only signals high-probability setups!</i>
+                    """
+                    
+                    await processing_msg.edit_text(no_signal_message, parse_mode='HTML')
+                    
+            except Exception as e:
+                logger.error(f"AI analysis error: {e}")
+                await processing_msg.edit_text(
+                    "❌ <b>Analysis Error</b>\n\n"
+                    "Unable to process chart image.\n"
+                    "Please ensure:\n"
+                    "• Image shows clear candlestick chart\n"
+                    "• Chart has at least 6-8 candles\n"
+                    "• Image quality is good\n\n"
+                    "📱 Try uploading a clearer screenshot.",
+                    parse_mode='HTML'
+                )
+                
+                # Clean up temp file
+                if os.path.exists(temp_path):
+                    os.remove(temp_path)
+                    
+        except Exception as e:
+            logger.error(f"Photo handling error: {e}")
+            await update.message.reply_text(
+                "❌ <b>Upload Error</b>\n\n"
+                "Failed to process your image.\n"
+                "Please try again with a clear chart screenshot.",
+                parse_mode='HTML'
+            )
+            
+    async def handle_text(self, update: Update, context: ContextTypes.DEFAULT_TYPE):
+        """Handle text messages with helpful guidance"""
+        user = update.effective_user
+        text = update.message.text.lower()
+        
+        if any(keyword in text for keyword in ['chart', 'analyze', 'signal', 'call', 'put', 'trade']):
+            await update.message.reply_text(
+                f"📱 <b>Hi {user.first_name}!</b>\n\n"
+                "🔍 <b>To get trading signals:</b>\n"
+                "• Send a chart screenshot directly here\n"
+                "• AI will analyze it in 2-5 seconds\n"
+                "• Receive CALL/PUT signal instantly\n\n"
+                "📊 <b>Supported brokers:</b>\n"
+                "Quotex, Binomo, Pocket Option, MT4/5, TradingView\n\n"
+                "⚡ <b>Just upload your chart image!</b>",
+                parse_mode='HTML'
+            )
+        else:
+            await update.message.reply_text(
+                f"👋 Hello {user.first_name}!\n\n"
+                "🧠 I'm COSMIC AI - your trading assistant.\n\n"
+                "📱 <b>Send a chart screenshot</b> for instant analysis\n"
+                "🤖 Or use /help for all commands\n\n"
+                "🚀 Ready to analyze your charts!",
+                parse_mode='HTML'
+            )
+        
     async def analyze_command(self, update: Update, context: ContextTypes.DEFAULT_TYPE):
         """Handle /analyze command"""
         await update.message.reply_text(
-            "🔍 <b>Manual Analysis Request</b>\n\n"
-            "To analyze a chart:\n"
-            "1. Visit: http://localhost:5000\n"
-            "2. Upload your chart screenshot\n"
-            "3. Wait for AI analysis\n"
-            "4. Receive signal instantly!\n\n"
-            "⚡ Analysis takes 2-5 seconds",
+            "🔍 <b>CHART ANALYSIS GUIDE</b>\n\n"
+            "📱 <b>Method 1: Direct Upload (Recommended)</b>\n"
+            "• Simply send a chart screenshot here\n"
+            "• AI will analyze it instantly\n"
+            "• Get results in 2-5 seconds\n\n"
+            "🌐 <b>Method 2: Web Interface</b>\n"
+            "• Visit: http://localhost:5000\n"
+            "• Upload your chart screenshot\n"
+            "• Receive signal via Telegram\n\n"
+            "📊 <b>Supported Brokers:</b>\n"
+            "• Quotex, Binomo, Pocket Option\n"
+            "• MetaTrader, TradingView\n"
+            "• Any candlestick chart\n\n"
+            "⚡ <b>Just send your chart image now!</b>",
             parse_mode='HTML'
         )
         
@@ -322,13 +522,16 @@ Having issues? Contact @CosmicAISupport
             
         elif query.data == "analyze":
             await query.edit_message_text(
-                "🔍 <b>Manual Analysis Request</b>\n\n"
-                "To analyze a chart:\n"
-                "1. Visit: http://localhost:5000\n"
-                "2. Upload your chart screenshot\n"
-                "3. Wait for AI analysis\n"
-                "4. Receive signal instantly!\n\n"
-                "⚡ Analysis takes 2-5 seconds",
+                "🔍 <b>CHART ANALYSIS READY</b>\n\n"
+                "📱 <b>Send Chart Screenshot Now!</b>\n"
+                "• Just upload any chart image here\n"
+                "• AI will analyze it instantly\n"
+                "• Get CALL/PUT signal in 2-5 seconds\n\n"
+                "📊 <b>Supported Charts:</b>\n"
+                "• Quotex, Binomo, Pocket Option\n"
+                "• MetaTrader, TradingView\n"
+                "• Any candlestick chart\n\n"
+                "⚡ <b>Upload your chart now!</b>",
                 parse_mode='HTML'
             )
             
@@ -406,6 +609,12 @@ Having issues? Contact @CosmicAISupport
         self.app.add_handler(CommandHandler("help", self.help_command))
         self.app.add_handler(CommandHandler("analyze", self.analyze_command))
         self.app.add_handler(CallbackQueryHandler(self.handle_callback))
+        
+        # Add photo handler for chart analysis
+        self.app.add_handler(MessageHandler(filters.PHOTO, self.handle_photo))
+        
+        # Add text message handler for guidance
+        self.app.add_handler(MessageHandler(filters.TEXT & ~filters.COMMAND, self.handle_text))
         
         # Start bot in a separate thread
         def run_bot():
