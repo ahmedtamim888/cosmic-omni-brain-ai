@@ -1,0 +1,158 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>COSMIC AI Binary Signal Bot</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+</head>
+<body>
+    <div class="container">
+        <!-- Header -->
+        <header class="header">
+            <div class="logo-section">
+                <i class="fas fa-brain cosmic-icon"></i>
+                <h1>COSMIC AI</h1>
+                <span class="subtitle">Binary Signal Bot</span>
+            </div>
+            <div class="status-indicator">
+                <i class="fas fa-circle online"></i>
+                <span>AI Engine Online</span>
+            </div>
+        </header>
+
+        <!-- Main Content -->
+        <main class="main-content">
+            <!-- Upload Section -->
+            <section class="upload-section">
+                <div class="upload-container" id="uploadContainer">
+                    <div class="upload-area" id="uploadArea">
+                        <div class="upload-content">
+                            <i class="fas fa-cloud-upload-alt upload-icon"></i>
+                            <h2>Upload Chart Screenshot</h2>
+                            <p>Drag & drop your candlestick chart or click to browse</p>
+                            <p class="supported-formats">Supports: JPG, PNG, WEBP (Max 16MB)</p>
+                            
+                            <input type="file" id="fileInput" accept="image/*" style="display: none;">
+                            <button class="browse-btn" onclick="document.getElementById('fileInput').click()">
+                                <i class="fas fa-folder-open"></i>
+                                Browse Files
+                            </button>
+                        </div>
+                        
+                        <div class="upload-preview" id="uploadPreview" style="display: none;">
+                            <img id="previewImage" alt="Chart preview">
+                            <div class="preview-overlay">
+                                <button class="remove-btn" id="removeBtn">
+                                    <i class="fas fa-trash"></i>
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <button class="analyze-btn" id="analyzeBtn" disabled>
+                        <i class="fas fa-brain"></i>
+                        <span class="btn-text">Analyze Chart</span>
+                        <div class="loading-spinner" style="display: none;">
+                            <i class="fas fa-spinner fa-spin"></i>
+                        </div>
+                    </button>
+                </div>
+            </section>
+
+            <!-- Results Section -->
+            <section class="results-section" id="resultsSection" style="display: none;">
+                <div class="results-container">
+                    <div class="result-header">
+                        <h2><i class="fas fa-chart-line"></i> Analysis Results</h2>
+                        <div class="result-timestamp" id="resultTimestamp"></div>
+                    </div>
+                    
+                    <div class="signal-display">
+                        <div class="signal-main" id="signalMain">
+                            <div class="signal-icon" id="signalIcon"></div>
+                            <div class="signal-text" id="signalText"></div>
+                        </div>
+                        
+                        <div class="confidence-meter">
+                            <div class="confidence-label">Confidence Level</div>
+                            <div class="confidence-bar">
+                                <div class="confidence-fill" id="confidenceFill"></div>
+                                <span class="confidence-value" id="confidenceValue">0%</span>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="analysis-details" id="analysisDetails">
+                        <h3><i class="fas fa-microscope"></i> Analysis Details</h3>
+                        <div class="reason-box" id="reasonBox"></div>
+                        
+                        <div class="details-grid" id="detailsGrid"></div>
+                    </div>
+                    
+                    <div class="telegram-status" id="telegramStatus">
+                        <i class="fab fa-telegram-plane"></i>
+                        <span>Signal sent to Telegram group</span>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Features Section -->
+            <section class="features-section">
+                <div class="features-container">
+                    <h2><i class="fas fa-star"></i> AI Features</h2>
+                    <div class="features-grid">
+                        <div class="feature-card">
+                            <i class="fas fa-eye"></i>
+                            <h3>Pattern Recognition</h3>
+                            <p>Advanced candlestick pattern detection and market structure analysis</p>
+                        </div>
+                        <div class="feature-card">
+                            <i class="fas fa-brain"></i>
+                            <h3>Market Psychology</h3>
+                            <p>Analyzes momentum, sentiment, and trader behavior patterns</p>
+                        </div>
+                        <div class="feature-card">
+                            <i class="fas fa-shield-alt"></i>
+                            <h3>Risk Management</h3>
+                            <p>Only signals with 85%+ confidence to minimize false signals</p>
+                        </div>
+                        <div class="feature-card">
+                            <i class="fas fa-rocket"></i>
+                            <h3>Real-time Signals</h3>
+                            <p>Instant Telegram notifications with detailed analysis reasoning</p>
+                        </div>
+                    </div>
+                </div>
+            </section>
+        </main>
+
+        <!-- Footer -->
+        <footer class="footer">
+            <div class="footer-content">
+                <p>&copy; 2024 COSMIC AI Binary Signal Bot. Powered by Advanced Computer Vision.</p>
+                <div class="footer-links">
+                    <span><i class="fas fa-code"></i> Built with Flask & OpenCV</span>
+                    <span><i class="fab fa-telegram"></i> Telegram Integration</span>
+                </div>
+            </div>
+        </footer>
+    </div>
+
+    <!-- Loading Overlay -->
+    <div class="loading-overlay" id="loadingOverlay" style="display: none;">
+        <div class="loading-content">
+            <div class="cosmic-loader">
+                <div class="cosmic-ring"></div>
+                <div class="cosmic-ring"></div>
+                <div class="cosmic-ring"></div>
+            </div>
+            <h3>COSMIC AI Analyzing...</h3>
+            <p>Processing candlestick patterns and market signals</p>
+        </div>
+    </div>
+
+    <script src="{{ url_for('static', filename='script.js') }}"></script>
+</body>
+</html>
