@@ -908,81 +908,105 @@ class StrategyEngine:
         }
     
     def _breakout_continuation_strategy(self, market_story: Dict, candles: List[Candle]) -> Dict:
-        """Enhanced Breakout Continuation Strategy - High Win Rate Focus"""
+        """ULTRA Enhanced Breakout Continuation - 99% Win Rate Focus"""
         confidence = 0
         signal = "NO_TRADE"
         reasoning = ""
         
-        if len(candles) < 6:
-            return {'signal': signal, 'confidence': confidence, 'reasoning': 'Insufficient data'}
+        if len(candles) < 8:  # Increased requirement for more data
+            return {'signal': signal, 'confidence': confidence, 'reasoning': 'Insufficient data for ultra analysis'}
         
-        # Analyze last 6-8 candles for breakout setup
-        recent_candles = candles[-6:]
+        # Analyze last 8 candles for perfect setup
+        recent_candles = candles[-8:]
         last_candle = candles[-1]
         prev_candle = candles[-2]
+        third_candle = candles[-3]
         
-        # Detect strong breakout conditions
+        # Enhanced market analysis
         sr_analysis = market_story['support_resistance']
         momentum = market_story['momentum']
         volatility = market_story['volatility']
+        trend = market_story['trend_direction']
         
-        # High probability breakout signals
+        # ULTRA STRICT breakout conditions
         breakout_detected = False
         breakout_type = ""
         
-        # 1. Resistance breakout with volume surge
+        # 1. PERFECT Resistance breakout (ULTRA STRICT)
         if (sr_analysis['near_resistance'] and 
             last_candle.is_bullish and 
-            last_candle.body_size > np.mean([c.body_size for c in recent_candles]) * 1.5):
+            prev_candle.is_bullish and  # Must have 2 consecutive bullish candles
+            last_candle.body_size > np.mean([c.body_size for c in recent_candles]) * 2.0 and  # Doubled volume requirement
+            last_candle.close_price > max([c.high_price for c in recent_candles[:-1]])):  # Must break previous highs
             
-            # Confirm with momentum
-            if momentum['direction'] == 'BULLISH' and momentum['strength'] > 0.7:
-                confidence = 88 + (momentum['strength'] * 7)
+            # ULTRA STRICT momentum confirmation
+            if (momentum['direction'] == 'BULLISH' and 
+                momentum['strength'] > 0.8 and  # Increased from 0.7
+                trend in ['UPTREND', 'SIDEWAYS'] and  # Must align with trend
+                not self._is_trend_mature(candles) and  # Avoid exhausted moves
+                self._validate_breakout_quality(recent_candles, 'BULLISH')):  # Additional quality check
+                
+                confidence = 86 + (momentum['strength'] * 6)  # Reduced base confidence
                 signal = "CALL"
-                reasoning = "Strong resistance breakout with volume surge and bullish momentum"
+                reasoning = "ULTRA CONFIRMED resistance breakout - multiple validations passed"
                 breakout_detected = True
-                breakout_type = "RESISTANCE_BREAK"
+                breakout_type = "ULTRA_RESISTANCE_BREAK"
         
-        # 2. Support breakdown with volume
+        # 2. PERFECT Support breakdown (ULTRA STRICT)
         elif (sr_analysis['near_support'] and 
               not last_candle.is_bullish and 
-              last_candle.body_size > np.mean([c.body_size for c in recent_candles]) * 1.5):
+              not prev_candle.is_bullish and  # Must have 2 consecutive bearish candles
+              last_candle.body_size > np.mean([c.body_size for c in recent_candles]) * 2.0 and
+              last_candle.close_price < min([c.low_price for c in recent_candles[:-1]])):
             
-            if momentum['direction'] == 'BEARISH' and momentum['strength'] > 0.7:
-                confidence = 88 + (momentum['strength'] * 7)
+            if (momentum['direction'] == 'BEARISH' and 
+                momentum['strength'] > 0.8 and
+                trend in ['DOWNTREND', 'SIDEWAYS'] and
+                not self._is_trend_mature(candles) and
+                self._validate_breakout_quality(recent_candles, 'BEARISH')):
+                
+                confidence = 86 + (momentum['strength'] * 6)
                 signal = "PUT"
-                reasoning = "Strong support breakdown with volume surge and bearish momentum"
+                reasoning = "ULTRA CONFIRMED support breakdown - multiple validations passed"
                 breakout_detected = True
-                breakout_type = "SUPPORT_BREAK"
+                breakout_type = "ULTRA_SUPPORT_BREAK"
         
-        # 3. Consolidation breakout pattern
-        elif self._detect_consolidation_breakout(recent_candles):
-            consolidation_result = self._analyze_consolidation_breakout(recent_candles, momentum)
-            if consolidation_result['valid']:
+        # 3. PERFECT Consolidation breakout (ULTRA STRICT)
+        elif self._detect_ultra_consolidation_breakout(recent_candles):
+            consolidation_result = self._analyze_ultra_consolidation_breakout(recent_candles, momentum, trend)
+            if consolidation_result['valid'] and consolidation_result['ultra_quality']:
                 confidence = consolidation_result['confidence']
                 signal = consolidation_result['signal']
                 reasoning = consolidation_result['reasoning']
                 breakout_detected = True
-                breakout_type = "CONSOLIDATION_BREAK"
+                breakout_type = "ULTRA_CONSOLIDATION_BREAK"
         
-        # Apply additional filters for high win rate
-        if breakout_detected and confidence > 85:
-            # Trend alignment filter
-            trend = market_story['trend_direction']
-            if ((signal == "CALL" and trend in ["UPTREND", "SIDEWAYS"]) or
-                (signal == "PUT" and trend in ["DOWNTREND", "SIDEWAYS"])):
-                confidence += 3  # Bonus for trend alignment
-            elif ((signal == "CALL" and trend == "DOWNTREND") or
-                  (signal == "PUT" and trend == "UPTREND")):
-                confidence -= 8  # Penalty for counter-trend
+        # ULTRA STRICT additional filters
+        if breakout_detected and confidence > 82:  # Lower threshold but stricter validation
             
-            # Time-of-trend filter (avoid late entries)
-            if self._is_trend_mature(candles):
-                confidence -= 5
+            # Market condition validation
+            if volatility['level'] == 'LOW':  # Avoid high volatility false breakouts
+                confidence -= 15  # Heavy penalty for low volatility
+            
+            # Recent failure check (avoid repeated failures)
+            if self._check_recent_breakout_failures(recent_candles):
+                confidence -= 20  # Heavy penalty for recent failures
+            
+            # Time-based validation
+            if self._is_within_reversal_time():  # Check for reversal zones
+                confidence -= 10
+            
+            # Market maker trap detection
+            if self._detect_potential_trap(recent_candles, signal):
+                return {'signal': 'NO_TRADE', 'confidence': 0, 'reasoning': 'Potential market maker trap detected'}
+            
+            # Final quality gate
+            if confidence < 85:  # Reject if below ultra threshold
+                return {'signal': 'NO_TRADE', 'confidence': confidence, 'reasoning': 'Failed ultra quality validation'}
         
         return {
             'signal': signal,
-            'confidence': min(confidence, 97),
+            'confidence': min(confidence, 94),  # Reduced max confidence for safety
             'reasoning': reasoning
         }
     
@@ -1697,6 +1721,162 @@ class StrategyEngine:
             return {'signal': 'CALL', 'confidence': 89, 'reasoning': 'Bullish sentiment divergence - crowd finding confidence in downtrend'}
         
         return {'signal': 'NO_TRADE', 'confidence': 0, 'reasoning': 'No sentiment divergence detected'}
+    
+    # ULTRA VALIDATION METHODS (Loss Prevention)
+    def _validate_breakout_quality(self, candles: List[Candle], direction: str) -> bool:
+        """Ultra strict breakout quality validation"""
+        if len(candles) < 6:
+            return False
+        
+        # Check for clean breakout structure
+        if direction == 'BULLISH':
+            # Must have building momentum (increasing body sizes)
+            recent_bodies = [c.body_size for c in candles[-3:] if c.is_bullish]
+            if len(recent_bodies) < 2 or recent_bodies[-1] <= recent_bodies[0]:
+                return False
+            
+            # Must break previous resistance cleanly
+            resistance_level = max([c.high_price for c in candles[:-2]])
+            if candles[-1].close_price <= resistance_level * 1.001:  # Must break by at least 0.1%
+                return False
+                
+        else:  # BEARISH
+            recent_bodies = [c.body_size for c in candles[-3:] if not c.is_bullish]
+            if len(recent_bodies) < 2 or recent_bodies[-1] <= recent_bodies[0]:
+                return False
+            
+            support_level = min([c.low_price for c in candles[:-2]])
+            if candles[-1].close_price >= support_level * 0.999:  # Must break by at least 0.1%
+                return False
+        
+        return True
+    
+    def _detect_ultra_consolidation_breakout(self, candles: List[Candle]) -> bool:
+        """Ultra strict consolidation breakout detection"""
+        if len(candles) < 6:
+            return False
+        
+        # Must have clear consolidation period
+        consolidation_candles = candles[:-2]  # Exclude last 2 candles
+        
+        highs = [c.high_price for c in consolidation_candles]
+        lows = [c.low_price for c in consolidation_candles]
+        
+        price_range = max(highs) - min(lows)
+        avg_body_size = np.mean([c.body_size for c in consolidation_candles])
+        
+        # Consolidation must be tight (low volatility)
+        if price_range > avg_body_size * 8:  # Too wide range
+            return False
+        
+        # Breakout must be significant
+        last_candle = candles[-1]
+        breakout_size = max(
+            last_candle.high_price - max(highs),
+            min(lows) - last_candle.low_price
+        )
+        
+        return breakout_size > price_range * 0.5  # Breakout must be 50% of consolidation range
+    
+    def _analyze_ultra_consolidation_breakout(self, candles: List[Candle], momentum: Dict, trend: str) -> Dict:
+        """Ultra strict consolidation analysis"""
+        if not self._detect_ultra_consolidation_breakout(candles):
+            return {'valid': False, 'ultra_quality': False}
+        
+        last_candle = candles[-1]
+        consolidation_candles = candles[:-2]
+        
+        highs = [c.high_price for c in consolidation_candles]
+        lows = [c.low_price for c in consolidation_candles]
+        
+        # Ultra quality checks
+        ultra_quality = (
+            momentum['strength'] > 0.75 and  # Strong momentum required
+            trend != 'UNKNOWN' and  # Must have clear trend
+            last_candle.body_size > np.mean([c.body_size for c in consolidation_candles]) * 2.5  # Massive volume
+        )
+        
+        if last_candle.high_price > max(highs):
+            signal = "CALL"
+            confidence = 84 + (momentum['strength'] * 5) if ultra_quality else 70
+            reasoning = "ULTRA QUALITY bullish consolidation breakout" if ultra_quality else "Standard consolidation breakout"
+        else:
+            signal = "PUT"
+            confidence = 84 + (momentum['strength'] * 5) if ultra_quality else 70
+            reasoning = "ULTRA QUALITY bearish consolidation breakdown" if ultra_quality else "Standard consolidation breakdown"
+        
+        return {
+            'valid': True,
+            'ultra_quality': ultra_quality,
+            'signal': signal,
+            'confidence': confidence,
+            'reasoning': reasoning
+        }
+    
+    def _check_recent_breakout_failures(self, candles: List[Candle]) -> bool:
+        """Check for recent breakout failures (loss prevention)"""
+        if len(candles) < 8:
+            return False
+        
+        # Look for failed breakouts in recent history
+        recent_8 = candles[-8:]
+        
+        for i in range(2, len(recent_8)-2):
+            curr_candle = recent_8[i]
+            prev_high = max([c.high_price for c in recent_8[:i]])
+            prev_low = min([c.low_price for c in recent_8[:i]])
+            
+            # Check for failed bullish breakout
+            if (curr_candle.high_price > prev_high and 
+                curr_candle.close_price < prev_high * 0.999):
+                return True
+                
+            # Check for failed bearish breakdown
+            if (curr_candle.low_price < prev_low and 
+                curr_candle.close_price > prev_low * 1.001):
+                return True
+        
+        return False
+    
+    def _is_within_reversal_time(self) -> bool:
+        """Check if current time is within typical reversal zones"""
+        current_minute = datetime.now().minute
+        
+        # Avoid signals at typical reversal times
+        reversal_minutes = [0, 15, 30, 45]  # Quarter hour reversals
+        reversal_zones = []
+        
+        for minute in reversal_minutes:
+            # 2-minute zone around each reversal time
+            reversal_zones.extend([minute-1, minute, minute+1])
+        
+        return current_minute in reversal_zones
+    
+    def _detect_potential_trap(self, candles: List[Candle], signal: str) -> bool:
+        """Detect potential market maker traps"""
+        if len(candles) < 5:
+            return False
+        
+        last_3 = candles[-3:]
+        
+        # Quick spike and potential reversal pattern
+        if signal == "CALL":
+            # Look for recent lower low followed by sudden spike
+            if (len(last_3) >= 3 and
+                last_3[0].low_price < last_3[1].low_price and
+                last_3[2].high_price > last_3[1].high_price * 1.002 and
+                last_3[2].upper_wick > last_3[2].body_size):
+                return True
+                
+        elif signal == "PUT":
+            # Look for recent higher high followed by sudden drop
+            if (len(last_3) >= 3 and
+                last_3[0].high_price > last_3[1].high_price and
+                last_3[2].low_price < last_3[1].low_price * 0.998 and
+                last_3[2].lower_wick > last_3[2].body_size):
+                return True
+        
+        return False
 
 class CosmicAIEngine:
     """Main AI engine that orchestrates the analysis and signal generation"""
