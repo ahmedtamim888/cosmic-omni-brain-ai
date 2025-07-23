@@ -18,7 +18,7 @@ logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)
 
 # Bot configuration
-BOT_TOKEN = "7604218758:AAHJj2zMDTfVwyJHpLClVCDzukNr2Psj-38"
+BOT_TOKEN = "8155744845:AAGQ6s8RMSpCAjO16Mzb1xl8_otLnXh3OKQ"
 FLASK_API_URL = "http://localhost:5000/api/analyze"
 
 class SimpleTelegramBot:

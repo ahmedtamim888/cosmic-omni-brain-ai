@@ -34,7 +34,7 @@ app = Flask(__name__)
 app.secret_key = os.environ.get('SECRET_KEY', 'ghost_transcendence_core_infinity')
 
 # Bot configuration
-TELEGRAM_BOT_TOKEN = "7604218758:AAHJj2zMDTfVwyJHpLClVCDzukNr2Psj-38"
+TELEGRAM_BOT_TOKEN = "8155744845:AAGQ6s8RMSpCAjO16Mzb1xl8_otLnXh3OKQ"
 WEBHOOK_URL = os.environ.get('WEBHOOK_URL', 'https://your-domain.com')
 
 # Initialize AI engines
