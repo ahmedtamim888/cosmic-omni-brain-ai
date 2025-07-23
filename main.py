@@ -53,10 +53,23 @@ class UltraAccurateTradingBot:
         self.market_data = MarketDataProvider()
         self.telegram_bot = TelegramBot(self.config.TELEGRAM_TOKEN)
         
+        # Set up Telegram chat IDs from config
+        if self.config.TELEGRAM_CHAT_IDS:
+            for chat_id in self.config.TELEGRAM_CHAT_IDS:
+                asyncio.create_task(self.telegram_bot.add_chat_id(chat_id))
+        
         # Trading state
         self.is_running = False
         self.last_signal_time = None
         self.signal_history = []
+        
+        # Validate configuration
+        config_status = self.config.validate_config()
+        if not config_status['valid']:
+            self.logger.warning("⚠️  Configuration issues found:")
+            for issue in config_status['issues']:
+                self.logger.warning(f"   • {issue}")
+            self.logger.warning("   Run 'python setup_telegram.py' to configure Telegram bot")
         
         self.logger.info("🚀 Ultra-Accurate Trading Bot initialized - God Mode Ready")
     

@@ -9,15 +9,43 @@ import os
 from datetime import datetime
 from typing import Dict, List, Optional, Any
 import logging
-import aiohttp
 import json
-from telegram import Bot
-from telegram.error import TelegramError
-import matplotlib.pyplot as plt
-import matplotlib.dates as mdates
-from matplotlib.patches import Rectangle
-import pandas as pd
 import numpy as np
+
+# Try importing optional dependencies
+try:
+    import aiohttp
+    AIOHTTP_AVAILABLE = True
+except ImportError:
+    AIOHTTP_AVAILABLE = False
+    print("Warning: aiohttp not available. Install with: pip install aiohttp")
+
+try:
+    from telegram import Bot
+    from telegram.error import TelegramError
+    TELEGRAM_AVAILABLE = True
+except ImportError:
+    TELEGRAM_AVAILABLE = False
+    print("Warning: python-telegram-bot not available. Install with: pip install python-telegram-bot")
+    
+    # Create dummy classes for when telegram is not available
+    class Bot:
+        def __init__(self, token): pass
+        async def send_message(self, **kwargs): pass
+        async def send_photo(self, **kwargs): pass
+        async def get_me(self): return type('obj', (object,), {'username': 'dummy'})()
+    
+    class TelegramError(Exception): pass
+
+try:
+    import matplotlib.pyplot as plt
+    import matplotlib.dates as mdates
+    from matplotlib.patches import Rectangle
+    import pandas as pd
+    PLOTTING_AVAILABLE = True
+except ImportError:
+    PLOTTING_AVAILABLE = False
+    print("Warning: matplotlib/pandas not available. Install with: pip install matplotlib pandas")
 
 class TelegramBot:
     """
@@ -28,12 +56,33 @@ class TelegramBot:
     def __init__(self, token: str):
         self.logger = logging.getLogger(__name__)
         self.token = token
-        self.bot = Bot(token=token)
         self.chat_ids = []  # Will be populated when users start the bot
         self.signal_history = []
+        self.telegram_available = TELEGRAM_AVAILABLE
+        self.plotting_available = PLOTTING_AVAILABLE
+        
+        # Initialize bot if telegram is available
+        if TELEGRAM_AVAILABLE and token and token != 'YOUR_TELEGRAM_BOT_TOKEN_HERE':
+            try:
+                self.bot = Bot(token=token)
+                self.logger.info("Telegram bot initialized successfully")
+            except Exception as e:
+                self.logger.error(f"Failed to initialize Telegram bot: {e}")
+                self.bot = None
+                self.telegram_available = False
+        else:
+            self.bot = None
+            if not TELEGRAM_AVAILABLE:
+                self.logger.warning("Telegram library not available - signals will be logged only")
+            elif not token or token == 'YOUR_TELEGRAM_BOT_TOKEN_HERE':
+                self.logger.warning("Telegram bot token not configured - signals will be logged only")
         
         # Chart settings
-        plt.style.use('dark_background')
+        if PLOTTING_AVAILABLE:
+            try:
+                plt.style.use('dark_background')
+            except:
+                pass  # Ignore style errors
         
     async def send_signal(self, signal: Dict[str, Any], chart_data: Optional[Dict] = None):
         """Send trading signal to Telegram with optional chart"""
@@ -41,15 +90,21 @@ class TelegramBot:
             # Format signal message
             message = self._format_signal_message(signal)
             
-            # Generate chart if data provided
+            # Always log the signal
+            self.logger.info(f"📱 TRADING SIGNAL:\n{message}")
+            
+            # If Telegram is not available or not configured, just log
+            if not self.telegram_available or not self.bot:
+                return
+            
+            # Generate chart if data provided and plotting is available
             chart_image = None
-            if chart_data:
+            if chart_data and self.plotting_available:
                 chart_image = await self._generate_chart(signal, chart_data)
             
             # Send to all registered chats
             if not self.chat_ids:
-                # For demo purposes, use a default chat ID or log
-                self.logger.info(f"📱 TELEGRAM SIGNAL:\n{message}")
+                self.logger.info("No Telegram chat IDs configured - signal logged only")
                 return
             
             for chat_id in self.chat_ids:
@@ -70,6 +125,8 @@ class TelegramBot:
                         
                 except TelegramError as e:
                     self.logger.error(f"Error sending to chat {chat_id}: {e}")
+                except Exception as e:
+                    self.logger.error(f"Unexpected error sending to chat {chat_id}: {e}")
             
             # Store signal in history
             self.signal_history.append({
@@ -79,7 +136,7 @@ class TelegramBot:
             })
             
         except Exception as e:
-            self.logger.error(f"Error sending Telegram signal: {e}")
+            self.logger.error(f"Error in send_signal: {e}")
     
     def _format_signal_message(self, signal: Dict[str, Any]) -> str:
         """Format signal into a beautiful Telegram message"""
@@ -202,6 +259,10 @@ class TelegramBot:
     async def _generate_chart(self, signal: Dict, chart_data: Dict) -> io.BytesIO:
         """Generate chart screenshot for the signal"""
         try:
+            if not self.plotting_available:
+                self.logger.warning("Plotting libraries not available - skipping chart generation")
+                return None
+                
             candles = chart_data.get('candles', [])
             if not candles:
                 return None
@@ -421,12 +482,19 @@ class TelegramBot:
     async def test_connection(self) -> bool:
         """Test Telegram bot connection"""
         try:
+            if not self.telegram_available or not self.bot:
+                self.logger.warning("Telegram bot not available or not configured")
+                return False
+                
             bot_info = await self.bot.get_me()
             self.logger.info(f"Telegram bot connected: {bot_info.username}")
             return True
             
         except TelegramError as e:
             self.logger.error(f"Telegram connection test failed: {e}")
+            return False
+        except Exception as e:
+            self.logger.error(f"Unexpected error testing connection: {e}")
             return False
     
     def get_signal_history(self) -> List[Dict]:
