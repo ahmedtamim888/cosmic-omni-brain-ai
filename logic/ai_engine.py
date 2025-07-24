@@ -1707,10 +1707,10 @@ class CosmicAIEngine:
         self.candle_detector = CandleDetector()
         self.perception_engine = MarketPerceptionEngine()
         self.strategy_engine = StrategyEngine()
-        # Import smart validator here to avoid circular imports
+        # Import balanced validator here to avoid circular imports
         try:
-            from logic.smart_validator import SmartChartValidator
-            self.chart_validator = SmartChartValidator()
+            from logic.balanced_validator import BalancedChartValidator
+            self.chart_validator = BalancedChartValidator()
         except ImportError:
             self.chart_validator = None
     
@@ -1730,87 +1730,29 @@ class CosmicAIEngine:
                         entry_time=datetime.now()
                     )
             
-            # EMERGENCY VALIDATION: Check if this looks like clothing, fabric, or everyday objects
+            # Simple texture check - only reject extremely obvious photos
             try:
                 import cv2
                 img = cv2.imread(image_path)
                 if img is not None:
-                    # Convert to HSV for color analysis
-                    hsv = cv2.cvtColor(img, cv2.COLOR_BGR2HSV)
                     gray = cv2.cvtColor(img, cv2.COLOR_BGR2GRAY)
-                    
-                    # Check for fabric-like textures (common in clothing photos)
-                    # Fabric typically has repetitive patterns and specific texture characteristics
                     laplacian_var = cv2.Laplacian(gray, cv2.CV_64F).var()
                     
-                    # Check for dominant colors that suggest clothing/fabric
-                    # Most trading charts have black/dark backgrounds with green/red/white elements
-                    # Clothing photos often have different color distributions
-                    
-                    # Get dominant colors
-                    pixels = img.reshape(-1, 3)
-                    unique_colors = len(np.unique(pixels.view(np.dtype((np.void, pixels.dtype.itemsize * pixels.shape[1])))))
-                    total_pixels = pixels.shape[0]
-                    
-                    # Check for very uniform colors (typical of solid-colored clothing)
-                    hist_b = cv2.calcHist([img], [0], None, [256], [0, 256])
-                    hist_g = cv2.calcHist([img], [1], None, [256], [0, 256])
-                    hist_r = cv2.calcHist([img], [2], None, [256], [0, 256])
-                    
-                    # Find peaks in color histograms
-                    peak_b = np.argmax(hist_b)
-                    peak_g = np.argmax(hist_g)
-                    peak_r = np.argmax(hist_r)
-                    
-                    # If colors are very concentrated around specific values, might be clothing
-                    color_concentration = (hist_b[peak_b] + hist_g[peak_g] + hist_r[peak_r]) / (3 * total_pixels)
-                    
-                    # Very high color concentration + medium texture = likely fabric/clothing
-                    if color_concentration > 0.3 and 500 < laplacian_var < 3000:
+                    # Only reject if texture is EXTREMELY high (obvious detailed photo)
+                    if laplacian_var > 15000:  # Very high threshold
                         return MarketSignal(
                             signal="NO_TRADE",
                             confidence=0,
-                            reasoning="❌ CLOTHING/FABRIC DETECTED: This appears to be a photo of clothing, fabric, or everyday objects. Please upload a TRADING CHART from your broker app with candlesticks visible.",
-                            strategy="VALIDATION_FAILED",
-                            market_psychology="UNKNOWN",
-                            entry_time=datetime.now()
-                        )
-                    
-                    # Check for very high texture complexity (detailed photos)
-                    if laplacian_var > 4000:
-                        return MarketSignal(
-                            signal="NO_TRADE",
-                            confidence=0,
-                            reasoning="❌ COMPLEX PHOTO DETECTED: This appears to be a detailed photo, not a trading chart. Please upload a clean chart screenshot from your trading platform.",
+                            reasoning="❌ DETAILED PHOTO DETECTED: Image complexity suggests this is a photograph rather than a chart screenshot.",
                             strategy="VALIDATION_FAILED",
                             market_psychology="UNKNOWN",
                             entry_time=datetime.now()
                         )
             except Exception as e:
-                # If emergency validation fails, continue but log it
-                print(f"Emergency validation error: {e}")
+                # If validation fails, continue but log it
+                print(f"Texture validation error: {e}")
             
-            # Additional aggressive validation - double check with image analysis
-            try:
-                import cv2
-                img = cv2.imread(image_path)
-                if img is not None:
-                    # Check if image looks like a typical random photo
-                    gray = cv2.cvtColor(img, cv2.COLOR_BGR2GRAY)
-                    laplacian_var = cv2.Laplacian(gray, cv2.CV_64F).var()
-                    
-                    # Very high texture usually means it's a photo, not a chart
-                    if laplacian_var > 3000:
-                        return MarketSignal(
-                            signal="NO_TRADE",
-                            confidence=0,
-                            reasoning="Image appears to be a photo or complex image, not a trading chart. Please upload a clean candlestick chart screenshot.",
-                            strategy="VALIDATION_FAILED",
-                            market_psychology="UNKNOWN",
-                            entry_time=datetime.now()
-                        )
-            except:
-                pass  # If additional validation fails, continue with main validation
+            # Removed aggressive validation that was too strict
             
             # Step 1: Detect candlesticks
             candles = self.candle_detector.detect_candlesticks(image_path)
@@ -1843,7 +1785,7 @@ class CosmicAIEngine:
                     entry_time=datetime.now()
                 )
             
-            # Check for unrealistic price volatility (suggests random data)
+            # Check for unrealistic price volatility (suggests random data) - MORE LENIENT
             if len(valid_candles) >= 3:
                 prices = [c.close_price for c in valid_candles]
                 price_range = max(prices) - min(prices)
@@ -1852,12 +1794,12 @@ class CosmicAIEngine:
                 if avg_price > 0:
                     volatility_percent = (price_range / avg_price) * 100
                     
-                    # If volatility is extremely high, it's likely random data
-                    if volatility_percent > 500:  # 500% volatility is unrealistic for real trading
+                    # Only reject if volatility is EXTREMELY unrealistic
+                    if volatility_percent > 1000:  # 1000% volatility (very lenient)
                         return MarketSignal(
                             signal="NO_TRADE",
                             confidence=0,
-                            reasoning=f"Detected price data shows {volatility_percent:.0f}% volatility, indicating random image data rather than real chart.",
+                            reasoning=f"Detected price data shows {volatility_percent:.0f}% volatility, indicating invalid data.",
                             strategy="VALIDATION_FAILED",
                             market_psychology="UNKNOWN",
                             entry_time=datetime.now()
@@ -1876,8 +1818,8 @@ class CosmicAIEngine:
                         change = abs((candles[i].close_price - candles[i-1].close_price) / candles[i-1].close_price)
                         price_changes.append(change)
                 
-                # If ANY candle has >100% price change, it's definitely fake data
-                if price_changes and max(price_changes) > 1.0:  # 100% change
+                # If ANY candle has >300% price change, it's definitely fake data
+                if price_changes and max(price_changes) > 3.0:  # 300% change (more lenient)
                     max_change = max(price_changes) * 100
                     return MarketSignal(
                         signal="NO_TRADE",
@@ -1897,8 +1839,8 @@ class CosmicAIEngine:
                     price_range = max(all_prices) - min(all_prices)
                     avg_price = sum(all_prices) / len(all_prices)
                     
-                    # If the range is more than 10x the average price, it's nonsense
-                    if avg_price > 0 and (price_range / avg_price) > 10:
+                    # If the range is more than 50x the average price, it's nonsense
+                    if avg_price > 0 and (price_range / avg_price) > 50:
                         ratio = price_range / avg_price
                         return MarketSignal(
                             signal="NO_TRADE",
