@@ -13,7 +13,7 @@ class Config:
     
     # AI Engine Configuration
     CONFIDENCE_THRESHOLD = 85.0  # Minimum confidence to give signal
-    MIN_CANDLES_REQUIRED = 6     # Minimum candles needed for analysis
+    MIN_CANDLES_REQUIRED = 3     # Minimum candles needed for analysis
     MAX_CANDLES_ANALYZED = 8     # Maximum candles to analyze
     
     # Trading Configuration

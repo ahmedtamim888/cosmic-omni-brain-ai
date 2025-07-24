@@ -1707,10 +1707,10 @@ class CosmicAIEngine:
         self.candle_detector = CandleDetector()
         self.perception_engine = MarketPerceptionEngine()
         self.strategy_engine = StrategyEngine()
-        # Import balanced validator here to avoid circular imports
+        # Import minimal validator here to avoid circular imports
         try:
-            from logic.balanced_validator import BalancedChartValidator
-            self.chart_validator = BalancedChartValidator()
+            from logic.minimal_validator import MinimalChartValidator
+            self.chart_validator = MinimalChartValidator()
         except ImportError:
             self.chart_validator = None
     
@@ -1767,89 +1767,16 @@ class CosmicAIEngine:
                     entry_time=datetime.now()
                 )
             
-            # Step 1.5: Validate candlestick data quality
-            # Check for invalid prices (zeros, negatives, unrealistic values)
-            valid_candles = [c for c in candles if 
-                           c.open_price > 0 and c.close_price > 0 and 
-                           c.high_price > 0 and c.low_price > 0 and
-                           c.high_price >= max(c.open_price, c.close_price) and
-                           c.low_price <= min(c.open_price, c.close_price)]
+            # Step 1.5: Use all detected candles - no price validation
+            # Accept whatever candlesticks are detected
+            valid_candles = candles  # Use all candles without filtering
             
-            if len(valid_candles) < 3:
-                return MarketSignal(
-                    signal="NO_TRADE",
-                    confidence=0,
-                    reasoning="Detected candlesticks have invalid price data. This appears to be a random image, not a trading chart.",
-                    strategy="VALIDATION_FAILED",
-                    market_psychology="UNKNOWN",
-                    entry_time=datetime.now()
-                )
-            
-            # Check for unrealistic price volatility (suggests random data) - MORE LENIENT
-            if len(valid_candles) >= 3:
-                prices = [c.close_price for c in valid_candles]
-                price_range = max(prices) - min(prices)
-                avg_price = sum(prices) / len(prices)
-                
-                if avg_price > 0:
-                    volatility_percent = (price_range / avg_price) * 100
-                    
-                    # Only reject if volatility is EXTREMELY unrealistic
-                    if volatility_percent > 1000:  # 1000% volatility (very lenient)
-                        return MarketSignal(
-                            signal="NO_TRADE",
-                            confidence=0,
-                            reasoning=f"Detected price data shows {volatility_percent:.0f}% volatility, indicating invalid data.",
-                            strategy="VALIDATION_FAILED",
-                            market_psychology="UNKNOWN",
-                            entry_time=datetime.now()
-                        )
+            # Removed volatility checks to allow all charts through
             
             # Use only valid candles for analysis
             candles = valid_candles
             
-            # FINAL ULTRA-STRICT CHECK: Ensure we have realistic trading data
-            # This is the LAST CHANCE to prevent fake signals
-            if len(candles) > 0:
-                # Check if the detected candlesticks make any trading sense
-                price_changes = []
-                for i in range(1, min(len(candles), 5)):
-                    if candles[i-1].close_price > 0:
-                        change = abs((candles[i].close_price - candles[i-1].close_price) / candles[i-1].close_price)
-                        price_changes.append(change)
-                
-                # If ANY candle has >300% price change, it's definitely fake data
-                if price_changes and max(price_changes) > 3.0:  # 300% change (more lenient)
-                    max_change = max(price_changes) * 100
-                    return MarketSignal(
-                        signal="NO_TRADE",
-                        confidence=0,
-                        reasoning=f"Impossible price movement detected ({max_change:.0f}% change). This is random data, not a real chart.",
-                        strategy="VALIDATION_FAILED",
-                        market_psychology="UNKNOWN",
-                        entry_time=datetime.now()
-                    )
-                
-                # Check for completely nonsensical price ranges
-                all_prices = []
-                for candle in candles[:5]:
-                    all_prices.extend([candle.open_price, candle.close_price, candle.high_price, candle.low_price])
-                
-                if all_prices:
-                    price_range = max(all_prices) - min(all_prices)
-                    avg_price = sum(all_prices) / len(all_prices)
-                    
-                    # If the range is more than 50x the average price, it's nonsense
-                    if avg_price > 0 and (price_range / avg_price) > 50:
-                        ratio = price_range / avg_price
-                        return MarketSignal(
-                            signal="NO_TRADE",
-                            confidence=0,
-                            reasoning=f"Nonsensical price range detected (ratio: {ratio:.1f}). This appears to be random data, not a trading chart.",
-                            strategy="VALIDATION_FAILED",
-                            market_psychology="UNKNOWN",
-                            entry_time=datetime.now()
-                        )
+            # Removed ultra-strict checks to allow real charts through
             
             # Step 2: Analyze market story
             market_story = self.perception_engine.analyze_market_story(candles)

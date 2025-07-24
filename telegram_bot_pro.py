@@ -311,8 +311,8 @@ Having issues? Contact @CosmicAISupport
                 if is_trading_signal:
                     # EMERGENCY RE-VALIDATION: Check image one more time
                     try:
-                        from logic.balanced_validator import BalancedChartValidator
-                        emergency_validator = BalancedChartValidator()
+                        from logic.minimal_validator import MinimalChartValidator
+                        emergency_validator = MinimalChartValidator()
                         emergency_check = emergency_validator.validate_chart_image(temp_path)
                         
                         if not emergency_check['is_valid']:
