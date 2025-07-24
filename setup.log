@@ -1,0 +1,57 @@
+2025-07-22 18:26:04,921 - INFO - 🧬 ULTRA GOD MODE AI SETUP INITIATED
+2025-07-22 18:26:04,922 - INFO - 🚀 TRANSCENDENT MARKET DOMINATION PREPARATION
+2025-07-22 18:26:04,922 - INFO - 
+🔧 Python Version Check
+2025-07-22 18:26:04,922 - INFO - 🐍 Checking Python version...
+2025-07-22 18:26:04,922 - INFO - ✅ Python version 3.13.3 is compatible
+2025-07-22 18:26:04,922 - INFO - 
+🔧 Directory Creation
+2025-07-22 18:26:04,922 - INFO - 📁 Creating directory structure...
+2025-07-22 18:26:04,922 - INFO - ✅ Created directory: models
+2025-07-22 18:26:04,922 - INFO - ✅ Created directory: logs
+2025-07-22 18:26:04,922 - INFO - ✅ Created directory: uploads
+2025-07-22 18:26:04,922 - INFO - ✅ Created directory: static/images
+2025-07-22 18:26:04,923 - INFO - ✅ Created directory: templates
+2025-07-22 18:26:04,923 - INFO - ✅ Created directory: data
+2025-07-22 18:26:04,923 - INFO - ✅ Created directory: backups
+2025-07-22 18:26:04,923 - INFO - 
+🔧 Virtual Environment Setup
+2025-07-22 18:26:04,923 - INFO - 🐍 Setting up virtual environment...
+2025-07-22 18:26:04,975 - ERROR - ❌ Failed to create virtual environment: Command '['/usr/bin/python3', '-m', 'venv', 'venv']' returned non-zero exit status 1.
+2025-07-22 18:26:04,975 - ERROR - ❌ Virtual Environment Setup failed
+2025-07-22 18:26:04,975 - INFO - 
+🔧 Dependency Installation
+2025-07-22 18:26:04,975 - INFO - 📦 Installing dependencies...
+2025-07-22 18:26:04,975 - INFO - 🔧 Upgrading pip
+2025-07-22 18:26:04,976 - ERROR - ❌ Upgrading pip - Failed: /bin/sh: 1: python: not found
+
+2025-07-22 18:26:04,976 - ERROR - ❌ Dependency Installation failed
+2025-07-22 18:26:04,976 - INFO - 
+🔧 Environment Variables
+2025-07-22 18:26:04,976 - INFO - 🔧 Setting up environment variables...
+2025-07-22 18:26:04,976 - INFO - ✅ Created .env file from template
+2025-07-22 18:26:04,977 - INFO - 
+🔧 Startup Scripts
+2025-07-22 18:26:04,977 - INFO - 🚀 Creating startup scripts...
+2025-07-22 18:26:04,977 - INFO - ✅ Created startup script: start_ultra_god_mode.sh
+2025-07-22 18:26:04,977 - INFO - ✅ Created Windows startup script: start_ultra_god_mode.bat
+2025-07-22 18:26:04,977 - INFO - 
+🔧 SystemD Service
+2025-07-22 18:26:04,977 - INFO - 🐧 Creating systemd service file...
+2025-07-22 18:26:04,977 - INFO - ✅ Created systemd service file: ultra-god-mode-ai.service
+2025-07-22 18:26:04,977 - INFO - 📝 To install: sudo cp ultra-god-mode-ai.service /etc/systemd/system/
+2025-07-22 18:26:04,977 - INFO - 📝 To enable: sudo systemctl enable ultra-god-mode-ai.service
+2025-07-22 18:26:04,977 - INFO - 📝 To start: sudo systemctl start ultra-god-mode-ai.service
+2025-07-22 18:26:04,977 - INFO - 
+🔧 Docker Configuration
+2025-07-22 18:26:04,977 - INFO - 🐳 Creating Docker configuration...
+2025-07-22 18:26:04,978 - INFO - ✅ Created Docker configuration files
+2025-07-22 18:26:04,978 - INFO - 📝 To build: docker-compose build
+2025-07-22 18:26:04,978 - INFO - 📝 To run: docker-compose up -d
+2025-07-22 18:26:04,978 - INFO - 
+🔧 README Documentation
+2025-07-22 18:26:04,978 - INFO - 📝 Creating README documentation...
+2025-07-22 18:26:04,978 - INFO - ✅ Created comprehensive README.md
+2025-07-22 18:26:04,978 - INFO - 
+🧬 SETUP COMPLETE: 7/9 steps successful
+2025-07-22 18:26:04,978 - ERROR - ❌ Some setup steps failed. Check logs for details.
