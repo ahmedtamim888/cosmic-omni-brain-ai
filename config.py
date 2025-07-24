@@ -8,8 +8,8 @@ class Config:
     MAX_CONTENT_LENGTH = 16 * 1024 * 1024  # 16MB max file size
     
     # Telegram Configuration
-    TELEGRAM_BOT_TOKEN = "8155744845:AAGQ6s8RMSpCAjO16Mzb1xl8_otLnXh3OKQ"
-    TELEGRAM_CHAT_ID = os.environ.get('TELEGRAM_CHAT_ID')  # Set this in environment
+    TELEGRAM_BOT_TOKEN = "8288385434:AAG_RVKnlXDWBZNN38Q3IEfSQXIgxwPlsU0"
+    TELEGRAM_CHAT_ID = "7700105638"
     
     # AI Engine Configuration
     CONFIDENCE_THRESHOLD = 85.0  # Minimum confidence to give signal
