@@ -1707,10 +1707,10 @@ class CosmicAIEngine:
         self.candle_detector = CandleDetector()
         self.perception_engine = MarketPerceptionEngine()
         self.strategy_engine = StrategyEngine()
-        # Import validator here to avoid circular imports
+        # Import smart validator here to avoid circular imports
         try:
-            from logic.chart_validator import ChartValidator
-            self.chart_validator = ChartValidator()
+            from logic.smart_validator import SmartChartValidator
+            self.chart_validator = SmartChartValidator()
         except ImportError:
             self.chart_validator = None
     
@@ -1730,6 +1730,28 @@ class CosmicAIEngine:
                         entry_time=datetime.now()
                     )
             
+            # Additional aggressive validation - double check with image analysis
+            try:
+                import cv2
+                img = cv2.imread(image_path)
+                if img is not None:
+                    # Check if image looks like a typical random photo
+                    gray = cv2.cvtColor(img, cv2.COLOR_BGR2GRAY)
+                    laplacian_var = cv2.Laplacian(gray, cv2.CV_64F).var()
+                    
+                    # Very high texture usually means it's a photo, not a chart
+                    if laplacian_var > 3000:
+                        return MarketSignal(
+                            signal="NO_TRADE",
+                            confidence=0,
+                            reasoning="Image appears to be a photo or complex image, not a trading chart. Please upload a clean candlestick chart screenshot.",
+                            strategy="VALIDATION_FAILED",
+                            market_psychology="UNKNOWN",
+                            entry_time=datetime.now()
+                        )
+            except:
+                pass  # If additional validation fails, continue with main validation
+            
             # Step 1: Detect candlesticks
             candles = self.candle_detector.detect_candlesticks(image_path)
             
@@ -1737,11 +1759,52 @@ class CosmicAIEngine:
                 return MarketSignal(
                     signal="NO_TRADE",
                     confidence=0,
-                    reasoning="Insufficient candlesticks detected for analysis",
-                    strategy="NONE",
+                    reasoning="No valid candlesticks detected. This does not appear to be a trading chart. Please upload a clear candlestick chart from a trading platform.",
+                    strategy="VALIDATION_FAILED",
                     market_psychology="UNKNOWN",
                     entry_time=datetime.now()
                 )
+            
+            # Step 1.5: Validate candlestick data quality
+            # Check for invalid prices (zeros, negatives, unrealistic values)
+            valid_candles = [c for c in candles if 
+                           c.open_price > 0 and c.close_price > 0 and 
+                           c.high_price > 0 and c.low_price > 0 and
+                           c.high_price >= max(c.open_price, c.close_price) and
+                           c.low_price <= min(c.open_price, c.close_price)]
+            
+            if len(valid_candles) < 3:
+                return MarketSignal(
+                    signal="NO_TRADE",
+                    confidence=0,
+                    reasoning="Detected candlesticks have invalid price data. This appears to be a random image, not a trading chart.",
+                    strategy="VALIDATION_FAILED",
+                    market_psychology="UNKNOWN",
+                    entry_time=datetime.now()
+                )
+            
+            # Check for unrealistic price volatility (suggests random data)
+            if len(valid_candles) >= 3:
+                prices = [c.close_price for c in valid_candles]
+                price_range = max(prices) - min(prices)
+                avg_price = sum(prices) / len(prices)
+                
+                if avg_price > 0:
+                    volatility_percent = (price_range / avg_price) * 100
+                    
+                    # If volatility is extremely high, it's likely random data
+                    if volatility_percent > 500:  # 500% volatility is unrealistic for real trading
+                        return MarketSignal(
+                            signal="NO_TRADE",
+                            confidence=0,
+                            reasoning=f"Detected price data shows {volatility_percent:.0f}% volatility, indicating random image data rather than real chart.",
+                            strategy="VALIDATION_FAILED",
+                            market_psychology="UNKNOWN",
+                            entry_time=datetime.now()
+                        )
+            
+            # Use only valid candles for analysis
+            candles = valid_candles
             
             # Step 2: Analyze market story
             market_story = self.perception_engine.analyze_market_story(candles)

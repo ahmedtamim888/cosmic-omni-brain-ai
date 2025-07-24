@@ -48,23 +48,58 @@ class ChartValidator:
                 self._reject_common_non_charts(img)
             ]
             
-            # Calculate overall confidence
+            # Smart validation logic - must have key trading chart characteristics
             valid_checks = [c for c in checks if c['is_valid']]
-            if len(valid_checks) < 3:  # Need at least 3 positive checks
-                reasons = [c['reason'] for c in checks if not c['is_valid']]
+            failed_checks = [c for c in checks if not c['is_valid']]
+            
+            # Key requirements: Must have either chart structure OR candlestick patterns
+            has_structure = any('grid structure' in c['reason'].lower() for c in valid_checks)
+            has_candles = any('candlestick patterns' in c['reason'].lower() for c in valid_checks)
+            has_colors = any('chart colors' in c['reason'].lower() for c in valid_checks)
+            passes_non_chart_test = any('rejection tests' in c['reason'].lower() for c in valid_checks)
+            
+            # If it's clearly not a chart (fails non-chart rejection), reject immediately
+            if not passes_non_chart_test:
                 return {
                     'is_valid': False,
-                    'reason': f"Not a trading chart. Issues: {'; '.join(reasons[:2])}",
+                    'reason': "This appears to be a photo or non-trading content, not a chart",
                     'confidence': 0.0
                 }
             
-            avg_confidence = np.mean([c['confidence'] for c in valid_checks])
-            
-            if avg_confidence < 0.6:  # 60% minimum confidence threshold
+            # Must have at least 2 of: structure, candles, or colors
+            key_features = sum([has_structure, has_candles, has_colors])
+            if key_features < 2:
+                reasons = [c['reason'] for c in failed_checks]
                 return {
                     'is_valid': False,
-                    'reason': 'Image does not appear to be a trading chart',
-                    'confidence': avg_confidence
+                    'reason': f"Missing key chart features. Issues: {'; '.join(reasons[:2])}",
+                    'confidence': 0.0
+                }
+            
+            # Calculate confidence from valid checks
+            if valid_checks:
+                avg_confidence = np.mean([c['confidence'] for c in valid_checks])
+                
+                # Lower threshold if we have the key features
+                threshold = 0.5 if key_features >= 2 else 0.7
+                
+                if avg_confidence >= threshold:
+                    return {
+                        'is_valid': True,
+                        'reason': 'Valid trading chart detected',
+                        'confidence': avg_confidence
+                    }
+                else:
+                    return {
+                        'is_valid': False,
+                        'reason': 'Chart characteristics too weak to be reliable',
+                        'confidence': avg_confidence
+                    }
+            else:
+                return {
+                    'is_valid': False,
+                    'reason': 'No chart characteristics detected',
+                    'confidence': 0.0
                 }
             
             return {
