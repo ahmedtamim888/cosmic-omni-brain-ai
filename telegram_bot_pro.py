@@ -274,7 +274,6 @@ Having issues? Contact @CosmicAISupport
             
             # Check image properties for debugging
             try:
-                from PIL import Image
                 with Image.open(temp_path) as img:
                     print(f"📸 IMAGE INFO: {img.size[0]}x{img.size[1]}, Mode: {img.mode}, Format: {img.format}")
             except:
