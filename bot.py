@@ -152,10 +152,22 @@ class TradingBot:
         
         return random.choice(signals)
     
-    def run(self):
-        """Start the bot"""
+    async def run_async(self):
+        """Start the bot asynchronously"""
         logger.info("Starting Telegram Trading Bot...")
-        self.application.run_polling(allowed_updates=Update.ALL_TYPES)
+        async with self.application:
+            await self.application.start()
+            await self.application.updater.start_polling()
+            
+            # Keep the bot running
+            try:
+                while True:
+                    await asyncio.sleep(1)
+            except KeyboardInterrupt:
+                logger.info("Bot stopped by user")
+            finally:
+                await self.application.updater.stop()
+                await self.application.stop()
 
 def main():
     """Main function to run the bot"""
@@ -168,7 +180,14 @@ def main():
     
     # Create and run the bot
     bot = TradingBot(BOT_TOKEN)
-    bot.run()
+    
+    # Run the bot using asyncio
+    try:
+        asyncio.run(bot.run_async())
+    except KeyboardInterrupt:
+        logger.info("Bot shutdown requested")
+    except Exception as e:
+        logger.error(f"Bot error: {e}")
 
 if __name__ == "__main__":
     main()
