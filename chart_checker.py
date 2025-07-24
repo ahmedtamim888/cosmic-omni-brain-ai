@@ -45,6 +45,9 @@ class ChartChecker:
             "call", "put", "higher", "lower", "up", "down", "buy", "sell",
             "trade", "trading", "chart", "candle", "candlestick",
             
+            # Mobile-specific terms (common on Android apps)
+            "balance", "profit", "loss", "amount", "win", "rate", "signal",
+            
             # Currency Indicators
             "usd", "eur", "gbp", "jpy", "aud", "cad", "chf", "nzd",
             "btc", "eth", "ltc", "bitcoin", "ethereum", "crypto",
@@ -62,9 +65,9 @@ class ChartChecker:
             "support", "resistance", "trend", "pattern"
         ]
         
-        # 🎯 Minimum confidence thresholds
-        self.min_keywords_found = 2  # Minimum keywords to consider valid
-        self.min_confidence_score = 0.3  # Minimum confidence score
+        # 🎯 Minimum confidence thresholds (RELAXED FOR MOBILE)
+        self.min_keywords_found = 1  # Minimum keywords to consider valid (reduced for mobile)
+        self.min_confidence_score = 0.15  # Minimum confidence score (reduced for mobile)
         
         logger.info("📊 Chart Checker initialized with %d keywords", len(self.trading_keywords))
     

@@ -26,7 +26,7 @@ class AdvancedChartAnalyzer:
     
     def __init__(self):
         """Initialize the advanced analyzer"""
-        self.min_candles_required = 5
+        self.min_candles_required = 3  # Reduced for mobile compatibility
         self.pattern_confidence_threshold = 0.75
         
         logger.info("🧠 Advanced Chart Analyzer initialized")
