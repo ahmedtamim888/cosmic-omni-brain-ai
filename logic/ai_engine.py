@@ -901,6 +901,39 @@ class StrategyEngine:
         # Find the best strategy
         best_strategy = max(strategy_scores.items(), key=lambda x: x[1]['confidence'])
         
+        # SAFETY CHECK: If high confidence signal, verify it's not from random image
+        strategy_details = best_strategy[1]
+        if strategy_details['confidence'] > 80 and strategy_details['signal'] in ['CALL', 'PUT']:
+            # Additional validation for high-confidence signals
+            try:
+                import cv2
+                import numpy as np
+                
+                # Re-check if candlesticks are realistic
+                if len(candles) > 0:
+                    # Check for impossible price relationships
+                    invalid_candles = 0
+                    for candle in candles[:3]:  # Check first few candles
+                        if (candle.open_price <= 0 or candle.close_price <= 0 or
+                            candle.high_price <= 0 or candle.low_price <= 0 or
+                            candle.high_price < max(candle.open_price, candle.close_price) or
+                            candle.low_price > min(candle.open_price, candle.close_price)):
+                            invalid_candles += 1
+                    
+                    # If too many invalid candles, likely random image
+                    if invalid_candles >= 2:
+                        return {
+                            'selected_strategy': 'VALIDATION_FAILED',
+                            'details': {
+                                'signal': 'NO_TRADE',
+                                'confidence': 0,
+                                'reasoning': '⛔ SAFETY OVERRIDE: High-confidence signal detected on invalid price data. Please upload a genuine trading chart with proper candlestick structure.'
+                            },
+                            'all_scores': strategy_scores
+                        }
+            except:
+                pass  # If safety check fails, continue with original result
+        
         return {
             'selected_strategy': best_strategy[0],
             'details': best_strategy[1],
