@@ -267,11 +267,19 @@ Having issues? Contact @CosmicAISupport
                 from logic.ai_engine import CosmicAIEngine
                 self.ai_engine = CosmicAIEngine()
             
+            # Log the image analysis attempt
+            file_size = os.path.getsize(temp_path) if os.path.exists(temp_path) else 0
+            print(f"🔍 ANALYZING IMAGE: {temp_path}, Size: {file_size} bytes")
+            
             # Analyze the chart
             try:
                 signal = await asyncio.get_event_loop().run_in_executor(
                     None, self.ai_engine.analyze_chart, temp_path
                 )
+                
+                # Log the result
+                print(f"📊 ANALYSIS RESULT: Signal={signal.signal}, Strategy={signal.strategy}, Confidence={signal.confidence}%")
+                print(f"💭 REASONING: {signal.reasoning}")
                 
                 # Clean up temp file
                 if os.path.exists(temp_path):

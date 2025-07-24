@@ -1806,6 +1806,49 @@ class CosmicAIEngine:
             # Use only valid candles for analysis
             candles = valid_candles
             
+            # FINAL ULTRA-STRICT CHECK: Ensure we have realistic trading data
+            # This is the LAST CHANCE to prevent fake signals
+            if len(candles) > 0:
+                # Check if the detected candlesticks make any trading sense
+                price_changes = []
+                for i in range(1, min(len(candles), 5)):
+                    if candles[i-1].close_price > 0:
+                        change = abs((candles[i].close_price - candles[i-1].close_price) / candles[i-1].close_price)
+                        price_changes.append(change)
+                
+                # If ANY candle has >100% price change, it's definitely fake data
+                if price_changes and max(price_changes) > 1.0:  # 100% change
+                    max_change = max(price_changes) * 100
+                    return MarketSignal(
+                        signal="NO_TRADE",
+                        confidence=0,
+                        reasoning=f"Impossible price movement detected ({max_change:.0f}% change). This is random data, not a real chart.",
+                        strategy="VALIDATION_FAILED",
+                        market_psychology="UNKNOWN",
+                        entry_time=datetime.now()
+                    )
+                
+                # Check for completely nonsensical price ranges
+                all_prices = []
+                for candle in candles[:5]:
+                    all_prices.extend([candle.open_price, candle.close_price, candle.high_price, candle.low_price])
+                
+                if all_prices:
+                    price_range = max(all_prices) - min(all_prices)
+                    avg_price = sum(all_prices) / len(all_prices)
+                    
+                    # If the range is more than 10x the average price, it's nonsense
+                    if avg_price > 0 and (price_range / avg_price) > 10:
+                        ratio = price_range / avg_price
+                        return MarketSignal(
+                            signal="NO_TRADE",
+                            confidence=0,
+                            reasoning=f"Nonsensical price range detected (ratio: {ratio:.1f}). This appears to be random data, not a trading chart.",
+                            strategy="VALIDATION_FAILED",
+                            market_psychology="UNKNOWN",
+                            entry_time=datetime.now()
+                        )
+            
             # Step 2: Analyze market story
             market_story = self.perception_engine.analyze_market_story(candles)
             
