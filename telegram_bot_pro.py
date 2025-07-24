@@ -459,10 +459,15 @@ Having issues? Contact @CosmicAISupport
                     
         except Exception as e:
             logger.error(f"Photo handling error: {e}")
+            import traceback
+            traceback.print_exc()
+            print(f"🚨 DETAILED ERROR: {str(e)}")
+            print(f"🚨 ERROR TYPE: {type(e).__name__}")
+            
             await update.message.reply_text(
-                "❌ <b>Upload Error</b>\n\n"
-                "Failed to process your image.\n"
-                "Please try again with a clear chart screenshot.",
+                f"❌ <b>Upload Error</b>\n\n"
+                f"Error: {str(e)}\n"
+                f"Please try again with a clear chart screenshot.",
                 parse_mode='HTML'
             )
             
