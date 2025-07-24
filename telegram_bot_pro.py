@@ -270,6 +270,15 @@ Having issues? Contact @CosmicAISupport
             # Log the image analysis attempt
             file_size = os.path.getsize(temp_path) if os.path.exists(temp_path) else 0
             print(f"🔍 ANALYZING IMAGE: {temp_path}, Size: {file_size} bytes")
+            print(f"👤 USER: {user.first_name} (@{user.username if user.username else 'no_username'})")
+            
+            # Check image properties for debugging
+            try:
+                from PIL import Image
+                with Image.open(temp_path) as img:
+                    print(f"📸 IMAGE INFO: {img.size[0]}x{img.size[1]}, Mode: {img.mode}, Format: {img.format}")
+            except:
+                print("📸 IMAGE INFO: Could not read image properties")
             
             # Analyze the chart
             try:
@@ -277,11 +286,48 @@ Having issues? Contact @CosmicAISupport
                     None, self.ai_engine.analyze_chart, temp_path
                 )
                 
-                # Log the result
-                print(f"📊 ANALYSIS RESULT: Signal={signal.signal}, Strategy={signal.strategy}, Confidence={signal.confidence}%")
-                print(f"💭 REASONING: {signal.reasoning}")
+                # Log the result with timestamp
+                from datetime import datetime
+                timestamp = datetime.now().strftime('%H:%M:%S')
+                print(f"📊 [{timestamp}] ANALYSIS RESULT:")
+                print(f"   Signal: {signal.signal}")
+                print(f"   Strategy: {signal.strategy}")
+                print(f"   Confidence: {signal.confidence}%")
+                print(f"   Reasoning: {signal.reasoning}")
                 
-                # Clean up temp file
+                # CRITICAL CHECK: If this is giving a signal for random image, log error
+                if signal.signal in ['CALL', 'PUT'] and signal.confidence > 0:
+                    print(f"🚨 CRITICAL: Trading signal generated!")
+                    print(f"🚨 USER {user.first_name} got {signal.signal} signal with {signal.confidence}% confidence")
+                    print(f"🚨 This should be investigated immediately!")
+                elif signal.strategy == 'VALIDATION_FAILED':
+                    print(f"✅ Image properly rejected as non-chart")
+                else:
+                    print(f"⚠️ Low confidence or no-trade signal")
+                
+                # NUCLEAR SAFETY CHECK: Double validation before any trading signal
+                is_trading_signal = signal and signal.signal in ['CALL', 'PUT'] and signal.confidence > 0
+                
+                if is_trading_signal:
+                    # EMERGENCY RE-VALIDATION: Check image one more time
+                    try:
+                        from logic.smart_validator import SmartChartValidator
+                        emergency_validator = SmartChartValidator()
+                        emergency_check = emergency_validator.validate_chart_image(temp_path)
+                        
+                        if not emergency_check['is_valid']:
+                            print(f"🚨 EMERGENCY OVERRIDE: Trading signal blocked by safety check!")
+                            print(f"🚨 Reason: {emergency_check['reason']}")
+                            
+                            # Force override to rejection
+                            signal.signal = "NO_TRADE"
+                            signal.confidence = 0
+                            signal.strategy = "VALIDATION_FAILED"
+                            signal.reasoning = f"⛔ SAFETY OVERRIDE: {emergency_check['reason']}. Trading signals are only provided for genuine trading charts."
+                    except Exception as e:
+                        print(f"Emergency validation error: {e}")
+                
+                # Clean up temp file after all processing
                 if os.path.exists(temp_path):
                     os.remove(temp_path)
                 
