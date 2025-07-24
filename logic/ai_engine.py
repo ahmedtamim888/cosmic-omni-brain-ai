@@ -1724,11 +1724,71 @@ class CosmicAIEngine:
                     return MarketSignal(
                         signal="NO_TRADE",
                         confidence=0,
-                        reasoning=f"Invalid chart image: {validation_result['reason']}",
+                        reasoning=f"❌ NOT A TRADING CHART: {validation_result['reason']}. Please upload a screenshot from a trading platform with visible candlesticks, price axis, and time axis.",
                         strategy="VALIDATION_FAILED",
                         market_psychology="UNKNOWN",
                         entry_time=datetime.now()
                     )
+            
+            # EMERGENCY VALIDATION: Check if this looks like clothing, fabric, or everyday objects
+            try:
+                import cv2
+                img = cv2.imread(image_path)
+                if img is not None:
+                    # Convert to HSV for color analysis
+                    hsv = cv2.cvtColor(img, cv2.COLOR_BGR2HSV)
+                    gray = cv2.cvtColor(img, cv2.COLOR_BGR2GRAY)
+                    
+                    # Check for fabric-like textures (common in clothing photos)
+                    # Fabric typically has repetitive patterns and specific texture characteristics
+                    laplacian_var = cv2.Laplacian(gray, cv2.CV_64F).var()
+                    
+                    # Check for dominant colors that suggest clothing/fabric
+                    # Most trading charts have black/dark backgrounds with green/red/white elements
+                    # Clothing photos often have different color distributions
+                    
+                    # Get dominant colors
+                    pixels = img.reshape(-1, 3)
+                    unique_colors = len(np.unique(pixels.view(np.dtype((np.void, pixels.dtype.itemsize * pixels.shape[1])))))
+                    total_pixels = pixels.shape[0]
+                    
+                    # Check for very uniform colors (typical of solid-colored clothing)
+                    hist_b = cv2.calcHist([img], [0], None, [256], [0, 256])
+                    hist_g = cv2.calcHist([img], [1], None, [256], [0, 256])
+                    hist_r = cv2.calcHist([img], [2], None, [256], [0, 256])
+                    
+                    # Find peaks in color histograms
+                    peak_b = np.argmax(hist_b)
+                    peak_g = np.argmax(hist_g)
+                    peak_r = np.argmax(hist_r)
+                    
+                    # If colors are very concentrated around specific values, might be clothing
+                    color_concentration = (hist_b[peak_b] + hist_g[peak_g] + hist_r[peak_r]) / (3 * total_pixels)
+                    
+                    # Very high color concentration + medium texture = likely fabric/clothing
+                    if color_concentration > 0.3 and 500 < laplacian_var < 3000:
+                        return MarketSignal(
+                            signal="NO_TRADE",
+                            confidence=0,
+                            reasoning="❌ CLOTHING/FABRIC DETECTED: This appears to be a photo of clothing, fabric, or everyday objects. Please upload a TRADING CHART from your broker app with candlesticks visible.",
+                            strategy="VALIDATION_FAILED",
+                            market_psychology="UNKNOWN",
+                            entry_time=datetime.now()
+                        )
+                    
+                    # Check for very high texture complexity (detailed photos)
+                    if laplacian_var > 4000:
+                        return MarketSignal(
+                            signal="NO_TRADE",
+                            confidence=0,
+                            reasoning="❌ COMPLEX PHOTO DETECTED: This appears to be a detailed photo, not a trading chart. Please upload a clean chart screenshot from your trading platform.",
+                            strategy="VALIDATION_FAILED",
+                            market_psychology="UNKNOWN",
+                            entry_time=datetime.now()
+                        )
+            except Exception as e:
+                # If emergency validation fails, continue but log it
+                print(f"Emergency validation error: {e}")
             
             # Additional aggressive validation - double check with image analysis
             try:
