@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 """
-🤖 TELEGRAM BINARY TRADING BOT
+🤖 TELEGRAM BINARY TRADING BOT - FIXED VERSION
 Professional chart analysis bot with OCR validation
 """
 
@@ -13,7 +13,6 @@ from typing import Optional
 
 from telegram import Update
 from telegram.ext import Application, CommandHandler, MessageHandler, filters, ContextTypes
-from telegram.constants import ParseMode
 
 from chart_checker import ChartChecker
 
@@ -65,8 +64,7 @@ class TradingBot:
         🚀 Handle /start command
         """
         user = update.effective_user
-        welcome_message = f"""
-🤖 **Welcome to Professional Trading Bot!** 
+        welcome_message = f"""🤖 **Welcome to Professional Trading Bot!** 
 
 Hello {user.first_name}! 👋
 
@@ -88,19 +86,14 @@ Quotex, TradingView, MetaTrader, Binomo, IQ Option, and more!
 📸 **Send me a chart screenshot to get started!**
         """
         
-        await update.message.reply_text(
-            welcome_message,
-            parse_mode=ParseMode.MARKDOWN
-        )
-        
+        await update.message.reply_text(welcome_message, parse_mode='Markdown')
         logger.info("📱 User %s started the bot", user.first_name)
     
     async def help_command(self, update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
         """
         ❓ Handle /help command
         """
-        help_message = """
-🤖 **Trading Bot Help**
+        help_message = """🤖 **Trading Bot Help**
 
 **Commands:**
 • `/start` - Start the bot and see welcome message
@@ -133,17 +126,13 @@ Quotex, TradingView, MetaTrader, Binomo, IQ Option, and more!
 Need support? Just send /help again! 🔧
         """
         
-        await update.message.reply_text(
-            help_message,
-            parse_mode=ParseMode.MARKDOWN
-        )
+        await update.message.reply_text(help_message, parse_mode='Markdown')
     
     async def status_command(self, update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
         """
         📊 Handle /status command
         """
-        status_message = f"""
-🤖 **Bot Status Report**
+        status_message = f"""🤖 **Bot Status Report**
 
 🟢 **Status:** Online and Active
 ⏰ **Current Time:** {datetime.now().strftime('%Y-%m-%d %H:%M:%S')}
@@ -153,7 +142,7 @@ Need support? Just send /help again! 🔧
 
 **Capabilities:**
 ✅ Image processing with OCR
-✅ Chart validation (60+ keywords)
+✅ Chart validation (100+ keywords)
 ✅ Signal generation
 ✅ Error handling
 ✅ Multi-platform support
@@ -164,10 +153,7 @@ Need support? Just send /help again! 🔧
 Send me a trading chart screenshot to test! 📸
         """
         
-        await update.message.reply_text(
-            status_message,
-            parse_mode=ParseMode.MARKDOWN
-        )
+        await update.message.reply_text(status_message, parse_mode='Markdown')
     
     async def handle_image(self, update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
         """
@@ -180,7 +166,7 @@ Send me a trading chart screenshot to test! 📸
             # Send initial processing message
             processing_msg = await update.message.reply_text(
                 "🔍 **Analyzing your chart...**\n⏳ Please wait while I process the image...",
-                parse_mode=ParseMode.MARKDOWN
+                parse_mode='Markdown'
             )
             
             # Get the largest photo size
@@ -203,15 +189,11 @@ Send me a trading chart screenshot to test! 📸
             if is_valid_chart:
                 # Generate trading signal for valid chart
                 signal_response = await self._generate_signal_response(image_path)
-                await processing_msg.edit_text(
-                    signal_response,
-                    parse_mode=ParseMode.MARKDOWN
-                )
+                await processing_msg.edit_text(signal_response, parse_mode='Markdown')
                 logger.info("✅ Valid chart detected, signal sent to user %s", user.first_name)
             else:
                 # Invalid chart response
-                invalid_response = """
-⚠️ **This is not a valid chart. Please send a real chart screenshot**
+                invalid_response = """⚠️ **This is not a valid chart. Please send a real chart screenshot**
 
 🔍 **What I'm looking for:**
 • Trading platform interfaces (Quotex, TradingView, MT4, etc.)
@@ -228,10 +210,7 @@ Send me a trading chart screenshot to test! 📸
 Try again with a real trading chart! 📊
                 """
                 
-                await processing_msg.edit_text(
-                    invalid_response,
-                    parse_mode=ParseMode.MARKDOWN
-                )
+                await processing_msg.edit_text(invalid_response, parse_mode='Markdown')
                 logger.info("❌ Invalid chart detected from user %s", user.first_name)
             
             # Clean up temp file
@@ -244,8 +223,7 @@ Try again with a real trading chart! 📊
         except Exception as e:
             logger.error("❌ Error handling image: %s", str(e))
             
-            error_message = """
-🚫 **Error processing your image**
+            error_message = """🚫 **Error processing your image**
 
 😔 Sorry, something went wrong while analyzing your chart.
 
@@ -257,10 +235,7 @@ Try again with a real trading chart! 📊
 If the problem persists, contact support. 🔧
             """
             
-            await update.message.reply_text(
-                error_message,
-                parse_mode=ParseMode.MARKDOWN
-            )
+            await update.message.reply_text(error_message, parse_mode='Markdown')
     
     async def _analyze_chart_async(self, image_path: str) -> bool:
         """
@@ -302,8 +277,7 @@ If the problem persists, contact support. 🔧
             detected_keywords = analysis.get('detected_keywords', [])
             
             # Create detailed response
-            response = f"""
-{signal_message}
+            response = f"""{signal_message}
 
 📊 **Analysis Details:**
 🔍 Keywords detected: {keywords_found}
@@ -325,8 +299,7 @@ If the problem persists, contact support. 🔧
         """
         💬 Handle text messages
         """
-        text_response = """
-📸 **Please send me a chart screenshot!**
+        text_response = """📸 **Please send me a chart screenshot!**
 
 🤖 I'm designed to analyze trading charts, not text messages.
 
@@ -344,10 +317,7 @@ If the problem persists, contact support. 🔧
 📱 Just send the image directly - no need to type anything!
         """
         
-        await update.message.reply_text(
-            text_response,
-            parse_mode=ParseMode.MARKDOWN
-        )
+        await update.message.reply_text(text_response, parse_mode='Markdown')
     
     async def error_handler(self, update: object, context: ContextTypes.DEFAULT_TYPE) -> None:
         """
@@ -361,7 +331,7 @@ If the problem persists, contact support. 🔧
                 await update.effective_message.reply_text(
                     "🚫 **Something went wrong!**\n\n"
                     "Please try again or contact support if the issue persists.",
-                    parse_mode=ParseMode.MARKDOWN
+                    parse_mode='Markdown'
                 )
             except:
                 pass
@@ -398,10 +368,8 @@ If the problem persists, contact support. 🔧
             logger.info("🤖 Starting Telegram Trading Bot...")
             logger.info("🟢 Bot is running! Press Ctrl+C to stop.")
             
-            # Start polling
-            self.application.run_polling(
-                drop_pending_updates=True
-            )
+            # Start polling with simpler configuration
+            self.application.run_polling()
             
         except Exception as e:
             logger.error("❌ Error starting bot: %s", str(e))
@@ -411,14 +379,8 @@ def main():
     """
     🎯 Main function to run the trading bot
     """
-    # Bot token - you can also use environment variable
+    # Bot token
     BOT_TOKEN = "8288385434:AAG_RVKnlXDWBZNN38Q3IEfSQXIgxwPlsU0"
-    
-    # Alternative: Use environment variable for security
-    # BOT_TOKEN = os.getenv('TELEGRAM_BOT_TOKEN')
-    # if not BOT_TOKEN:
-    #     logger.error("❌ TELEGRAM_BOT_TOKEN environment variable not set!")
-    #     return
     
     try:
         # Create and run the bot
