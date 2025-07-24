@@ -1,396 +1,218 @@
-# 🧠 COSMIC AI Binary Signal Bot 🚀
+# 🤖 Telegram Binary Trading Bot
 
-A professional Flask web application that analyzes candlestick chart screenshots from any broker (Quotex, Binomo, Pocket Option, etc.) and predicts the next 1-minute candle (CALL / PUT / NO TRADE) using advanced multi-stage AI logic.
+A professional Telegram bot that analyzes trading chart screenshots and provides binary trading signals. The bot validates chart images from popular trading platforms and responds with trading signals.
 
-## ✨ Features
+## 🌟 Features
 
-### 🔬 Advanced AI Analysis Engine
-- **Candlestick Detection**: OpenCV-powered computer vision to detect and analyze candlestick patterns
-- **Market Psychology Analysis**: Reads market sentiment and behavior patterns
-- **Multi-Strategy System**: 5 different trading strategies with dynamic selection
-- **Pattern Recognition**: Detects 8+ candlestick patterns including:
-  - Engulfing patterns
-  - Doji, Hammer, Shooting Star
-  - Momentum shifts
-  - Exhaustion patterns
-  - Breakout/trap detection
+- **Chart Validation**: Uses OCR to verify authentic trading charts from platforms like Quotex, TradingView, MetaTrader, Binomo, etc.
+- **Smart Detection**: Identifies trading-specific keywords and interface elements
+- **Signal Generation**: Provides CALL/PUT signals with duration and amount recommendations
+- **Error Handling**: Rejects invalid images and provides helpful feedback
+- **Logging**: Comprehensive logging for monitoring and debugging
+- **Clean Architecture**: Modular design with separate chart checking logic
 
-### 🎯 Smart Strategy Engine
-- **Breakout Continuation**: Follows momentum after breakouts
-- **Reversal Play**: Identifies reversal opportunities at key levels
-- **Momentum Shift**: Catches trend changes early
-- **Trap Fade**: Fades false breakouts
-- **Exhaustion Reversal**: Trades trend exhaustion
-
-### 📱 Telegram Integration
-- Automatic signal delivery to Telegram groups
-- Beautiful formatted messages with emojis
-- Confidence-based filtering (only sends high-confidence signals)
-- Real-time signal updates
-
-### 🌐 Modern Web Interface
-- Dark-themed, mobile-responsive design
-- Drag & drop file upload
-- Real-time progress indicators
-- Interactive results display
-- System status monitoring
-
-## 🚀 Quick Start
+## 📦 Installation
 
 ### Prerequisites
-- Python 3.8+
-- pip package manager
 
-### Installation
+1. **Python 3.8+** installed on your system
+2. **Tesseract OCR** engine installed:
 
-1. **Clone the repository**
-```bash
-git clone <repository-url>
-cd cosmic-ai-binary-bot
+   **Ubuntu/Debian:**
+   ```bash
+   sudo apt update
+   sudo apt install tesseract-ocr tesseract-ocr-eng
+   ```
+
+   **macOS:**
+   ```bash
+   brew install tesseract
+   ```
+
+   **Windows:**
+   - Download and install from: https://github.com/UB-Mannheim/tesseract/wiki
+   - Add tesseract to your system PATH
+
+### Setup Instructions
+
+1. **Clone or download the project files**
+2. **Install Python dependencies:**
+   ```bash
+   pip install -r requirements.txt
+   ```
+
+3. **Verify Tesseract installation:**
+   ```bash
+   tesseract --version
+   ```
+
+## 🚀 Usage
+
+### Running the Bot
+
+1. **Start the bot:**
+   ```bash
+   python bot.py
+   ```
+
+2. **The bot will start and display:**
+   ```
+   INFO - Starting Telegram Trading Bot...
+   INFO - Application started
+   ```
+
+### Bot Commands
+
+- **`/start`** - Welcome message and instructions
+- **Send image** - Upload a trading chart screenshot for analysis
+
+### Supported Trading Platforms
+
+The bot recognizes charts from:
+- Quotex
+- TradingView  
+- MetaTrader 4/5
+- Binomo
+- IQ Option
+- Olymp Trade
+- Pocket Option
+- Expert Option
+
+### Example Responses
+
+**Valid Chart:**
+```
+✅ Chart detected. Signal: 📈 CALL/UP
+⏰ Duration: 1 minute
+💰 Recommended amount: 2-5% of balance
 ```
 
-2. **Install dependencies**
-```bash
-pip install -r requirements.txt
+**Invalid Image:**
+```
+⚠️ This is not a valid chart. Please send a real chart screenshot
+
+📊 Make sure your image contains a trading chart from platforms like:
+• Quotex
+• TradingView
+• MetaTrader
+• Binomo
+• Other trading platforms
 ```
 
-3. **Configure Telegram (Optional)**
-```bash
-# Set your Telegram chat ID
-export TELEGRAM_CHAT_ID="your_chat_id_here"
-```
+## 🔧 Configuration
 
-4. **Run the application**
-```bash
-python app.py
-```
+### Bot Token
+Your bot token is already configured in `bot.py`. If you need to change it:
 
-5. **Open your browser**
-Navigate to `http://localhost:5000`
-
-## 📊 How It Works
-
-### 1. Upload Chart Screenshot
-- Drag & drop or browse to upload candlestick chart images
-- Supports JPG, PNG, BMP formats
-- Minimum size: 300x200 pixels
-
-### 2. AI Analysis Process
-```
-Image Upload → Candle Detection → Pattern Analysis → Market Psychology → Strategy Selection → Signal Generation
-```
-
-### 3. Signal Output
-- **CALL**: Bullish prediction for next 1M candle
-- **PUT**: Bearish prediction for next 1M candle  
-- **NO TRADE**: Low confidence, avoid trading
-
-### 4. Confidence Threshold
-- Only signals with >85% confidence are actionable
-- Lower confidence signals are filtered out for safety
-
-## ⚙️ Configuration
-
-### Environment Variables
-```bash
-# Telegram Configuration
-export TELEGRAM_CHAT_ID="your_chat_id_here"
-
-# Optional Settings
-export DEBUG="true"                    # Enable debug mode
-export SECRET_KEY="your_secret_key"    # Flask secret key
-```
-
-### Config File (`config.py`)
 ```python
-# AI Engine Settings
-CONFIDENCE_THRESHOLD = 85.0    # Minimum confidence for signals
-MIN_CANDLES_REQUIRED = 6       # Minimum candles needed
-MAX_CANDLES_ANALYZED = 8       # Maximum candles to analyze
-
-# Image Processing
-MIN_IMAGE_WIDTH = 300          # Minimum image width
-MIN_IMAGE_HEIGHT = 200         # Minimum image height
-SUPPORTED_FORMATS = ['jpg', 'jpeg', 'png', 'bmp']
+BOT_TOKEN = "YOUR_NEW_BOT_TOKEN_HERE"
 ```
 
-## 📱 Telegram Setup
+### Chart Detection Settings
+You can modify detection sensitivity in `chart_checker.py`:
 
-### 1. Create Telegram Bot
-1. Message [@BotFather](https://t.me/botfather) on Telegram
-2. Use `/newbot` command
-3. Get your bot token (already configured in the app)
-
-### 2. Get Chat ID
-1. Add your bot to a group or start a private chat
-2. Send a message to the bot
-3. Visit: `https://api.telegram.org/bot<BOT_TOKEN>/getUpdates`
-4. Find your chat ID in the response
-5. Set it as environment variable:
-```bash
-export TELEGRAM_CHAT_ID="your_chat_id"
-```
-
-### 3. Test Connection
-Use the "Test Telegram Bot" button in the web interface to verify setup.
-
-## 🔧 API Endpoints
-
-### Main Routes
-- `GET /` - Main web interface
-- `POST /upload` - Chart analysis endpoint
-- `POST /test-telegram` - Test Telegram bot
-- `GET /health` - Health check
-- `GET /api/status` - System status
-
-### Upload API Example
-```javascript
-const formData = new FormData();
-formData.append('chart_file', file);
-
-fetch('/upload', {
-    method: 'POST',
-    body: formData
-})
-.then(response => response.json())
-.then(data => {
-    console.log('Signal:', data.signal.signal);
-    console.log('Confidence:', data.signal.confidence);
-});
-```
-
-## 🏗️ Project Structure
-
-```
-cosmic-ai-binary-bot/
-├── app.py                 # Main Flask application
-├── config.py             # Configuration settings
-├── telegram_bot.py       # Telegram integration
-├── requirements.txt      # Python dependencies
-├── README.md            # This file
-├── logic/
-│   └── ai_engine.py     # AI analysis engine
-├── templates/
-│   └── index.html       # Web interface
-├── static/
-│   └── style.css        # Styling
-└── uploads/             # Temporary file storage
-```
-
-## 🧠 AI Engine Architecture
-
-### Core Components
-
-1. **CandleDetector**: 
-   - OpenCV-based image processing
-   - Candlestick pattern extraction
-   - OHLC data estimation
-
-2. **MarketPerceptionEngine**:
-   - Pattern recognition (8+ patterns)
-   - Market psychology analysis
-   - Support/resistance detection
-   - Momentum analysis
-
-3. **StrategyEngine**:
-   - 5 trading strategies
-   - Dynamic strategy selection
-   - Confidence scoring
-   - Risk assessment
-
-### Analysis Flow
 ```python
-# Example analysis flow
-candles = detector.detect_candlesticks(image_path)
-market_story = perception.analyze_market_story(candles)
-strategy = strategy_engine.generate_strategy(market_story, candles)
-signal = generate_final_signal(strategy)
+# Minimum keywords required for validation
+self.min_keywords_required = 2  # Adjust as needed
 ```
 
-## 📈 Trading Strategies
+### Adding New Keywords
+To add more trading platform keywords, edit the `chart_keywords` list in `chart_checker.py`:
 
-### 1. Breakout Continuation
-- Detects price breakouts
-- Confirms with momentum
-- **Best for**: Trending markets
-
-### 2. Reversal Play  
-- Identifies reversal patterns
-- Confirms at key levels
-- **Best for**: Range-bound markets
-
-### 3. Momentum Shift
-- Catches trend changes
-- Uses consecutive candle analysis
-- **Best for**: Volatile markets
-
-### 4. Trap Fade
-- Fades false breakouts
-- High-confidence strategy
-- **Best for**: Choppy markets
-
-### 5. Exhaustion Reversal
-- Detects trend exhaustion
-- Uses decreasing momentum
-- **Best for**: Extended trends
-
-## 🎨 UI Features
-
-### Modern Design
-- Dark theme optimized for trading
-- Gradient backgrounds and smooth animations
-- Mobile-responsive layout
-- Accessibility features
-
-### Interactive Elements
-- Drag & drop file upload
-- Real-time progress indicators
-- Toast notifications
-- Smooth scrolling and transitions
-
-### Status Monitoring
-- AI Engine status
-- Telegram bot connectivity
-- API version information
-- System health checks
-
-## ⚠️ Risk Disclaimer
-
-**IMPORTANT**: This bot is for educational purposes only. Trading binary options involves significant risk and may not be suitable for all investors. Always:
-
-- Use proper risk management
-- Never risk more than you can afford to lose
-- Test thoroughly before live trading
-- Consider market conditions and volatility
-- Seek professional financial advice
-
-## 🔧 Development
-
-### Running in Debug Mode
-```bash
-export DEBUG=true
-python app.py
-```
-
-### Testing Individual Components
 ```python
-# Test AI Engine
-from logic.ai_engine import CosmicAIEngine
-engine = CosmicAIEngine()
-signal = engine.analyze_chart('path/to/chart.png')
-
-# Test Telegram Bot
-from telegram_bot import TelegramBot
-bot = TelegramBot()
-status = bot.validate_configuration()
+self.chart_keywords = [
+    # Add your new keywords here
+    "your_platform_name",
+    "specific_trading_term",
+    # ... existing keywords
+]
 ```
 
-### Adding New Strategies
-1. Add strategy function to `StrategyEngine` class
-2. Register in `self.strategies` dictionary
-3. Implement confidence scoring logic
-4. Test with various market conditions
+## 📁 Project Structure
 
-## 📦 Dependencies
-
-### Core Dependencies
-- **Flask**: Web framework
-- **OpenCV**: Computer vision
-- **NumPy**: Numerical computing
-- **Pillow**: Image processing
-- **Requests**: HTTP client
-
-### Full Requirements
-See `requirements.txt` for complete dependency list with versions.
-
-## 🚀 Deployment
-
-### Local Development
-```bash
-python app.py
+```
+trading-bot/
+├── bot.py              # Main Telegram bot logic
+├── chart_checker.py    # OCR-based chart validation
+├── requirements.txt    # Python dependencies
+└── README.md          # This documentation
 ```
 
-### Production Deployment
-```bash
-# Using Gunicorn
-gunicorn -w 4 -b 0.0.0.0:5000 app:app
+## 🔍 How It Works
 
-# Using Docker (create Dockerfile)
-docker build -t cosmic-ai-bot .
-docker run -p 5000:5000 cosmic-ai-bot
-```
+1. **Image Reception**: Bot receives image from user
+2. **Temporary Storage**: Image saved temporarily with unique filename
+3. **OCR Processing**: Text extracted using Tesseract OCR
+4. **Keyword Analysis**: Extracted text analyzed for trading-specific terms
+5. **Validation**: Multiple checks determine if image is a valid trading chart
+6. **Response**: Bot sends appropriate signal or error message
+7. **Cleanup**: Temporary image file deleted
 
-### Environment Variables for Production
-```bash
-export DEBUG=false
-export TELEGRAM_CHAT_ID="production_chat_id"
-export SECRET_KEY="production_secret_key"
-```
-
-## 📊 Performance Optimization
-
-### Image Processing
-- Optimized OpenCV operations
-- Efficient contour detection
-- Minimal memory usage
-
-### Web Interface
-- Lazy loading of components
-- Compressed images and assets
-- Efficient JavaScript execution
-
-### AI Engine
-- Vectorized NumPy operations
-- Efficient pattern matching
-- Parallel processing where possible
-
-## 🔍 Troubleshooting
+## 🛠️ Troubleshooting
 
 ### Common Issues
 
-1. **"No candlesticks detected"**
-   - Ensure image is clear and well-lit
-   - Check minimum image size requirements
-   - Verify chart has visible candlesticks
-
-2. **"Telegram not configured"**
-   - Set TELEGRAM_CHAT_ID environment variable
-   - Verify bot token is correct
-   - Test with /test-telegram endpoint
-
-3. **Low confidence signals**
-   - Upload clearer chart images
-   - Ensure sufficient candlesticks are visible
-   - Check market conditions (avoid low volatility)
-
-### Debug Mode
-Enable debug mode for detailed error messages:
+**"No module named 'pytesseract'"**
 ```bash
-export DEBUG=true
-python app.py
+pip install pytesseract
 ```
+
+**"TesseractNotFoundError"**
+- Ensure Tesseract is installed and in your system PATH
+- On Windows, you may need to specify the path:
+  ```python
+  pytesseract.pytesseract.tesseract_cmd = r'C:\Program Files\Tesseract-OCR\tesseract.exe'
+  ```
+
+**Bot not responding**
+- Check your internet connection
+- Verify bot token is correct
+- Check bot logs for error messages
+
+### Debugging
+
+Enable debug logging by modifying the logging level in `bot.py`:
+
+```python
+logging.basicConfig(
+    format='%(asctime)s - %(name)s - %(levelname)s - %(message)s',
+    level=logging.DEBUG  # Change from INFO to DEBUG
+)
+```
+
+## 📊 Chart Detection Keywords
+
+The bot looks for these types of keywords:
+
+- **Platform names**: quotex, tradingview, metatrader, binomo
+- **Currency pairs**: usd, eur, gbp, jpy, btc, eth
+- **Trading elements**: payout, investment, call, put, expiry
+- **Time frames**: 1m, 5m, 15m, 30m, 1h
+- **Market terms**: price, balance, profit, loss, trade
+
+## ⚠️ Important Notes
+
+- This bot provides **placeholder signals** for demonstration
+- **Not financial advice** - for educational purposes only
+- Always test with demo accounts first
+- Consider implementing proper signal generation logic
+- Monitor bot performance and adjust keywords as needed
+
+## 🔒 Security
+
+- Bot token is visible in code - consider using environment variables in production
+- Temporary files are automatically cleaned up
+- No user data is permanently stored
 
 ## 📞 Support
 
-For issues and questions:
+If you encounter issues:
+
 1. Check the troubleshooting section
-2. Review configuration settings
-3. Test with sample chart images
-4. Enable debug mode for detailed logs
-
-## 🌟 Contributing
-
-Contributions are welcome! Areas for improvement:
-- Additional candlestick patterns
-- New trading strategies  
-- Enhanced image processing
-- Mobile app development
-- Performance optimizations
-
-## 📄 License
-
-This project is for educational purposes. Use at your own risk and always follow proper risk management when trading.
+2. Review bot logs for error messages
+3. Ensure all dependencies are properly installed
+4. Verify Tesseract OCR is working correctly
 
 ---
 
-**🌌 Powered by Cosmic AI Engine | Built with ❤️ for traders**
+**Happy Trading! 📈📉**
