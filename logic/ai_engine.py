@@ -1707,10 +1707,29 @@ class CosmicAIEngine:
         self.candle_detector = CandleDetector()
         self.perception_engine = MarketPerceptionEngine()
         self.strategy_engine = StrategyEngine()
+        # Import validator here to avoid circular imports
+        try:
+            from logic.chart_validator import ChartValidator
+            self.chart_validator = ChartValidator()
+        except ImportError:
+            self.chart_validator = None
     
     def analyze_chart(self, image_path: str) -> MarketSignal:
         """Analyze chart image and generate trading signal"""
         try:
+            # Step 0: Validate that image is actually a trading chart
+            if self.chart_validator:
+                validation_result = self.chart_validator.validate_chart_image(image_path)
+                if not validation_result['is_valid']:
+                    return MarketSignal(
+                        signal="NO_TRADE",
+                        confidence=0,
+                        reasoning=f"Invalid chart image: {validation_result['reason']}",
+                        strategy="VALIDATION_FAILED",
+                        market_psychology="UNKNOWN",
+                        entry_time=datetime.now()
+                    )
+            
             # Step 1: Detect candlesticks
             candles = self.candle_detector.detect_candlesticks(image_path)
             

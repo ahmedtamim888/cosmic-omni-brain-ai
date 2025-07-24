@@ -335,8 +335,38 @@ Having issues? Contact @CosmicAISupport
                         self.stats['win_rate'] = (self.stats['successful_signals'] / self.stats['total_signals']) * 100
                     
                 else:
-                    # Low confidence or no signal
-                    no_signal_message = f"""
+                    # Check if it's a validation failure or low confidence
+                    if signal and signal.strategy == "VALIDATION_FAILED":
+                        validation_message = f"""
+❌ <b>INVALID IMAGE DETECTED</b>
+
+👤 <b>User:</b> {user.first_name}
+🚫 <b>Issue:</b> {signal.reasoning}
+
+📱 <b>Please upload a TRADING CHART with:</b>
+✅ Candlestick patterns visible
+✅ Price axis (numbers on right)
+✅ Time axis (bottom)
+✅ Green/Red candles
+✅ Clear chart structure
+
+🚫 <b>NOT ACCEPTED:</b>
+❌ Random photos
+❌ Text screenshots  
+❌ Social media images
+❌ Non-trading content
+
+📊 <b>Supported Brokers:</b>
+• Quotex, Binomo, Pocket Option
+• MetaTrader 4/5, TradingView
+• Any genuine candlestick chart
+
+<i>🎯 COSMIC AI only analyzes real trading charts!</i>
+                        """
+                        await processing_msg.edit_text(validation_message, parse_mode='HTML')
+                    else:
+                        # Low confidence signal
+                        no_signal_message = f"""
 🧠 <b>COSMIC AI ANALYSIS COMPLETE</b> ⚠️
 
 👤 <b>Analyst:</b> {user.first_name}
@@ -353,9 +383,8 @@ Having issues? Contact @CosmicAISupport
 • Monitor for breakout/breakdown
 
 <i>🎯 COSMIC AI only signals high-probability setups!</i>
-                    """
-                    
-                    await processing_msg.edit_text(no_signal_message, parse_mode='HTML')
+                        """
+                        await processing_msg.edit_text(no_signal_message, parse_mode='HTML')
                     
             except Exception as e:
                 logger.error(f"AI analysis error: {e}")
