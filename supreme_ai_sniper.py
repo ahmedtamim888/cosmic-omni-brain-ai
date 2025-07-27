@@ -87,16 +87,123 @@ class SupremeAISniper:
         return webdriver.Chrome(options=options)
 
     def _login(self):
+        """Login to Quotex platform - Enhanced for live platform"""
         logging.info("🤖 AI Engine initializing...")
-        self.driver.get("https://quotex.com/en/login")
-        time.sleep(3)
-        self.driver.find_element(By.NAME, "email").send_keys(EMAIL)
-        self.driver.find_element(By.NAME, "password").send_keys(PASSWORD)
-        self.driver.find_element(By.CSS_SELECTOR, "button[type=submit]").click()
-        time.sleep(6)
-        if "trade" not in self.driver.current_url:
-            raise RuntimeError("❌ AI Login failed — verify credentials")
-        logging.info("✅ AI Engine connected to market feed")
+        try:
+            # Try multiple Quotex URLs
+            login_urls = [
+                "https://quotex.com/en/login",
+                "https://quotex.io/en/login",
+                "https://quotex.io/login",
+                "https://qxbroker.com/en/login",
+                "https://qxbroker.com/login"
+            ]
+            
+            login_success = False
+            
+            for url in login_urls:
+                try:
+                    logging.info(f"🔗 Trying login URL: {url}")
+                    self.driver.get(url)
+                    time.sleep(5)
+                    
+                    # Try multiple selectors for email field
+                    email_selectors = [
+                        'input[name="email"]',
+                        'input[type="email"]',
+                        'input[placeholder*="email" i]',
+                        'input[placeholder*="Email" i]',
+                        '.email-input',
+                        '#email',
+                        'input.form-control[type="text"]'
+                    ]
+                    
+                    email_field = None
+                    for selector in email_selectors:
+                        try:
+                            email_field = self.driver.find_element(By.CSS_SELECTOR, selector)
+                            break
+                        except:
+                            continue
+                    
+                    if not email_field:
+                        logging.warning(f"❌ Email field not found on {url}")
+                        continue
+                    
+                    # Try multiple selectors for password field
+                    password_selectors = [
+                        'input[name="password"]',
+                        'input[type="password"]',
+                        'input[placeholder*="password" i]',
+                        'input[placeholder*="Password" i]',
+                        '.password-input',
+                        '#password'
+                    ]
+                    
+                    password_field = None
+                    for selector in password_selectors:
+                        try:
+                            password_field = self.driver.find_element(By.CSS_SELECTOR, selector)
+                            break
+                        except:
+                            continue
+                    
+                    if not password_field:
+                        logging.warning(f"❌ Password field not found on {url}")
+                        continue
+                    
+                    # Clear and enter credentials
+                    email_field.clear()
+                    email_field.send_keys(EMAIL)
+                    time.sleep(1)
+                    
+                    password_field.clear()
+                    password_field.send_keys(PASSWORD)
+                    time.sleep(1)
+                    
+                    # Try multiple selectors for login button
+                    login_selectors = [
+                        'button[type="submit"]',
+                        'input[type="submit"]',
+                        'button.btn-primary',
+                        'button.login-btn',
+                        '.login-button',
+                        'form button'
+                    ]
+                    
+                    login_button = None
+                    for selector in login_selectors:
+                        try:
+                            login_button = self.driver.find_element(By.CSS_SELECTOR, selector)
+                            break
+                        except:
+                            continue
+                    
+                    if not login_button:
+                        logging.warning(f"❌ Login button not found on {url}")
+                        continue
+                    
+                    login_button.click()
+                    time.sleep(8)
+                    
+                    # Check if login was successful
+                    if "trade" in self.driver.current_url or "dashboard" in self.driver.current_url:
+                        login_success = True
+                        logging.info(f"✅ Successfully logged into Quotex via {url}")
+                        break
+                        
+                except Exception as e:
+                    logging.warning(f"❌ Failed to login via {url}: {e}")
+                    continue
+            
+            if not login_success:
+                raise RuntimeError("❌ AI Login failed — verify credentials")
+                
+            logging.info("✅ AI Engine connected to market feed")
+                
+        except Exception as e:
+            logging.error(f"❌ Login failed: {e}")
+            raise
 
     # ═══════════════ DATA ACQUISITION ═══════════════
     def fetch_market_data(self, asset: str, tf: int) -> pd.DataFrame:
