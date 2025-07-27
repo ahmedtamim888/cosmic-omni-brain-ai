@@ -100,22 +100,114 @@ class SupremeAISniper:
 
     # ═══════════════ DATA ACQUISITION ═══════════════
     def fetch_market_data(self, asset: str, tf: int) -> pd.DataFrame:
-        """Enhanced data fetching with AI preprocessing"""
-        js = "return window.chartData ? window.chartData : null;"
-        raw = self.driver.execute_script(js)
-        if raw is None:
-            return pd.DataFrame()
+        """Enhanced data fetching with AI preprocessing - Live Market Optimized"""
+        try:
+            # Multiple data retrieval methods for Quotex
+            js_queries = [
+                "return window.chartData ? window.chartData : null;",
+                "return window.candleData ? window.candleData : null;",
+                "return window.marketData ? window.marketData : null;",
+                "return window.quotes ? window.quotes : null;"
+            ]
             
-        candles = raw.get(asset, {}).get(str(tf), [])[-WINDOW:]
-        if len(candles) < AI_LOOKBACK:
-            return pd.DataFrame()
+            raw = None
+            for js in js_queries:
+                try:
+                    raw = self.driver.execute_script(js)
+                    if raw:
+                        break
+                except:
+                    continue
             
-        df = pd.DataFrame(candles, columns=["timestamp", "open", "high", "low", "close", "volume"])
-        df["timestamp"] = pd.to_datetime(df["timestamp"], unit="s")
-        
-        # AI Enhancements
-        df = self._enhance_with_ai_indicators(df)
-        return df.set_index("timestamp")
+            if raw is None:
+                # Try direct element scraping as fallback
+                try:
+                    elements = self.driver.find_elements(By.CSS_SELECTOR, "[data-asset], .chart-data, .candle-data")
+                    if elements:
+                        logging.info(f"Found {len(elements)} potential data elements")
+                except:
+                    pass
+                return pd.DataFrame()
+            
+            # Handle different data structures
+            candles = []
+            if isinstance(raw, dict):
+                # Try different asset name variations
+                asset_variations = [asset, asset.lower(), asset.upper(), asset.replace('_otc', ''), asset.replace('_OTC', '')]
+                for asset_var in asset_variations:
+                    if asset_var in raw:
+                        timeframe_data = raw[asset_var]
+                        if isinstance(timeframe_data, dict):
+                            candles = timeframe_data.get(str(tf), timeframe_data.get(f"{tf}m", []))
+                        else:
+                            candles = timeframe_data
+                        break
+            elif isinstance(raw, list):
+                candles = raw
+            
+            if not candles or len(candles) < AI_LOOKBACK:
+                logging.warning(f"Insufficient data for {asset} {tf}M: {len(candles) if candles else 0} candles")
+                return pd.DataFrame()
+            
+            # Take recent candles
+            recent_candles = candles[-WINDOW:] if len(candles) > WINDOW else candles
+            
+            # Handle different candle formats
+            df_data = []
+            for candle in recent_candles:
+                if isinstance(candle, dict):
+                    # Dictionary format
+                    row = [
+                        candle.get('time', candle.get('timestamp', candle.get('t', 0))),
+                        candle.get('open', candle.get('o', 0)),
+                        candle.get('high', candle.get('h', 0)),
+                        candle.get('low', candle.get('l', 0)),
+                        candle.get('close', candle.get('c', 0)),
+                        candle.get('volume', candle.get('v', 1))
+                    ]
+                elif isinstance(candle, (list, tuple)) and len(candle) >= 5:
+                    # Array format
+                    row = list(candle[:6]) + [1] * (6 - len(candle))  # Pad with volume=1 if missing
+                else:
+                    continue
+                    
+                df_data.append(row)
+            
+            if not df_data:
+                logging.error(f"No valid candle data for {asset} {tf}M")
+                return pd.DataFrame()
+            
+            df = pd.DataFrame(df_data, columns=["timestamp", "open", "high", "low", "close", "volume"])
+            
+            # Convert timestamp
+            if df["timestamp"].dtype == 'object':
+                try:
+                    df["timestamp"] = pd.to_datetime(df["timestamp"], unit="s")
+                except:
+                    df["timestamp"] = pd.to_datetime(df["timestamp"])
+            else:
+                df["timestamp"] = pd.to_datetime(df["timestamp"], unit="s")
+            
+            # Ensure numeric types
+            for col in ["open", "high", "low", "close", "volume"]:
+                df[col] = pd.to_numeric(df[col], errors='coerce')
+            
+            # Remove invalid rows
+            df = df.dropna()
+            
+            if len(df) < AI_LOOKBACK:
+                logging.warning(f"After cleaning: {len(df)} candles for {asset} {tf}M")
+                return pd.DataFrame()
+            
+            # AI Enhancements
+            df = self._enhance_with_ai_indicators(df)
+            
+            logging.info(f"✅ Fetched {len(df)} candles for {asset} {tf}M - Latest: {df['close'].iloc[-1]:.5f}")
+            return df.set_index("timestamp")
+            
+        except Exception as e:
+            logging.error(f"Error fetching data for {asset} {tf}M: {e}")
+            return pd.DataFrame()
 
     def _enhance_with_ai_indicators(self, df: pd.DataFrame) -> pd.DataFrame:
         """Add advanced AI technical indicators"""
@@ -581,33 +673,115 @@ class SupremeAISniper:
             logging.error(f"❌ Telegram error: {e}")
 
     # ═══════════════ MAIN AI LOOP ═══════════════
+    def get_otc_assets(self) -> List[str]:
+        """Get available OTC assets from Quotex - Live Market Optimized"""
+        try:
+            # Multiple selectors for finding OTC assets
+            asset_selectors = [
+                ".symbol-item",
+                ".asset-item", 
+                ".currency-item",
+                "[data-asset]",
+                ".chart-symbol",
+                ".symbol-name",
+                ".asset-name"
+            ]
+            
+            assets = set()
+            
+            for selector in asset_selectors:
+                try:
+                    elements = self.driver.find_elements(By.CSS_SELECTOR, selector)
+                    for el in elements:
+                        text = el.text.strip()
+                        if text and ("otc" in text.lower() or "OTC" in text):
+                            assets.add(text)
+                        
+                        # Also check data attributes
+                        for attr in ['data-asset', 'data-symbol', 'data-name']:
+                            value = el.get_attribute(attr)
+                            if value and ("otc" in value.lower() or "OTC" in value):
+                                assets.add(value)
+                except:
+                    continue
+            
+            # Add common OTC assets if none found
+            if not assets:
+                common_otc = [
+                    "EUR/USD_otc", "GBP/USD_otc", "USD/JPY_otc", "AUD/USD_otc",
+                    "USD/CAD_otc", "EUR/GBP_otc", "EUR/JPY_otc", "GBP/JPY_otc",
+                    "EURUSD_OTC", "GBPUSD_OTC", "USDJPY_OTC", "AUDUSD_OTC"
+                ]
+                assets.update(common_otc)
+                logging.info("Using common OTC assets list")
+            
+            asset_list = sorted(list(assets))
+            logging.info(f"📊 Found {len(asset_list)} OTC assets: {asset_list[:5]}...")
+            return asset_list
+            
+        except Exception as e:
+            logging.error(f"Error getting OTC assets: {e}")
+            return ["EUR/USD_otc", "GBP/USD_otc", "USD/JPY_otc"]  # Fallback
+
     def run_ai_engine(self):
-        """Main AI trading engine loop"""
+        """Main AI trading engine loop - Live Market Optimized"""
         logging.info("🤖 Starting Supreme AI Sniper Engine...")
         logging.info("🧠 100 Billion Years AI Strategies Activated")
+        logging.info("🌐 Live Market Mode: QUOTEX OTC")
         
         last_signal_time = time.time()
+        asset_rotation_index = 0
+        
+        # Send startup notification
+        try:
+            startup_msg = (
+                f"🤖 **𝗔𝗜 𝗦𝗨𝗣𝗥𝗘𝗠𝗘 𝗦𝗡𝗜𝗣𝗘𝗥 - 𝗟𝗜𝗩𝗘**\n\n"
+                f"🚀 **Status**: AI Engine Started\n"
+                f"🌐 **Mode**: Live Quotex OTC Markets\n"
+                f"🧠 **AI**: 100 Billion Years Engine Active\n"
+                f"⚡ **Confidence**: 85% Minimum Threshold\n"
+                f"📊 **Timeframes**: 1M, 2M\n"
+                f"🎯 **Psychology**: 7+ Pattern Detection\n\n"
+                f"📡 *Scanning for high-probability setups...*"
+            )
+            self.bot.send_message(chat_id=CHAT_ID, text=startup_msg, parse_mode="Markdown")
+        except:
+            pass
         
         while True:
             try:
-                # Get available OTC assets
-                assets = [el.text for el in self.driver.find_elements(By.CLASS_NAME, "symbol-item") 
-                         if "otc" in el.text.lower()]
+                # Get available OTC assets (refresh periodically)
+                if asset_rotation_index % 20 == 0:  # Refresh every 20 cycles
+                    assets = self.get_otc_assets()
+                    if not assets:
+                        logging.warning("No OTC assets found, waiting...")
+                        time.sleep(10)
+                        continue
                 
-                for asset in assets:
+                # Rotate through assets efficiently
+                for i, asset in enumerate(assets):
+                    if i < asset_rotation_index % len(assets):
+                        continue
+                        
                     for tf in TIMEFRAMES:
                         try:
                             # AI Analysis
+                            logging.debug(f"🔍 Analyzing {asset} {tf}M...")
                             signal = self.execute_ai_analysis(asset, tf)
                             
                             if signal and time.time() - last_signal_time > 15:
                                 self.send_ai_signal(asset, tf, signal)
                                 last_signal_time = time.time()
                                 
+                                # Brief pause after signal
+                                time.sleep(2)
+                                
                         except Exception as e:
-                            logging.exception(f"❌ AI Error analyzing {asset} {tf}M: {e}")
+                            logging.debug(f"Analysis error {asset} {tf}M: {e}")
                             
                     time.sleep(SCAN_SLEEP)
+                    
+                asset_rotation_index += 1
                     
             except Exception as e:
                 logging.exception(f"❌ AI Engine error: {e}")
